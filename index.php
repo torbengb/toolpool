@@ -1,10 +1,7 @@
 <?php include "templates/header.php"; ?>
 
-<ul>
-	<li><a href="create.php"><strong>Create</strong></a> - add a user</li>
-	<li><a href="read.php"><strong>Read</strong></a> - find a user</li>
-	<li><a href="update.php"><strong>Update</strong></a> - edit a user</li>
-	<li><a href="delete.php"><strong>Delete</strong></a> - delete a user</li>
-</ul>
+<h2>Welcome!</h2>
+
+Use the navigation at the top to work with either users or tools. UNDER CONSTRUCTION!! Have fun - no warranties either expressed or implied. Use at your own peril.
 
 <?php include "templates/footer.php"; ?>

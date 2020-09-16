@@ -5,6 +5,7 @@ USE toolpool_dev;
 CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	creation TIMESTAMP,
+	lastupdated TIMESTAMP,
 	active BOOLEAN COMMENT 'TRUE if user is not e.g. banned or retired',
 	username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
 	email VARCHAR(50) NOT NULL COMMENT 'obvious',
@@ -24,8 +25,9 @@ CREATE TABLE users (
 CREATE TABLE tools (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	creation TIMESTAMP,
-	active BOOLEAN COMMENT 'TRUE if owner currently wants to loan this tool',
+	lastupdated TIMESTAMP,
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
+	offered BOOLEAN COMMENT 'TRUE if owner currently offers to loan this tool',
 	loanedto int(11) COMMENT 'user-id that is currently borrowing this tool',
 	toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',
 	brand VARCHAR(50) COMMENT 'the make of this tool',

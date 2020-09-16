@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Use an HTML form to edit an entry in the
- * users table.
- *
- */
-
 require "config/config.php";
 require "common.php";
 
@@ -16,23 +9,41 @@ if (isset($_POST['submit'])) {
     $connection = new PDO($dsn, $username, $password, $options);
 
     $user =[
-      "id"        => $_POST['id'],
-      "firstname" => $_POST['firstname'],
-      "lastname"  => $_POST['lastname'],
-      "email"     => $_POST['email'],
-      "age"       => $_POST['age'],
-      "location"  => $_POST['location'],
-      "date"      => $_POST['date']
+      "id"            => $_POST['id'],
+      "username"      => $_POST['username'],
+      "email"         => $_POST['email'],
+      "firstname"     => $_POST['firstname'],
+      "lastname"      => $_POST['lastname'],
+      "phone"         => $_POST['phone'],
+      "addr_country"  => $_POST['addr_country'],
+      "addr_region"   => $_POST['addr_region'],
+      "addr_city"     => $_POST['addr_city'],
+      "addr_zip"      => $_POST['addr_zip'],
+      "addr_street"   => $_POST['addr_street'],
+      "addr_number"   => $_POST['addr_number'],
+      "privatenotes"  => $_POST['privatenotes'],
+      "publicnotes"   => $_POST['publicnotes'],
+      "creation"      => $_POST['creation'],
+      "lastupdated"   => $_POST['lastupdated']
     ];
 
     $sql = "UPDATE users 
             SET id = :id, 
-              firstname = :firstname, 
-              lastname = :lastname, 
-              email = :email, 
-              age = :age, 
-              location = :location, 
-              date = :date 
+              username = :username,
+              email = :email,
+              firstname = :firstname,
+              lastname = :lastname,
+              phone = :phone,
+              addr_country = :addr_country,
+              addr_region = :addr_region,
+              addr_city = :addr_city,
+              addr_zip = :addr_zip,
+              addr_street = :addr_street,
+              addr_number = :addr_number,
+              privatenotes = :privatenotes,
+              publicnotes = :publicnotes,
+              creation = :creation, 
+              lastupdated = :lastupdated 
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);
@@ -65,7 +76,7 @@ if (isset($_GET['id'])) {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-	<blockquote><?php echo escape($_POST['firstname']); ?> successfully updated.</blockquote>
+    <blockquote>Successfully updated user <b><?php echo escape($_POST['username']); ?></>.</blockquote>
 <?php endif; ?>
 
 <h2>Edit a user</h2>

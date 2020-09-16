@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Function to query information based on 
- * a parameter: in this case, location.
- *
- */
-
 require "config/config.php";
 require "common.php";
 
@@ -17,11 +10,11 @@ if (isset($_POST['submit'])) {
 
     $sql = "SELECT * 
             FROM tools
-            WHERE location = :location";
+            WHERE owner = :owner";
 
-    $location = $_POST['location'];
+    $owner = $_POST['owner'];
     $statement = $connection->prepare($sql);
-    $statement->bindParam(':location', $location, PDO::PARAM_STR);
+    $statement->bindParam(':owner', $owner, PDO::PARAM_STR);
     $statement->execute();
 
     $result = $statement->fetchAll();
@@ -41,42 +34,94 @@ if (isset($_POST['submit'])) {
       <thead>
         <tr>
           <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email Address</th>
-          <th>Age</th>
-          <th>Location</th>
-          <th>Date</th>
+          <th>Owner</th>
+          <th>Offered</th>
+          <th>Loanedto</th>
+          <th>Toolname</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Dimensions</th>
+          <th>Weight</th>
+          <th>Privatenotes</th>
+          <th>Publicnotes</th>
+          <th>Taxonomy1</th>
+          <th>Taxonomy2</th>
+          <th>Taxonomy3</th>
+          <th>Taxonomy4</th>
+          <th>Taxonomy5</th>
+          <th>Electrical230v</th>
+          <th>Electrical400v</th>
+          <th>Hydraulic</th>
+          <th>Pneumatic</th>
+          <th>Created</th>
+          <th>Last updated</th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($result as $row) : ?>
         <tr>
           <td><?php echo escape($row["id"]); ?></td>
-          <td><?php echo escape($row["firstname"]); ?></td>
-          <td><?php echo escape($row["lastname"]); ?></td>
-          <td><?php echo escape($row["email"]); ?></td>
-          <td><?php echo escape($row["age"]); ?></td>
-          <td><?php echo escape($row["location"]); ?></td>
-          <td><?php echo escape($row["date"]); ?> </td>
+          <td><?php echo escape($row["owner"]); ?></td>
+          <td><?php echo escape($row["offered"]); ?></td>
+          <td><?php echo escape($row["loanedto"]); ?></td>
+          <td><?php echo escape($row["toolname"]); ?></td>
+          <td><?php echo escape($row["brand"]); ?></td>
+          <td><?php echo escape($row["model"]); ?></td>
+          <td><?php echo escape($row["dimensions"]); ?></td>
+          <td><?php echo escape($row["weight"]); ?></td>
+          <td><?php echo escape($row["privatenotes"]); ?></td>
+          <td><?php echo escape($row["publicnotes"]); ?></td>
+          <td><?php echo escape($row["taxonomy1"]); ?></td>
+          <td><?php echo escape($row["taxonomy2"]); ?></td>
+          <td><?php echo escape($row["taxonomy3"]); ?></td>
+          <td><?php echo escape($row["taxonomy4"]); ?></td>
+          <td><?php echo escape($row["taxonomy5"]); ?></td>
+          <td><?php echo escape($row["electrical230v"]); ?></td>
+          <td><?php echo escape($row["electrical400v"]); ?></td>
+          <td><?php echo escape($row["hydraulic"]); ?></td>
+          <td><?php echo escape($row["pneumatic"]); ?></td>
+          <td><?php echo escape($row["creation"]); ?></td>
+          <td><?php echo escape($row["lastupdated"]); ?></td>
         </tr>
       <?php endforeach; ?>
       </tbody>
     </table>
     <?php } else { ?>
-      <blockquote>No results found for <?php echo escape($_POST['location']); ?>.</blockquote>
+      <blockquote>No results found for <?php echo escape($_POST['owner']); ?>.</blockquote>
     <?php } 
 } ?> 
 
-<h2>Find tool based on location</h2>
+<h2>Find tool based on owner</h2>
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-  <label for="location">Location</label>
-  <input type="text" id="location" name="location">
+  <label for="owner">owner</label>
+  <input type="text" id="owner" name="owner">
   <input type="submit" name="submit" value="View Results">
 </form>
 
 <a href="index.php">Back to home</a>
 
 <?php require "templates/footer.php"; ?>
+
+<!--
+owner
+offered
+loanedto
+toolname
+brand
+model
+dimensions
+weight
+privatenotes
+publicnotes
+taxonomy1
+taxonomy2
+taxonomy3
+taxonomy4
+taxonomy5
+electrical230v
+electrical400v
+hydraulic
+pneumatic
+-->

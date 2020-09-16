@@ -1,9 +1,4 @@
 <?php
-
-/**
- * Delete a tool
- */
-
 require "config/config.php";
 require "common.php";
 
@@ -23,7 +18,7 @@ if (isset($_POST["submit"])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
 
-    $success = "Tool successfully deleted";
+    $success = "Successfully deleted the tool.";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
@@ -53,26 +48,56 @@ try {
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email Address</th>
-        <th>Age</th>
-        <th>Location</th>
-        <th>Date</th>
+          <th>#</th>
+          <th>Owner</th>
+          <th>Offered</th>
+          <th>Loanedto</th>
+          <th>Toolname</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Dimensions</th>
+          <th>Weight</th>
+          <th>Privatenotes</th>
+          <th>Publicnotes</th>
+          <th>Taxonomy1</th>
+          <th>Taxonomy2</th>
+          <th>Taxonomy3</th>
+          <th>Taxonomy4</th>
+          <th>Taxonomy5</th>
+          <th>Electrical230v</th>
+          <th>Electrical400v</th>
+          <th>Hydraulic</th>
+          <th>Pneumatic</th>
+          <th>Created</th>
+          <th>Last updated</th>
         <th>Delete</th>
       </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td><?php echo escape($row["id"]); ?></td>
-        <td><?php echo escape($row["firstname"]); ?></td>
-        <td><?php echo escape($row["lastname"]); ?></td>
-        <td><?php echo escape($row["email"]); ?></td>
-        <td><?php echo escape($row["age"]); ?></td>
-        <td><?php echo escape($row["location"]); ?></td>
-        <td><?php echo escape($row["date"]); ?> </td>
+          <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["owner"]); ?></td>
+          <td><?php echo escape($row["offered"]); ?></td>
+          <td><?php echo escape($row["loanedto"]); ?></td>
+          <td><?php echo escape($row["toolname"]); ?></td>
+          <td><?php echo escape($row["brand"]); ?></td>
+          <td><?php echo escape($row["model"]); ?></td>
+          <td><?php echo escape($row["dimensions"]); ?></td>
+          <td><?php echo escape($row["weight"]); ?></td>
+          <td><?php echo escape($row["privatenotes"]); ?></td>
+          <td><?php echo escape($row["publicnotes"]); ?></td>
+          <td><?php echo escape($row["taxonomy1"]); ?></td>
+          <td><?php echo escape($row["taxonomy2"]); ?></td>
+          <td><?php echo escape($row["taxonomy3"]); ?></td>
+          <td><?php echo escape($row["taxonomy4"]); ?></td>
+          <td><?php echo escape($row["taxonomy5"]); ?></td>
+          <td><?php echo escape($row["electrical230v"]); ?></td>
+          <td><?php echo escape($row["electrical400v"]); ?></td>
+          <td><?php echo escape($row["hydraulic"]); ?></td>
+          <td><?php echo escape($row["pneumatic"]); ?></td>
+          <td><?php echo escape($row["creation"]); ?></td>
+          <td><?php echo escape($row["lastupdated"]); ?></td>
         <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>

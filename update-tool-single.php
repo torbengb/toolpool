@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Use an HTML form to edit an entry in the
- * users table.
- *
- */
-
 require "config/config.php";
 require "common.php";
 
@@ -16,23 +9,52 @@ if (isset($_POST['submit'])) {
     $connection = new PDO($dsn, $username, $password, $options);
 
     $tool =[
-      "id"        => $_POST['id'],
-      "firstname" => $_POST['firstname'],
-      "lastname"  => $_POST['lastname'],
-      "email"     => $_POST['email'],
-      "age"       => $_POST['age'],
-      "location"  => $_POST['location'],
-      "date"      => $_POST['date']
+      "owner" => $_POST['owner'],
+      "offered" => $_POST['offered'],
+      "loanedto" => $_POST['loanedto'],
+      "toolname" => $_POST['toolname'],
+      "brand" => $_POST['brand'],
+      "model" => $_POST['model'],
+      "dimensions" => $_POST['dimensions'],
+      "weight" => $_POST['weight'],
+      "privatenotes" => $_POST['privatenotes'],
+      "publicnotes" => $_POST['publicnotes'],
+      "taxonomy1" => $_POST['taxonomy1'],
+      "taxonomy2" => $_POST['taxonomy2'],
+      "taxonomy3" => $_POST['taxonomy3'],
+      "taxonomy4" => $_POST['taxonomy4'],
+      "taxonomy5" => $_POST['taxonomy5'],
+      "electrical230v" => $_POST['electrical230v'],
+      "electrical400v" => $_POST['electrical400v'],
+      "hydraulic" => $_POST['hydraulic'],
+      "pneumatic" => $_POST['pneumatic'],
+      "creation" => $_POST['creation'],
+      "lastupdated" => $_POST['lastupdated']
     ];
 
     $sql = "UPDATE tools 
             SET id = :id, 
-              firstname = :firstname, 
-              lastname = :lastname, 
-              email = :email, 
-              age = :age, 
-              location = :location, 
-              date = :date 
+              owner = :owner,
+              offered = :offered,
+              loanedto = :loanedto,
+              toolname = :toolname,
+              brand = :brand,
+              model = :model,
+              dimensions = :dimensions,
+              weight = :weight,
+              privatenotes = :privatenotes,
+              publicnotes = :publicnotes,
+              taxonomy1 = :taxonomy1,
+              taxonomy2 = :taxonomy2,
+              taxonomy3 = :taxonomy3,
+              taxonomy4 = :taxonomy4,
+              taxonomy5 = :taxonomy5,
+              electrical230v = :electrical230v,
+              electrical400v = :electrical400v,
+              hydraulic = :hydraulic,
+              pneumatic = :pneumatic,
+              creation = :creation, 
+              lastupdated = :lastupdated 
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);
@@ -65,7 +87,7 @@ if (isset($_GET['id'])) {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-	<blockquote><?php echo escape($_POST['toolname']); ?> successfully updated.</blockquote>
+	<blockquote>Successfully updated <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
 <?php endif; ?>
 
 <h2>Edit a tool</h2>

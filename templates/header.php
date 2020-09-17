@@ -13,11 +13,8 @@
 
 <body>
 	<h1><?php echo $_SERVER['HTTP_HOST']; ?></h1>
-
-<table>
-<tr><td>
-	<a href="index.php"><strong>Home</strong></a>
-	<a href="user-list.php"><strong>Users</strong></a>
-	<a href="tool-list.php"><strong>Tools</strong></a>
-</td></tr>
-</table>
+<hr /> ||
+	<a href="index.php"><strong>Home</strong></a> ||
+	<a href="user-list.php"><strong>Users</strong></a> ||
+	<a href="tool-list.php"><strong>Tools</strong></a> ||
+<hr />

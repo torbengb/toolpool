@@ -30,7 +30,9 @@ if (isset($_POST["submit"])) {
 try {
   $connection = new PDO($dsn, $username, $password, $options);
 
-  $sql = "SELECT * FROM tools WHERE deleted = '0000-00-00 00:00:00'";
+  $sql = "SELECT * FROM users u, tools t 
+		  WHERE t.deleted = '0000-00-00 00:00:00'
+		  AND u.id = t.owner";
 
   $statement = $connection->prepare($sql);
   $statement->execute();
@@ -80,8 +82,8 @@ try {
       <tr>
           <td><a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["id"]); ?></td>
-          <td><?php echo escape($row["owner"]); ?></td>
-          <td><?php echo escape($row["offered"]); ?></td>
+          <td><?php echo escape($row["username"]); ?></td>
+          <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
@@ -94,10 +96,10 @@ try {
           <td><?php echo escape($row["taxonomy3"]); ?></td>
           <td><?php echo escape($row["taxonomy4"]); ?></td>
           <td><?php echo escape($row["taxonomy5"]); ?></td>
-          <td><?php echo escape($row["electrical230v"]); ?></td>
-          <td><?php echo escape($row["electrical400v"]); ?></td>
-          <td><?php echo escape($row["hydraulic"]); ?></td>
-          <td><?php echo escape($row["pneumatic"]); ?></td>
+          <td><?php echo (escape($row["electrical230v"])) ? '230V' : '-' ; ?></td>
+          <td><?php echo (escape($row["electrical400v"])) ? '400V' : '-' ; ?></td>
+          <td><?php echo (escape($row["hydraulic"])) ? 'hydr' : '-' ; ?></td>
+          <td><?php echo (escape($row["pneumatic"])) ? 'pneu' : '-' ; ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

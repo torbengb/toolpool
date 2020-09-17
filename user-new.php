@@ -70,6 +70,4 @@ if (isset($_POST['submit'])) {
     <input type="submit" name="submit" value="Submit">
   </form>
 
-  <a href="index.php">Back to home</a>
-
 <?php require "templates/footer.php"; ?>

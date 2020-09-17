@@ -1,23 +1,30 @@
-# Connecting to MySQL in PHP using PDO
+# This is a prototype!!
 
-Create a Simple Database App: Connecting to MySQL with PHP
+This prototype of `Tool Pool` aims to provide a proof of concept for a community of people wanting to share their tools for DIY home-improvement projects.
 
-## Tutorial
+## Features
 
-- [Part 1: Create and Read](https://www.taniarascia.com/create-a-simple-database-app-connecting-to-mysql-with-php/)
-- [Part 2: Update and Delete](https://www.taniarascia.com/create-a-simple-crud-database-app-php-update-delete/)
+These are some of the ideas to be explored with this prototype, sorted by approximate order of planned implementation:
 
-## Lessons
+- add users
+- modify users
+- add tools
+- modify tools
+- find a tool
+- request a tool loan
+- accept/reject a tool loan
+- record a tool pick-up
+- record a tool return
+- chat between users
+- commenting, flagging, reporting on users and tools for moderator attention
 
-- Install database and create table structure
-- Submit new users
-- Query and filter users
-- Update users with new data
-- Delete users
+## Bugs?
+
+- [Please submit an issue!](https://github.com/torbengb/toolpool/issues/new)
 
 ## Author
-
-- [Tania Rascia](https://www.taniarascia.com)
+- [Torben Gundtofte-Bruun](https://github.com/torbengb)
+- Basic functionality based on [Tania Rascia's totorial](https://www.taniarascia.com/create-a-simple-database-app-connecting-to-mysql-with-php/). *Thank you Tania!*
 
 ## License
 

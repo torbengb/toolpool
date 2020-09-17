@@ -100,24 +100,3 @@ if (isset($_POST['submit'])) {
 </form>
 
 <?php require "templates/footer.php"; ?>
-
-<!--
-owner
-offered
-toolname
-brand
-model
-dimensions
-weight
-privatenotes
-publicnotes
-taxonomy1
-taxonomy2
-taxonomy3
-taxonomy4
-taxonomy5
-electrical230v
-electrical400v
-hydraulic
-pneumatic
--->

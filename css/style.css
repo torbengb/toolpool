@@ -8,6 +8,10 @@ table {
 	border-spacing: 0;
 }
 
+tr:hover {
+  background-color: yellow;
+}
+
 td,
 th {
 	padding: 5px;

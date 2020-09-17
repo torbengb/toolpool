@@ -12,9 +12,9 @@
 </head>
 
 <body>
-	<h1><?php echo $_SERVER['HTTP_HOST']; ?></h1>
+	<h1><a href="index.php"><?php echo $_SERVER['HTTP_HOST']; ?></a></h1>
 <hr /> ||
-	<a href="index.php"><strong>Home</strong></a> ||
-	<a href="user-list.php"><strong>Users</strong></a> ||
-	<a href="tool-list.php"><strong>Tools</strong></a> ||
+	<a href="tool-list.php"><strong>Tool Pool</strong></a> ||
+	<a href="user-list.php"><strong>Members</strong></a> ||
+	<a href="loan-list.php"><strong>Loans</strong></a> ||
 <hr />

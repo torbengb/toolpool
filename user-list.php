@@ -42,11 +42,9 @@ try {
 ?>
 <?php require "templates/header.php"; ?>
         
-<h2>Manage users</h2>
+<h2>Members || <a href="user-new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
-
-<div><a href="user-new.php">Add new user</a></div>
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -59,15 +57,6 @@ try {
           <th>Email</th>
           <th>First name</th>
           <th>Last name</th>
-          <th>Phone</th>
-          <th>Country</th>
-          <th>Region</th>
-          <th>City</th>
-          <th>Postal code</th>
-          <th>Street</th>
-          <th>House number</th>
-          <th>Private notes</th>
-          <th>Public notes</th>
       </tr>
     </thead>
     <tbody>
@@ -79,15 +68,6 @@ try {
           <td><?php echo escape($row["email"]); ?></td>
           <td><?php echo escape($row["firstname"]); ?></td>
           <td><?php echo escape($row["lastname"]); ?></td>
-          <td><?php echo escape($row["phone"]); ?></td>
-          <td><?php echo escape($row["addr_country"]); ?></td>
-          <td><?php echo escape($row["addr_region"]); ?></td>
-          <td><?php echo escape($row["addr_city"]); ?></td>
-          <td><?php echo escape($row["addr_zip"]); ?></td>
-          <td><?php echo escape($row["addr_street"]); ?></td>
-          <td><?php echo escape($row["addr_number"]); ?></td>
-          <td><?php echo escape($row["privatenotes"]); ?></td>
-          <td><?php echo escape($row["publicnotes"]); ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

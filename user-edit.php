@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated user <b><?php echo escape($_POST['username']); ?></>.</blockquote>
+    <blockquote>Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="user-list.php">member list</a>.</blockquote>
 <?php endif; ?>
 
 <h2>Edit a user</h2>
@@ -89,7 +89,5 @@ if (isset($_GET['id'])) {
     <?php endforeach; ?> 
     <input type="submit" name="submit" value="Submit">
 </form>
-
-<a href="index.php">Back to home</a>
 
 <?php require "templates/footer.php"; ?>

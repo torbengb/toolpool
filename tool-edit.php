@@ -86,7 +86,7 @@ if (isset($_GET['id'])) {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated tool <b><?php echo escape($_POST['toolname']); ?></>.</blockquote>
+    <blockquote>Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="tool-list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
 
 <h2>Edit a tool</h2>
@@ -99,7 +99,5 @@ if (isset($_GET['id'])) {
     <?php endforeach; ?> 
     <input type="submit" name="submit" value="Submit">
 </form>
-
-<a href="index.php">Back to home</a>
 
 <?php require "templates/footer.php"; ?>

@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
 <?php require "templates/header.php"; ?>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully added user <b><?php echo escape($_POST['username']); ?></>.</blockquote>
+    <blockquote>Successfully added <b><?php echo escape($_POST['username']); ?></b> to the <a href="user-list.php">member list</a>.</blockquote>
   <?php endif; ?>
 
   <h2>Add a user</h2>

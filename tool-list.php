@@ -32,7 +32,8 @@ try {
 
   $sql = "SELECT * FROM users u, tools t 
 		  WHERE t.deleted = '0000-00-00 00:00:00'
-		  AND u.id = t.owner";
+		  AND u.id = t.owner
+		  ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
 
   $statement = $connection->prepare($sql);
   $statement->execute();
@@ -44,11 +45,9 @@ try {
 ?>
 <?php require "templates/header.php"; ?>
         
-<h2>Manage tools</h2>
+<h2>Tool Pool || <a href="tool-new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
-
-<div><a href="tool-new.php">Add new tool</a></div>
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -64,15 +63,13 @@ try {
           <th>Model</th>
           <th>Dimensions</th>
           <th>Weight</th>
-          <th>Private notes</th>
-          <th>Public notes</th>
           <th>Taxonomy1</th>
           <th>Taxonomy2</th>
           <th>Taxonomy3</th>
           <th>Taxonomy4</th>
           <th>Taxonomy5</th>
-          <th>Electrical230v</th>
-          <th>Electrical400v</th>
+          <th>230V</th>
+          <th>400V</th>
           <th>Hydraulic</th>
           <th>Pneumatic</th>
       </tr>
@@ -89,8 +86,6 @@ try {
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>
           <td><?php echo escape($row["weight"]); ?></td>
-          <td><?php echo escape($row["privatenotes"]); ?></td>
-          <td><?php echo escape($row["publicnotes"]); ?></td>
           <td><?php echo escape($row["taxonomy1"]); ?></td>
           <td><?php echo escape($row["taxonomy2"]); ?></td>
           <td><?php echo escape($row["taxonomy3"]); ?></td>

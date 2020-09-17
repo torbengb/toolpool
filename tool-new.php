@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
 <?php require "templates/header.php"; ?>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully added <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
+    <blockquote>Successfully added <b><?php echo escape($_POST['toolname']); ?></b> to the <a href="tool-list.php">tool pool</a>.</blockquote>
   <?php endif; ?>
 
   <h2>Add a tool</h2>
@@ -78,25 +78,3 @@ if (isset($_POST['submit'])) {
   </form>
 
 <?php require "templates/footer.php"; ?>
-
-<!--
-owner
-offered
-loanedto
-toolname
-brand
-model
-dimensions
-weight
-privatenotes
-publicnotes
-taxonomy1
-taxonomy2
-taxonomy3
-taxonomy4
-taxonomy5
-electrical230v
-electrical400v
-hydraulic
-pneumatic
--->

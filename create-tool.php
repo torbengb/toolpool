@@ -9,9 +9,9 @@ if (isset($_POST['submit'])) {
     $connection = new PDO($dsn, $username, $password, $options);
     
     $new_tool = array(
+	  "created" => 'CURRENT_TIMESTAMP()',
       "owner" => $_POST['owner'],
       "offered" => $_POST['offered'],
-      "loanedto" => $_POST['loanedto'],
       "toolname" => $_POST['toolname'],
       "brand" => $_POST['brand'],
       "model" => $_POST['model'],
@@ -56,7 +56,6 @@ if (isset($_POST['submit'])) {
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <label for="owner">owner</label><input type="text" name="owner" id="owner">
     <label for="offered">offered</label><input type="text" name="offered" id="offered">
-    <label for="loanedto">loanedto</label><input type="text" name="loanedto" id="loanedto">
     <label for="toolname">toolname</label><input type="text" name="toolname" id="toolname">
     <label for="brand">brand</label><input type="text" name="brand" id="brand">
     <label for="model">model</label><input type="text" name="model" id="model">

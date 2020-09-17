@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>ID</th>
           <th>Owner</th>
           <th>Offered</th>
           <th>Loanedto</th>
@@ -63,7 +63,6 @@ if (isset($_POST['submit'])) {
           <td><?php echo escape($row["id"]); ?></td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
-          <td><?php echo escape($row["loanedto"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
@@ -80,7 +79,7 @@ if (isset($_POST['submit'])) {
           <td><?php echo escape($row["electrical400v"]); ?></td>
           <td><?php echo escape($row["hydraulic"]); ?></td>
           <td><?php echo escape($row["pneumatic"]); ?></td>
-          <td><?php echo escape($row["creation"]); ?></td>
+          <td><?php echo escape($row["created"]); ?></td>
           <td><?php echo escape($row["lastupdated"]); ?></td>
         </tr>
       <?php endforeach; ?>
@@ -107,7 +106,6 @@ if (isset($_POST['submit'])) {
 <!--
 owner
 offered
-loanedto
 toolname
 brand
 model

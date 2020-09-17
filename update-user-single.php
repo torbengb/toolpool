@@ -23,8 +23,7 @@ if (isset($_POST['submit'])) {
       "addr_number"   => $_POST['addr_number'],
       "privatenotes"  => $_POST['privatenotes'],
       "publicnotes"   => $_POST['publicnotes'],
-      "creation"      => $_POST['creation'],
-      "lastupdated"   => $_POST['lastupdated']
+	  "lastupdated"   => $_POST['lastupdated']
     ];
 
     $sql = "UPDATE users 
@@ -42,8 +41,7 @@ if (isset($_POST['submit'])) {
               addr_number = :addr_number,
               privatenotes = :privatenotes,
               publicnotes = :publicnotes,
-              creation = :creation, 
-              lastupdated = :lastupdated 
+              lastupdated = 'CURRENT_TIMESTAMP()'
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);

@@ -11,8 +11,9 @@ if (isset($_POST["submit"])) {
     $connection = new PDO($dsn, $username, $password, $options);
   
     $id = $_POST["submit"];
-
-    $sql = "DELETE FROM tools WHERE id = :id";
+    $sql = "UPDATE tools 
+			SET deleted = 'CURRENT_TIMESTAMP()' 
+			WHERE id = :id";
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
@@ -39,7 +40,7 @@ try {
 ?>
 <?php require "templates/header.php"; ?>
         
-<h2>Delete users</h2>
+<h2>Delete tools</h2>
 
 <?php if ($success) echo $success; ?>
 
@@ -48,10 +49,13 @@ try {
   <table>
     <thead>
       <tr>
-          <th>#</th>
+        <th>Action</th>
+          <th>ID</th>
+          <th>Created</th>
+          <th>Last updated</th>
+          <th>Deleted</th>
           <th>Owner</th>
           <th>Offered</th>
-          <th>Loanedto</th>
           <th>Toolname</th>
           <th>Brand</th>
           <th>Model</th>
@@ -70,16 +74,18 @@ try {
           <th>Pneumatic</th>
           <th>Created</th>
           <th>Last updated</th>
-        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
+        <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["created"]); ?> </td>
+          <td><?php echo escape($row["lastupdated"]); ?> </td>
+          <td><?php echo escape($row["deleted"]); ?> </td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
-          <td><?php echo escape($row["loanedto"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
@@ -98,7 +104,6 @@ try {
           <td><?php echo escape($row["pneumatic"]); ?></td>
           <td><?php echo escape($row["creation"]); ?></td>
           <td><?php echo escape($row["lastupdated"]); ?></td>
-        <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete</button></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

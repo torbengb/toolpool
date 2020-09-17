@@ -9,9 +9,9 @@ if (isset($_POST['submit'])) {
     $connection = new PDO($dsn, $username, $password, $options);
 
     $tool =[
+      "id" => $_POST['id'],
       "owner" => $_POST['owner'],
       "offered" => $_POST['offered'],
-      "loanedto" => $_POST['loanedto'],
       "toolname" => $_POST['toolname'],
       "brand" => $_POST['brand'],
       "model" => $_POST['model'],
@@ -28,15 +28,13 @@ if (isset($_POST['submit'])) {
       "electrical400v" => $_POST['electrical400v'],
       "hydraulic" => $_POST['hydraulic'],
       "pneumatic" => $_POST['pneumatic'],
-      "creation" => $_POST['creation'],
-      "lastupdated" => $_POST['lastupdated']
+      "lastupdated"   => $_POST['lastupdated']
     ];
 
     $sql = "UPDATE tools 
             SET id = :id, 
               owner = :owner,
               offered = :offered,
-              loanedto = :loanedto,
               toolname = :toolname,
               brand = :brand,
               model = :model,
@@ -53,12 +51,11 @@ if (isset($_POST['submit'])) {
               electrical400v = :electrical400v,
               hydraulic = :hydraulic,
               pneumatic = :pneumatic,
-              creation = :creation, 
-              lastupdated = :lastupdated 
+              lastupdated = 'CURRENT_TIMESTAMP()'
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);
-  $statement->execute($user);
+  $statement->execute($tool);
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
@@ -74,7 +71,7 @@ if (isset($_GET['id'])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
     
-    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    $tool = $statement->fetch(PDO::FETCH_ASSOC);
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
@@ -87,7 +84,7 @@ if (isset($_GET['id'])) {
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-	<blockquote>Successfully updated <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
+    <blockquote>Successfully updated tool <b><?php echo escape($_POST['toolname']); ?></>.</blockquote>
 <?php endif; ?>
 
 <h2>Edit a tool</h2>

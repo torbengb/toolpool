@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>ID</th>
           <th>User name</th>
           <th>Email</th>
           <th>First name</th>

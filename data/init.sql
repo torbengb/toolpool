@@ -4,13 +4,13 @@ USE toolpool_dev;
 
 CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	creation TIMESTAMP,
+	created TIMESTAMP,
 	lastupdated TIMESTAMP,
-	active BOOLEAN COMMENT 'TRUE if user is not e.g. banned or retired',
+	deleted TIMESTAMP,
 	username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
 	email VARCHAR(50) NOT NULL COMMENT 'obvious',
-	firstname VARCHAR(50) NOT NULL COMMENT 'obvious',
-	lastname VARCHAR(50) NOT NULL COMMENT 'obvious',
+	firstname VARCHAR(50) COMMENT 'obvious',
+	lastname VARCHAR(50) COMMENT 'obvious',
 	phone VARCHAR(20) COMMENT '0043-555-2100-1234',
 	addr_country VARCHAR(50) COMMENT 'obvious',
 	addr_region VARCHAR(50) COMMENT 'e.g. state',
@@ -24,11 +24,11 @@ CREATE TABLE users (
 
 CREATE TABLE tools (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	creation TIMESTAMP,
+	created TIMESTAMP,
 	lastupdated TIMESTAMP,
+	deleted TIMESTAMP,
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
 	offered BOOLEAN COMMENT 'TRUE if owner currently offers to loan this tool',
-	loanedto int(11) COMMENT 'user-id that is currently borrowing this tool',
 	toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',
 	brand VARCHAR(50) COMMENT 'the make of this tool',
 	model VARCHAR(50) COMMENT 'the model of this tool',
@@ -49,11 +49,13 @@ CREATE TABLE tools (
 
 CREATE TABLE loans (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	creation TIMESTAMP,
+	created TIMESTAMP,
 	active BOOLEAN COMMENT 'TRUE if this loan is ongoing, FALSE if kept for historical records',
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
 	loanedto int(11) NOT NULL COMMENT 'user-id that is currently borrowing this tool',
-	loanstart DATE COMMENT 'agreed date of loan start',
-	loanend DATE COMMENT 'agreed date of loan end'
+	agreedstart DATE COMMENT 'agreed date of loan start',
+	agreedend DATE COMMENT 'agreed date of loan end',
+	actualstart DATE COMMENT 'actual date of loan start',
+	actualend DATE COMMENT 'actual date of loan end'
 );
 

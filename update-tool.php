@@ -22,10 +22,11 @@ try {
 <table>
     <thead>
         <tr>
-          <th>#</th>
+          <th>Action</th>
+          <th>ID</th>
+          <th>Last updated</th>
           <th>Owner</th>
           <th>Offered</th>
-          <th>Loanedto</th>
           <th>Toolname</th>
           <th>Brand</th>
           <th>Model</th>
@@ -43,17 +44,16 @@ try {
           <th>Hydraulic</th>
           <th>Pneumatic</th>
           <th>Created</th>
-          <th>Last updated</th>
-          <th>Edit</th>
         </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
         <tr>
+          <td><a href="update-tool-single.php?id=<?php echo escape($row["id"]); ?>">Edit</a></td>
           <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["lastupdated"]); ?></td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
-          <td><?php echo escape($row["loanedto"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
@@ -70,9 +70,7 @@ try {
           <td><?php echo escape($row["electrical400v"]); ?></td>
           <td><?php echo escape($row["hydraulic"]); ?></td>
           <td><?php echo escape($row["pneumatic"]); ?></td>
-          <td><?php echo escape($row["creation"]); ?></td>
-          <td><?php echo escape($row["lastupdated"]); ?></td>
-          <td><a href="update-tool-single.php?id=<?php echo escape($row["id"]); ?>">Edit</a></td>
+          <td><?php echo escape($row["created"]); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

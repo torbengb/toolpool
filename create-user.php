@@ -9,6 +9,7 @@ if (isset($_POST['submit'])) {
     $connection = new PDO($dsn, $username, $password, $options);
     
     $new_user = array(
+	  "creation"     => 'CURRENT_TIMESTAMP()',
       "username"     => $_POST['username'],
       "email"        => $_POST['email'],
       "firstname"    => $_POST['firstname'],

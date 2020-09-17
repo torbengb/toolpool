@@ -9,10 +9,12 @@ if (isset($_POST["submit"])) {
 
   try {
     $connection = new PDO($dsn, $username, $password, $options);
+	
+	$timestamp = date("Y-m-d H:i:s");
   
     $id = $_POST["submit"];
     $sql = "UPDATE tools 
-			SET deleted = 'CURRENT_TIMESTAMP()' 
+			SET deleted = '$timestamp'
 			WHERE id = :id";
 
     $statement = $connection->prepare($sql);
@@ -28,7 +30,7 @@ if (isset($_POST["submit"])) {
 try {
   $connection = new PDO($dsn, $username, $password, $options);
 
-  $sql = "SELECT * FROM tools";
+  $sql = "SELECT * FROM tools WHERE deleted = '0000-00-00 00:00:00'";
 
   $statement = $connection->prepare($sql);
   $statement->execute();
@@ -40,29 +42,28 @@ try {
 ?>
 <?php require "templates/header.php"; ?>
         
-<h2>Delete tools</h2>
+<h2>Manage tools</h2>
 
 <?php if ($success) echo $success; ?>
+
+<div><a href="tool-new.php">Add new tool</a></div>
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
     <thead>
       <tr>
-        <th>Action</th>
+          <th>Action</th>
           <th>ID</th>
-          <th>Created</th>
-          <th>Last updated</th>
-          <th>Deleted</th>
           <th>Owner</th>
           <th>Offered</th>
-          <th>Toolname</th>
+          <th>Tool name</th>
           <th>Brand</th>
           <th>Model</th>
           <th>Dimensions</th>
           <th>Weight</th>
-          <th>Privatenotes</th>
-          <th>Publicnotes</th>
+          <th>Private notes</th>
+          <th>Public notes</th>
           <th>Taxonomy1</th>
           <th>Taxonomy2</th>
           <th>Taxonomy3</th>
@@ -72,18 +73,13 @@ try {
           <th>Electrical400v</th>
           <th>Hydraulic</th>
           <th>Pneumatic</th>
-          <th>Created</th>
-          <th>Last updated</th>
       </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["id"]); ?></td>
-          <td><?php echo escape($row["created"]); ?> </td>
-          <td><?php echo escape($row["lastupdated"]); ?> </td>
-          <td><?php echo escape($row["deleted"]); ?> </td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
@@ -102,8 +98,6 @@ try {
           <td><?php echo escape($row["electrical400v"]); ?></td>
           <td><?php echo escape($row["hydraulic"]); ?></td>
           <td><?php echo escape($row["pneumatic"]); ?></td>
-          <td><?php echo escape($row["creation"]); ?></td>
-          <td><?php echo escape($row["lastupdated"]); ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

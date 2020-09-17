@@ -8,7 +8,9 @@ if (isset($_POST['submit'])) {
   try {
     $connection = new PDO($dsn, $username, $password, $options);
 
-    $user =[
+    $timestamp = date("Y-m-d H:i:s");
+	
+	$user =[
       "id"            => $_POST['id'],
       "username"      => $_POST['username'],
       "email"         => $_POST['email'],
@@ -41,7 +43,7 @@ if (isset($_POST['submit'])) {
               addr_number = :addr_number,
               privatenotes = :privatenotes,
               publicnotes = :publicnotes,
-              lastupdated = 'CURRENT_TIMESTAMP()'
+              lastupdated = '$timestamp'
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);

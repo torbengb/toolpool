@@ -34,6 +34,8 @@ if (isset($_POST['submit'])) {
       <thead>
         <tr>
           <th>ID</th>
+          <th>Created</th>
+          <th>Last updated</th>
           <th>Owner</th>
           <th>Offered</th>
           <th>Loanedto</th>
@@ -53,14 +55,14 @@ if (isset($_POST['submit'])) {
           <th>Electrical400v</th>
           <th>Hydraulic</th>
           <th>Pneumatic</th>
-          <th>Created</th>
-          <th>Last updated</th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($result as $row) : ?>
         <tr>
           <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["created"]); ?></td>
+          <td><?php echo escape($row["lastupdated"]); ?></td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
@@ -79,8 +81,6 @@ if (isset($_POST['submit'])) {
           <td><?php echo escape($row["electrical400v"]); ?></td>
           <td><?php echo escape($row["hydraulic"]); ?></td>
           <td><?php echo escape($row["pneumatic"]); ?></td>
-          <td><?php echo escape($row["created"]); ?></td>
-          <td><?php echo escape($row["lastupdated"]); ?></td>
         </tr>
       <?php endforeach; ?>
       </tbody>

@@ -8,8 +8,12 @@ if (isset($_POST['submit'])) {
   try  {
     $connection = new PDO($dsn, $username, $password, $options);
     
+	$timestamp = date("Y-m-d H:i:s");
+    
     $new_user = array(
-	  "creation"     => 'CURRENT_TIMESTAMP()',
+	  "created"      => $timestamp,
+	  "lastupdated"  => '0000-00-00 00:00:00',
+	  "deleted"      => '0000-00-00 00:00:00',
       "username"     => $_POST['username'],
       "email"        => $_POST['email'],
       "firstname"    => $_POST['firstname'],
@@ -31,7 +35,6 @@ if (isset($_POST['submit'])) {
       implode(", ", array_keys($new_user)),
       ":" . implode(", :", array_keys($new_user))
     );
-    
     $statement = $connection->prepare($sql);
     $statement->execute($new_user);
   } catch(PDOException $error) {

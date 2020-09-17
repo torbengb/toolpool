@@ -34,6 +34,8 @@ if (isset($_POST['submit'])) {
       <thead>
         <tr>
           <th>ID</th>
+          <th>Created</th>
+          <th>Last updated</th>
           <th>User name</th>
           <th>Email</th>
           <th>First name</th>
@@ -47,14 +49,14 @@ if (isset($_POST['submit'])) {
           <th>House number</th>
           <th>Private notes</th>
           <th>Public notes</th>
-          <th>Created</th>
-          <th>Last updated</th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($result as $row) : ?>
         <tr>
           <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["created"]); ?> </td>
+          <td><?php echo escape($row["lastupdated"]); ?> </td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo escape($row["email"]); ?></td>
           <td><?php echo escape($row["firstname"]); ?></td>
@@ -68,8 +70,6 @@ if (isset($_POST['submit'])) {
           <td><?php echo escape($row["addr_number"]); ?></td>
           <td><?php echo escape($row["privatenotes"]); ?></td>
           <td><?php echo escape($row["publicnotes"]); ?></td>
-          <td><?php echo escape($row["creation"]); ?> </td>
-          <td><?php echo escape($row["lastupdated"]); ?> </td>
         </tr>
       <?php endforeach; ?>
       </tbody>

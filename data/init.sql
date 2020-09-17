@@ -4,9 +4,9 @@ USE toolpool_dev;
 
 CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	created TIMESTAMP,
-	lastupdated TIMESTAMP,
-	deleted TIMESTAMP,
+	created TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
 	email VARCHAR(50) NOT NULL COMMENT 'obvious',
 	firstname VARCHAR(50) COMMENT 'obvious',
@@ -18,15 +18,15 @@ CREATE TABLE users (
 	addr_zip VARCHAR(8) COMMENT '',
 	addr_street VARCHAR(80) COMMENT '',
 	addr_number VARCHAR(50) COMMENT '',
-	privatenotes VARCHAR(50) COMMENT 'notes that only the user can read',
-	publicnotes VARCHAR(50) COMMENT 'notes that all users can read'
+	privatenotes VARCHAR(50) COMMENT 'notes that only the user can read' DEFAULT 'Only you can see what you type here.',
+	publicnotes VARCHAR(50) COMMENT 'notes that all users can read' DEFAULT 'This user has no public comments.'
 );
 
 CREATE TABLE tools (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	created TIMESTAMP,
-	lastupdated TIMESTAMP,
-	deleted TIMESTAMP,
+	created TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
 	offered BOOLEAN COMMENT 'TRUE if owner currently offers to loan this tool',
 	toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',
@@ -41,10 +41,10 @@ CREATE TABLE tools (
 	taxonomy3 VARCHAR(30) COMMENT '',
 	taxonomy4 VARCHAR(30) COMMENT '',
 	taxonomy5 VARCHAR(30) COMMENT 'narrowest classification of this tool',
-	electrical230v BOOLEAN COMMENT 'TRUE if the tool requires 230V AC',
-	electrical400v BOOLEAN COMMENT 'TRUE if the tool requires 400V AC',
-	hydraulic BOOLEAN COMMENT 'TRUE if tool operates with oil pressure',
-	pneumatic BOOLEAN COMMENT 'TRUE if tool operates with air pressure'
+	electrical230v BOOLEAN COMMENT 'TRUE if the tool requires 230V AC' DEFAULT 0,
+	electrical400v BOOLEAN COMMENT 'TRUE if the tool requires 400V AC' DEFAULT 0,
+	hydraulic BOOLEAN COMMENT 'TRUE if tool operates with oil pressure' DEFAULT 0,
+	pneumatic BOOLEAN COMMENT 'TRUE if tool operates with air pressure' DEFAULT 0
 );
 
 CREATE TABLE loans (

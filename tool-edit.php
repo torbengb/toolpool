@@ -8,6 +8,8 @@ if (isset($_POST['submit'])) {
   try {
     $connection = new PDO($dsn, $username, $password, $options);
 
+    $timestamp = date("Y-m-d H:i:s");
+
     $tool =[
       "id" => $_POST['id'],
       "owner" => $_POST['owner'],
@@ -51,7 +53,7 @@ if (isset($_POST['submit'])) {
               electrical400v = :electrical400v,
               hydraulic = :hydraulic,
               pneumatic = :pneumatic,
-              lastupdated = 'CURRENT_TIMESTAMP()'
+              lastupdated = '$timestamp'
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);

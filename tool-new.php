@@ -8,8 +8,10 @@ if (isset($_POST['submit'])) {
   try  {
     $connection = new PDO($dsn, $username, $password, $options);
     
+	$timestamp = date("Y-m-d H:i:s");
+    
     $new_tool = array(
-	  "created" => 'CURRENT_TIMESTAMP()',
+	  "created" => $timestamp,
       "owner" => $_POST['owner'],
       "offered" => $_POST['offered'],
       "toolname" => $_POST['toolname'],
@@ -68,10 +70,10 @@ if (isset($_POST['submit'])) {
     <label for="taxonomy3">taxonomy3</label><input type="text" name="taxonomy3" id="taxonomy3">
     <label for="taxonomy4">taxonomy4</label><input type="text" name="taxonomy4" id="taxonomy4">
     <label for="taxonomy5">taxonomy5</label><input type="text" name="taxonomy5" id="taxonomy5">
-    <label for="electrical230v">electrical230v</label><input type="text" name="electrical230v" id="electrical230v">
-    <label for="electrical400v">electrical400v</label><input type="text" name="electrical400v" id="electrical400v">
-    <label for="hydraulic">hydraulic</label><input type="text" name="hydraulic" id="hydraulic">
-    <label for="pneumatic">pneumatic</label><input type="text" name="pneumatic" id="pneumatic">
+    <label for="electrical230v">electrical230v</label><input type="checkbox" name="electrical230v" id="electrical230v" value=1>
+    <label for="electrical400v">electrical400v</label><input type="checkbox" name="electrical400v" id="electrical400v" value=1>
+    <label for="hydraulic">hydraulic</label><input type="checkbox" name="hydraulic" id="hydraulic" value=1>
+    <label for="pneumatic">pneumatic</label><input type="checkbox" name="pneumatic" id="pneumatic" value=1>
     <input type="submit" name="submit" value="Submit">
   </form>
 

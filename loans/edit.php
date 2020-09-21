@@ -1,17 +1,18 @@
 <?php
-require "/common/config.php";
-require "/common/common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Edit a loan</h2>
+
+<?php
 // Action on SUBMIT:
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-
     $timestamp = date("Y-m-d H:i:s");
-	
-	$loan =[
+    $loan =[
       "id" => $_POST['id'],
       "created" => $_POST['created'],
       "lastupdated" => $_POST['lastupdated'],
@@ -40,7 +41,6 @@ if (isset($_POST['submit'])) {
               actualstart = :actualstart,
               actualend = :actualend
             WHERE id = :id";
-  
   $statement = $connection->prepare($sql);
   $statement->execute($loan);
   } catch(PDOException $error) {
@@ -51,14 +51,11 @@ if (isset($_POST['submit'])) {
 // Action on LOAD:
 if (isset($_GET['id'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
     $id = $_GET['id'];
-
     $sql = "SELECT * FROM loans WHERE id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-    
     $loan = $statement->fetch(PDO::FETCH_ASSOC);
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
@@ -69,13 +66,9 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<?php require "templates/header.php"; ?>
-
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated the loan in the <a href="loan-list.php">loan list</a>.</blockquote>
+    <blockquote>Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
 <?php endif; ?>
-
-<h2>Edit a loan</h2>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">

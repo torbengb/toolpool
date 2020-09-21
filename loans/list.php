@@ -68,7 +68,7 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="loan-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["active"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>

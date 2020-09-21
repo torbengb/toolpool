@@ -1,17 +1,18 @@
 <?php
-require "/common/config.php";
-require "/common/common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Edit a taxonomy</h2>
+
+<?php
 // Action on SUBMIT:
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-
     $timestamp = date("Y-m-d H:i:s");
-	
-	$tax =[
+    $tax =[
       "id"            => $_POST['id'],
 	    "lastupdated"   => $_POST['lastupdated'],
       "name"          => $_POST['name'],
@@ -26,7 +27,6 @@ if (isset($_POST['submit'])) {
               name = :name,
               parent = :parent
             WHERE id = :id";
-  
   $statement = $connection->prepare($sql);
   $statement->execute($tax);
   } catch(PDOException $error) {
@@ -37,8 +37,6 @@ if (isset($_POST['submit'])) {
 // Action on LOAD:
 if (isset($_GET['id'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-
     // Load the record:
     $id = $_GET['id'];
     $sql = "SELECT * FROM taxonomy WHERE id = :id";
@@ -67,13 +65,9 @@ if (isset($_GET['id'])) {
 
 ?>
 
-<?php require "templates/header.php"; ?>
-
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="tax-list.php">taxonomy list</a>.</blockquote>
+    <blockquote>Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="list.php">taxonomy list</a>.</blockquote>
 <?php endif; ?>
-
-<h2>Edit a taxonomy</h2>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">

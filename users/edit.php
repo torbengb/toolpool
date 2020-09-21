@@ -1,16 +1,17 @@
 <?php
-require "/common/config.php";
-require "/common/common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Edit a user</h2>
+
+<?php
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-
     $timestamp = date("Y-m-d H:i:s");
-	
-	$user =[
+    $user =[
       "id"            => $_POST['id'],
       "username"      => $_POST['username'],
       "email"         => $_POST['email'],
@@ -45,7 +46,6 @@ if (isset($_POST['submit'])) {
               privatenotes = :privatenotes,
               publicnotes = :publicnotes
             WHERE id = :id";
-  
   $statement = $connection->prepare($sql);
   $statement->execute($user);
   } catch(PDOException $error) {
@@ -55,14 +55,11 @@ if (isset($_POST['submit'])) {
   
 if (isset($_GET['id'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
     $id = $_GET['id'];
-
     $sql = "SELECT * FROM users WHERE id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-    
     $user = $statement->fetch(PDO::FETCH_ASSOC);
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
@@ -73,13 +70,9 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<?php require "templates/header.php"; ?>
-
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="user-list.php">member list</a>.</blockquote>
+    <blockquote>Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="list.php">member list</a>.</blockquote>
 <?php endif; ?>
-
-<h2>Edit a user</h2>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">

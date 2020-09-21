@@ -1,15 +1,16 @@
 <?php
-require "/common/config.php";
-require "/common/common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Edit a tool</h2>
+
+<?php
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-
     $timestamp = date("Y-m-d H:i:s");
-
     $tool =[
       "id" => $_POST['id'],
       "owner" => $_POST['owner'],
@@ -55,7 +56,6 @@ if (isset($_POST['submit'])) {
               hydraulic = :hydraulic,
               pneumatic = :pneumatic
             WHERE id = :id";
-  
   $statement = $connection->prepare($sql);
   $statement->execute($tool);
   } catch(PDOException $error) {
@@ -65,9 +65,7 @@ if (isset($_POST['submit'])) {
   
 if (isset($_GET['id'])) {
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
     $id = $_GET['id'];
-
     $sql = "SELECT * FROM tools WHERE id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
@@ -83,13 +81,9 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<?php require "templates/header.php"; ?>
-
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="tool-list.php">tool pool</a>.</blockquote>
+    <blockquote>Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
-
-<h2>Edit a tool</h2>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">

@@ -66,7 +66,7 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="tax-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["id"]); ?></td>
           <td><?php echo escape($row["name"]); ?></td>
           <td><?php echo escape($row["parentname"]); ?></td>

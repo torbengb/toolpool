@@ -3,6 +3,8 @@ require "common/common.php";
 require "common/header.php";
 ?>
 
+<p style="color:red;background-color:yellow;"><b>!! UNDER CONSTRUCTION !!</b> No warranties, neither expressed nor implied. Use at your own peril.
+
 <h2>Welcome to your tool pool!</h2>
 
 <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
@@ -43,10 +45,12 @@ UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE deleted =
 <li>You're happy that you didn't have to buy an expensive tool, and he's happy that his tool doesn't collect dust.
 </ul>
 
-<p><b>Tool Pool helps people to find tools they can borrow,</b> rather than buying them. This is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables.
+<p><b>Tool Pool helps people to find tools they can borrow,</b> rather than buying them. Tool Pool helps people build a positive neighborhood. Tool Pool is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to meet new likeminded DIY enthusiasts!
 
-<h2>!! UNDER CONSTRUCTION !!</h2>
-<p style="color:red;background-color:yellow;">No warranties, neither expressed nor implied. Use at your own peril.
+<h2>Known bugs</h2>
+<ul>
+<li>broken: "edit existing entries"
+</ul>
 
 <h2>Features</h2>
 <p>These are some of the ideas to be explored with this prototype, sorted by approximate order of planned implementation:

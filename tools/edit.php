@@ -1,6 +1,6 @@
 <?php
-require "config/config.php";
-require "common.php";
+require "/common/config.php";
+require "/common/common.php";
 
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -34,7 +34,8 @@ if (isset($_POST['submit'])) {
     ];
 
     $sql = "UPDATE tools 
-            SET id = :id, 
+            SET lastupdated = '$timestamp',
+              id = :id, 
               owner = :owner,
               offered = :offered,
               toolname = :toolname,
@@ -52,8 +53,7 @@ if (isset($_POST['submit'])) {
               electrical230v = :electrical230v,
               electrical400v = :electrical400v,
               hydraulic = :hydraulic,
-              pneumatic = :pneumatic,
-              lastupdated = '$timestamp'
+              pneumatic = :pneumatic
             WHERE id = :id";
   
   $statement = $connection->prepare($sql);
@@ -91,13 +91,13 @@ if (isset($_GET['id'])) {
 
 <h2>Edit a tool</h2>
 
-<form method="post">
+<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <?php foreach ($tool as $key => $value) : ?>
       <label for="<?php echo $key; ?>"><?php echo ucfirst($key); ?></label>
 	    <input type="text" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo escape($value); ?>" <?php echo ($key === 'id' ? 'readonly' : null); ?>>
     <?php endforeach; ?> 
-    <input type="submit" name="submit" value="Submit">
+    <input class="submit" type="submit" name="submit" value="Submit">
 </form>
 
-<?php require "templates/footer.php"; ?>
+<?php require "../common/footer.php"; ?>

@@ -1,10 +1,10 @@
-CREATE DATABASE toolpool_dev;
+-- CREATE DATABASE IF NOT EXISTS toolpool_dev; -- this was moved into 'install.php'!
 
-USE toolpool_dev;
+-- USE toolpool_dev; -- this was moved into 'install.php'!
 
 CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	created TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
@@ -24,7 +24,7 @@ CREATE TABLE users (
 
 CREATE TABLE tools (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	created TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
@@ -49,7 +49,7 @@ CREATE TABLE tools (
 
 CREATE TABLE loans (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	created TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	active BOOLEAN COMMENT 'TRUE if this loan is ongoing, FALSE if kept for historical records',
@@ -60,5 +60,14 @@ CREATE TABLE loans (
 	agreedend DATE COMMENT 'agreed date of loan end',
 	actualstart DATE COMMENT 'actual date of loan start',
 	actualend DATE COMMENT 'actual date of loan end'
+);
+
+CREATE TABLE taxonomy (
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
+	taxonomy VARCHAR(50) NOT NULL COMMENT 'the taxonomy of a tool',
+	parent VARCHAR(50) COMMENT 'the parent of this taxonomy'  
 );
 

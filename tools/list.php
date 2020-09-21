@@ -1,26 +1,25 @@
 <?php
-require "config/config.php";
-require "common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Tool Pool || <a href="new.php">add new</a></h2>
+
+<?php
 $success = null;
 
 if (isset($_POST["submit"])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
-	
-	$timestamp = date("Y-m-d H:i:s");
-  
+    $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["submit"];
     $sql = "UPDATE tools 
 			SET deleted = '$timestamp'
 			WHERE id = :id";
-
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-
     $success = "Successfully deleted the tool.";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
@@ -28,24 +27,17 @@ if (isset($_POST["submit"])) {
 }
 
 try {
-  $connection = new PDO($dsn, $username, $password, $options);
-
   $sql = "SELECT * FROM users u, tools t 
 		  WHERE t.deleted = '0000-00-00 00:00:00'
 		  AND u.id = t.owner
 		  ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
-
   $statement = $connection->prepare($sql);
   $statement->execute();
-
   $result = $statement->fetchAll();
 } catch(PDOException $error) {
   echo $sql . "<br>" . $error->getMessage();
 }
 ?>
-<?php require "templates/header.php"; ?>
-        
-<h2>Tool Pool || <a href="tool-new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
 
@@ -77,7 +69,7 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["id"]); ?></td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
@@ -101,6 +93,4 @@ try {
   </table>
 </form>
 
-<a href="index.php">Back to home</a>
-
-<?php require "templates/footer.php"; ?>
+<?php require "../common/footer.php"; ?>

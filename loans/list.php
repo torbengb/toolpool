@@ -1,7 +1,11 @@
 <?php
-require "config/config.php";
-require "common.php";
+require "../common/common.php";
+require "../common/header.php";
+?>
 
+<h2>Loans || <a href="new.php">add new</a></h2>
+
+<?php
 $success = null;
 
 if (isset($_POST["submit"])) {
@@ -28,8 +32,6 @@ if (isset($_POST["submit"])) {
 }
 
 try {
-  $connection = new PDO($dsn, $username, $password, $options);
-
   $sql = "SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l
 		  JOIN tools t ON l.tool = t.id
 		  JOIN users u1 ON l.owner = u1.id
@@ -44,9 +46,6 @@ try {
   echo $sql . "<br>" . $error->getMessage();
 }
 ?>
-<?php require "templates/header.php"; ?>
-        
-<h2>Loans || <a href="loan-new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
 
@@ -56,10 +55,6 @@ try {
     <thead>
       <tr>
           <th>Action</th>
-          <th>ID</th>
-          <th>Created</th>
-          <th>Last updated</th>
-          <th>Deleted</th>
           <th>Active</th>
           <th>Tool</th>
           <th>Owner</th>
@@ -73,11 +68,7 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="loan-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["id"]); ?></td>
-          <td><?php echo escape($row["created"]); ?></td>
-          <td><?php echo escape($row["lastupdated"]); ?></td>
-          <td><?php echo escape($row["deleted"]); ?></td>
+          <td><a href="loan-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["active"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>
@@ -92,7 +83,7 @@ try {
   </table>
 </form>
 
-<?php require "templates/footer.php"; ?>
+<?php require "../common/footer.php"; ?>
 
 <!--
 id

@@ -1,11 +1,31 @@
-label {
+/*
+palette colors
+695675 -- dark grape, matte violet
+DD5A7F -- raspberry matte red
+F87363 -- matte orange
+F7DFA8 -- sand
+58B28B -- 50s green
+*/
+
+label, xinput {
 	display: block;
-	margin: 5px 0;
+	margin: 0;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+  xborder:1px solid red;
+}
+label:hover {
+  background-color: yellow;
+}
+input {
+	margin-left: 0.5em;
+  xborder:1px solid brown;
 }
 
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+  width: 100%
 }
 
 tr:hover {

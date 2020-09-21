@@ -1,6 +1,6 @@
 <?php
-require "config/config.php";
-require "common.php";
+require "/common/config.php";
+require "/common/common.php";
 
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <label for="owner">owner</label>
   <input type="text" id="owner" name="owner">
-  <input type="submit" name="submit" value="View Results">
+  <input class="submit" type="submit" name="submit" value="View Results">
 </form>
 
-<?php require "templates/footer.php"; ?>
+<?php require "../common/footer.php"; ?>

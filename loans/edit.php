@@ -1,7 +1,8 @@
 <?php
-require "config/config.php";
-require "common.php";
+require "/common/config.php";
+require "/common/common.php";
 
+// Action on SUBMIT:
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -47,6 +48,7 @@ if (isset($_POST['submit'])) {
   }
 }
   
+// Action on LOAD:
 if (isset($_GET['id'])) {
   try {
     $connection = new PDO($dsn, $username, $password, $options);
@@ -75,13 +77,20 @@ if (isset($_GET['id'])) {
 
 <h2>Edit a loan</h2>
 
-<form method="post">
+<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <?php foreach ($loan as $key => $value) : ?>
-      <label for="<?php echo $key; ?>"><?php echo ucfirst($key); ?></label>
-	    <input type="text" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo escape($value); ?>" <?php echo ($key === 'id' ? 'readonly' : null); ?>>
-    <?php endforeach; ?> 
-    <input type="submit" name="submit" value="Submit">
+
+          <label for="id">Id	    <input type="text" name="id" id="id" value="<?php echo escape($loan["id"]); ?>" readonly></label>
+          <label for="active">Active	    <input type="text" name="active" id="active" value="<?php echo escape($loan["active"]); ?>" ></label>
+          <label for="tool">Tool	    <input type="text" name="tool" id="tool" value="6" ></label>
+          <label for="owner">Owner	    <input type="text" name="owner" id="owner" value="8" ></label>
+          <label for="loanedto">Loanedto	    <input type="text" name="loanedto" id="loanedto" value="3" ></label>
+          <label for="agreedstart">Agreedstart	    <input type="text" name="agreedstart" id="agreedstart" value="0000-00-00" ></label>
+          <label for="agreedend">Agreedend	    <input type="text" name="agreedend" id="agreedend" value="0000-00-00" ></label>
+          <label for="actualstart">Actualstart	    <input type="text" name="actualstart" id="actualstart" value="0000-00-00" ></label>
+          <label for="actualend">Actualend	    <input type="text" name="actualend" id="actualend" value="0000-00-00" ></label>
+
+    <input class="submit" type="submit" name="submit" value="Submit">
 </form>
 
-<?php require "templates/footer.php"; ?>
+<?php require "../common/footer.php"; ?>

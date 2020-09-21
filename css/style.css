@@ -8,8 +8,25 @@ table {
 	border-spacing: 0;
 }
 
+tr:hover {
+  background-color: yellow;
+}
+
 td,
 th {
 	padding: 5px;
 	border-bottom: 1px solid #aaa;
 }
+
+button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+

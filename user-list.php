@@ -1,9 +1,4 @@
 <?php
-
-/**
- * Delete a user
- */
-
 require "config/config.php";
 require "common.php";
 
@@ -14,16 +9,19 @@ if (isset($_POST["submit"])) {
 
   try {
     $connection = new PDO($dsn, $username, $password, $options);
+	
+	$timestamp = date("Y-m-d H:i:s");
   
     $id = $_POST["submit"];
-
-    $sql = "DELETE FROM users WHERE id = :id";
+    $sql = "UPDATE users 
+			SET deleted = '$timestamp'
+            WHERE id = :id";
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
 
-    $success = "User successfully deleted";
+    $success = "Successfully deleted the user.";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
@@ -32,7 +30,7 @@ if (isset($_POST["submit"])) {
 try {
   $connection = new PDO($dsn, $username, $password, $options);
 
-  $sql = "SELECT * FROM users";
+  $sql = "SELECT * FROM users WHERE deleted = '0000-00-00 00:00:00'";
 
   $statement = $connection->prepare($sql);
   $statement->execute();
@@ -44,7 +42,7 @@ try {
 ?>
 <?php require "templates/header.php"; ?>
         
-<h2>Delete users</h2>
+<h2>Members || <a href="user-new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
 
@@ -53,33 +51,27 @@ try {
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email Address</th>
-        <th>Age</th>
-        <th>Location</th>
-        <th>Date</th>
-        <th>Delete</th>
+          <th>Action</th>
+          <th>ID</th>
+          <th>User name</th>
+          <th>Email</th>
+          <th>First name</th>
+          <th>Last name</th>
       </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td><?php echo escape($row["id"]); ?></td>
-        <td><?php echo escape($row["firstname"]); ?></td>
-        <td><?php echo escape($row["lastname"]); ?></td>
-        <td><?php echo escape($row["email"]); ?></td>
-        <td><?php echo escape($row["age"]); ?></td>
-        <td><?php echo escape($row["location"]); ?></td>
-        <td><?php echo escape($row["date"]); ?> </td>
-        <td><button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete</button></td>
+          <td><a href="user-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><?php echo escape($row["id"]); ?></td>
+          <td><?php echo escape($row["username"]); ?></td>
+          <td><?php echo escape($row["email"]); ?></td>
+          <td><?php echo escape($row["firstname"]); ?></td>
+          <td><?php echo escape($row["lastname"]); ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
   </table>
 </form>
-
-<a href="index.php">Back to home</a>
 
 <?php require "templates/footer.php"; ?>

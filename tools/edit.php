@@ -6,13 +6,15 @@ require "../common/header.php";
 <h2>Edit a tool</h2>
 
 <?php
-if (isset($_POST['submit'])) {
+
+if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
-  try {
+  try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
-    $tool =[
+    $record =array(
       "id" => $_POST['id'],
+      "lastupdated" => $timestamp,
       "owner" => $_POST['owner'],
       "offered" => $_POST['offered'],
       "toolname" => $_POST['toolname'],
@@ -30,13 +32,10 @@ if (isset($_POST['submit'])) {
       "electrical230v" => $_POST['electrical230v'],
       "electrical400v" => $_POST['electrical400v'],
       "hydraulic" => $_POST['hydraulic'],
-      "pneumatic" => $_POST['pneumatic'],
-      "lastupdated"   => $_POST['lastupdated']
-    ];
-
-    $sql = "UPDATE tools 
-            SET lastupdated = '$timestamp',
-              id = :id, 
+      "pneumatic" => $_POST['pneumatic']
+    );
+    $sql = 'UPDATE tools 
+            SET lastupdated = :lastupdated,
               owner = :owner,
               offered = :offered,
               toolname = :toolname,
@@ -55,26 +54,30 @@ if (isset($_POST['submit'])) {
               electrical400v = :electrical400v,
               hydraulic = :hydraulic,
               pneumatic = :pneumatic
-            WHERE id = :id";
-  $statement = $connection->prepare($sql);
-  $statement->execute($tool);
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+            WHERE id = :id';
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
   
-if (isset($_GET['id'])) {
-  try {
+if (isset($_GET['id'])) { // Action on LOAD:
+  try { // load the record
     $id = $_GET['id'];
     $sql = "SELECT * FROM tools WHERE id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-    
     $tool = $statement->fetch(PDO::FETCH_ASSOC);
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+    
+    try { // load foreign tables:
+      $sql = "SELECT username, id FROM users u
+          WHERE u.deleted = '0000-00-00 00:00:00'
+          ORDER BY username";
+      $statement = $connection->prepare($sql);
+      $statement->execute();
+      $users = $statement->fetchAll();
+    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } else {
     echo "Something went wrong!";
     exit;
@@ -82,16 +85,38 @@ if (isset($_GET['id'])) {
 ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
+    <blockquote class="success">Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <?php foreach ($tool as $key => $value) : ?>
-      <label for="<?php echo $key; ?>"><?php echo ucfirst($key); ?></label>
-	    <input type="text" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo escape($value); ?>" <?php echo ($key === 'id' ? 'readonly' : null); ?>>
-    <?php endforeach; ?> 
-    <input class="submit" type="submit" name="submit" value="Submit">
+  <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <input type="hidden" name="id" value="<?php echo escape($tool['id']); ?>">
+
+  <label class="label" for="owner">Owner
+    <select class="input" name="owner" id="owner">
+      <?php foreach ($users as $row) : ?>
+        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($tool["owner"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["username"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
+  <label class="label" for="offered"><input class="input" type="checkbox" name="offered" id="offered" value="1" <?php echo ( escape($tool["offered"]) ? "checked" : NULL ) ?>>Offered</label>
+  <label class="label" for="toolname">Tool name<input class="input" type="text" name="toolname" id="toolname" type="text" value="<?php echo escape($tool["toolname"]); ?>"></label>
+  <label class="label" for="brand">Brand<input class="input" type="text" name="brand" id="brand" value="<?php echo escape($tool["brand"]); ?>"></label>
+  <label class="label" for="model">Model<input class="input" type="text" name="model" id="model" value="<?php echo escape($tool["model"]); ?>"></label>
+  <label class="label" for="weight">Weight<input class="input" type="text" name="weight" id="weight" value="<?php echo escape($tool["weight"]); ?>"></label>
+  <label class="label" for="dimensions">Dimensions<input class="input" type="text" name="dimensions" id="dimensions" value="<?php echo escape($tool["dimensions"]); ?>"></label>
+  <label class="label" for="privatenotes">Privatenotes<input class="input" type="text" name="privatenotes" id="privatenotes" value="<?php echo escape($tool["privatenotes"]); ?>"></label>
+  <label class="label" for="publicnotes">Publicnotes<input class="input" type="text" name="publicnotes" id="publicnotes" value="<?php echo escape($tool["publicnotes"]); ?>"></label>
+  <label class="label" for="taxonomy1">Taxonomy 1<input class="input" type="text" name="taxonomy1" id="taxonomy1" value="<?php echo escape($tool["taxonomy1"]); ?>"></label>
+  <label class="label" for="taxonomy2">Taxonomy 2<input class="input" type="text" name="taxonomy2" id="taxonomy2" value="<?php echo escape($tool["taxonomy2"]); ?>"></label>
+  <label class="label" for="taxonomy3">Taxonomy 3<input class="input" type="text" name="taxonomy3" id="taxonomy3" value="<?php echo escape($tool["taxonomy3"]); ?>"></label>
+  <label class="label" for="taxonomy4">Taxonomy 4<input class="input" type="text" name="taxonomy4" id="taxonomy4" value="<?php echo escape($tool["taxonomy4"]); ?>"></label>
+  <label class="label" for="taxonomy5">Taxonomy 5<input class="input" type="text" name="taxonomy5" id="taxonomy5" value="<?php echo escape($tool["taxonomy5"]); ?>"></label>
+  <label class="label" for="electrical230v"><input class="input" type="checkbox" name="electrical230v" id="electrical230v" value="1" <?php echo ( escape($tool["electrical230v"]) ? "checked" : NULL ) ?>>Electrical230v</label>
+  <label class="label" for="electrical400v"><input class="input" type="checkbox" name="electrical400v" id="electrical400v" value="1" <?php echo ( escape($tool["electrical400v"]) ? "checked" : NULL ) ?>>Electrical400v</label>
+  <label class="label" for="hydraulic">     <input class="input" type="checkbox" name="hydraulic"      id="hydraulic"      value="1" <?php echo ( escape($tool["hydraulic"]     ) ? "checked" : NULL ) ?>>Hydraulic</label>
+  <label class="label" for="pneumatic">     <input class="input" type="checkbox" name="pneumatic"      id="pneumatic"      value="1" <?php echo ( escape($tool["pneumatic"]     ) ? "checked" : NULL ) ?>>Pneumatic</label>
+
+  <input class="submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

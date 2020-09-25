@@ -1,25 +1,58 @@
-/*
-palette colors
-695675 -- dark grape, matte violet
-DD5A7F -- raspberry matte red
-F87363 -- matte orange
-F7DFA8 -- sand
-58B28B -- 50s green
-*/
+/* palette colors */
+:root {
+  --color1: #695675; /* dark grape, matte violet */
+  --color2: #DD5A7F; /* raspberry matte red */
+  --color3: #F87363; /* matte orange */
+  --color4: #F7DFA8; /* sand */
+  --color5: #58B28B; /* 50s green */
+}
 
-label, xinput {
+body {
+  margin:0;
+}
+.header {
+  background-color: var(--color5);
+  margin:0;
+  padding:5px;
+}
+.footer {
+  background-color: var(--color3);
+  margin:0;
+  padding:5px;
+}
+.navbar {
+  margin:0;
+  background-color: var(--color4);
+  padding:5px;
+}
+h1, h2 {
+  margin:0;
+  padding: 0 0 10px 0;
+  xborder:1px solid var(--color1);
+}
+.mainbody {
+  margin: 0;
+  padding: 5px;
+  xborder:1px solid var(--color1);
+}
+.label {
 	display: block;
 	margin: 0;
-	padding-top: 0.2em;
-	padding-bottom: 0.2em;
-  xborder:1px solid red;
+	padding: 0.2em;
+  xborder:1px solid var(--color2);
 }
-label:hover {
-  background-color: yellow;
+.labeltext {
+	xdisplay: block;
+  width:10em;
+  xborder:1px solid var(--color3);
 }
-input {
+.label:hover {
+  background-color: var(--color4);
+}
+.input {
 	margin-left: 0.5em;
-  xborder:1px solid brown;
+  xborder:1px solid var(--color5);
+  xfloat:right;
 }
 
 table {
@@ -29,24 +62,28 @@ table {
 }
 
 tr:hover {
-  background-color: yellow;
+  background-color: var(--color4);
 }
 
 td,
 th {
 	padding: 5px;
-	border-bottom: 1px solid #aaa;
+	border-bottom: 1px solid var(--color4);
 }
 
-button {
+.submit {
   background: none!important;
   border: none;
   padding: 0!important;
   /*optional*/
   font-family: arial, sans-serif;
   /*input has OS specific font-family*/
-  color: #069;
   text-decoration: underline;
   cursor: pointer;
 }
 
+.success {
+  color: white;
+  background-color: var(--color5);
+  padding: 5px;
+}

@@ -12,11 +12,17 @@
 </head>
 
 <body>
-	<h1><a href="/index.php"><?php echo $_SERVER['HTTP_HOST']; ?></a></h1>
-<hr /> ||
-	<a href="/index.php"><strong>Home</strong></a> ||
-	<a href="/tools/list.php"><strong>Tool Pool</strong></a> ||
-	<a href="/users/list.php"><strong>Members</strong></a> ||
-	<a href="/loans/list.php"><strong>Loans</strong></a> ||
-	<a href="/taxonomy/list.php"><strong>Taxonomy</strong></a> ||
-<hr />
+<div class="header">
+	<h1 class="sitename"><a href="/index.php"><?php echo $_SERVER['HTTP_HOST']; ?></a></h1>
+  <div class="navbar">
+    <div class="topics">
+      || <a href="/index.php"><strong>Home</strong></a>
+      || <a href="/tools/list.php"><strong>Tool Pool</strong></a>
+      || <a href="/users/list.php"><strong>Members</strong></a>
+      || <a href="/loans/list.php"><strong>Loans</strong></a>
+      || <a href="/taxonomy/list.php"><strong>Taxonomy</strong></a>
+      ||
+    </div>
+  </div>
+</div>
+<div class="mainbody">

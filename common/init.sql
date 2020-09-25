@@ -28,7 +28,7 @@ CREATE TABLE tools (
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	owner int(11) NOT NULL COMMENT 'user-id of owner',
-	offered BOOLEAN COMMENT 'TRUE if owner currently offers to loan this tool',
+	offered BOOLEAN DEFAULT FALSE DEFAULT FALSE COMMENT 'TRUE if owner currently offers to loan this tool',
 	toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',
 	brand VARCHAR(50) COMMENT 'the make of this tool',
 	model VARCHAR(50) COMMENT 'the model of this tool',
@@ -41,10 +41,10 @@ CREATE TABLE tools (
 	taxonomy3 VARCHAR(30) COMMENT '',
 	taxonomy4 VARCHAR(30) COMMENT '',
 	taxonomy5 VARCHAR(30) COMMENT 'narrowest classification of this tool',
-	electrical230v BOOLEAN COMMENT 'TRUE if the tool requires 230V AC' DEFAULT 0,
-	electrical400v BOOLEAN COMMENT 'TRUE if the tool requires 400V AC' DEFAULT 0,
-	hydraulic BOOLEAN COMMENT 'TRUE if tool operates with oil pressure' DEFAULT 0,
-	pneumatic BOOLEAN COMMENT 'TRUE if tool operates with air pressure' DEFAULT 0
+	electrical230v BOOLEAN DEFAULT FALSE COMMENT 'TRUE if the tool requires 230V AC' DEFAULT 0,
+	electrical400v BOOLEAN DEFAULT FALSE COMMENT 'TRUE if the tool requires 400V AC' DEFAULT 0,
+	hydraulic BOOLEAN DEFAULT FALSE COMMENT 'TRUE if tool operates with oil pressure' DEFAULT 0,
+	pneumatic BOOLEAN DEFAULT FALSE COMMENT 'TRUE if tool operates with air pressure' DEFAULT 0
 );
 
 CREATE TABLE loans (
@@ -52,7 +52,7 @@ CREATE TABLE loans (
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
-	active BOOLEAN COMMENT 'TRUE if this loan is ongoing, FALSE if kept for historical records',
+	active BOOLEAN DEFAULT FALSE COMMENT 'TRUE if this loan is ongoing, FALSE if kept for historical records',
 	tool int(11) NOT NULL COMMENT 'tools.id of the borrowed tool',
 	owner int(11) NOT NULL COMMENT 'users.id of owner',
 	loanedto int(11) NOT NULL COMMENT 'users.id that is currently borrowing this tool',
@@ -68,6 +68,6 @@ CREATE TABLE taxonomy (
 	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	taxonomy VARCHAR(50) NOT NULL COMMENT 'the taxonomy of a tool',
-	parent VARCHAR(50) COMMENT 'the parent of this taxonomy'  
+	parent INT(11) DEFAULT 0 COMMENT 'the parent of this taxonomy, or zero for top level'
 );
 

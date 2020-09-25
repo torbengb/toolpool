@@ -8,11 +8,13 @@ require "../common/header.php";
 <?php
 $success = null;
 
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try {
-    $connection = new PDO($dsn, $username, $password, $options);
+////$connection = new PDO($dsn, $username, $password, $options);
+////$sql = "USE " . $dbname;
+////$connection->exec($sql);
 	
 	$timestamp = date("Y-m-d H:i:s");
   
@@ -31,7 +33,11 @@ if (isset($_POST["submit"])) {
   }
 }
 
-try {
+// Action on LOAD:
+try { // load the record
+$connection = new PDO($dsn, $username, $password, $options);
+$sql = "USE " . $dbname;
+$connection->exec($sql);
   $sql = "SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l
 		  JOIN tools t ON l.tool = t.id
 		  JOIN users u1 ON l.owner = u1.id
@@ -69,7 +75,7 @@ try {
     <?php foreach ($result as $row) : ?>
       <tr>
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["active"]); ?></td>
+          <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>
           <td><?php echo escape($row["username2"]); ?></td>

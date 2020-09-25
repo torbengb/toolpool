@@ -8,10 +8,10 @@ require "../common/header.php";
 <?php
 $success = null;
 
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
-  try {
+  try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["submit"];
     $sql = "UPDATE tools 
@@ -26,7 +26,8 @@ if (isset($_POST["submit"])) {
   }
 }
 
-try {
+// Action on LOAD:
+try { // load the record:
   $sql = "SELECT * FROM users u, tools t 
 		  WHERE t.deleted = '0000-00-00 00:00:00'
 		  AND u.id = t.owner

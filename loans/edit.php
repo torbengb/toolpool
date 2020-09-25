@@ -6,17 +6,14 @@ require "../common/header.php";
 <h2>Edit a loan</h2>
 
 <?php
-// Action on SUBMIT:
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
-  try {
+  try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
-    $loan =[
+    $record =[
       "id" => $_POST['id'],
-      "created" => $_POST['created'],
-      "lastupdated" => $_POST['lastupdated'],
-      "deleted" => $_POST['deleted'],
+      "lastupdated" => $timestamp,
       "active" => $_POST['active'],
       "tool" => $_POST['tool'],
       "owner" => $_POST['owner'],
@@ -26,12 +23,8 @@ if (isset($_POST['submit'])) {
       "actualstart" => $_POST['actualstart'],
       "actualend" => $_POST['actualend'],
     ];
-
     $sql = "UPDATE loans 
-            SET id = :id, 
-              created = :created,
-              lastupdated = '$timestamp',
-              deleted = :deleted,
+            SET lastupdated = :lastupdated,
               active = :active,
               tool = :tool,
               owner = :owner,
@@ -42,24 +35,28 @@ if (isset($_POST['submit'])) {
               actualend = :actualend
             WHERE id = :id";
   $statement = $connection->prepare($sql);
-  $statement->execute($loan);
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
   
-// Action on LOAD:
-if (isset($_GET['id'])) {
-  try {
+if (isset($_GET['id'])) { // Action on LOAD:
+  try { // load the record
     $id = $_GET['id'];
     $sql = "SELECT * FROM loans WHERE id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
     $loan = $statement->fetch(PDO::FETCH_ASSOC);
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+    
+    try { // load foreign tables:
+      $sql = "SELECT username, id FROM users u
+          WHERE u.deleted = '0000-00-00 00:00:00'
+          ORDER BY username";
+      $statement = $connection->prepare($sql);
+      $statement->execute();
+      $users = $statement->fetchAll();
+    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } else {
     echo "Something went wrong!";
     exit;
@@ -67,23 +64,33 @@ if (isset($_GET['id'])) {
 ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
+    <blockquote class="success">Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
 <?php endif; ?>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">
 
-          <label for="id">Id	    <input type="text" name="id" id="id" value="<?php echo escape($loan["id"]); ?>" readonly></label>
-          <label for="active">Active	    <input type="text" name="active" id="active" value="<?php echo escape($loan["active"]); ?>" ></label>
-          <label for="tool">Tool	    <input type="text" name="tool" id="tool" value="6" ></label>
-          <label for="owner">Owner	    <input type="text" name="owner" id="owner" value="8" ></label>
-          <label for="loanedto">Loanedto	    <input type="text" name="loanedto" id="loanedto" value="3" ></label>
-          <label for="agreedstart">Agreedstart	    <input type="text" name="agreedstart" id="agreedstart" value="0000-00-00" ></label>
-          <label for="agreedend">Agreedend	    <input type="text" name="agreedend" id="agreedend" value="0000-00-00" ></label>
-          <label for="actualstart">Actualstart	    <input type="text" name="actualstart" id="actualstart" value="0000-00-00" ></label>
-          <label for="actualend">Actualend	    <input type="text" name="actualend" id="actualend" value="0000-00-00" ></label>
+  <label class="label" for="active">Active<input class="input" type="checkbox" name="active" id="active" value="1" <?php echo ( escape($loan["active"]) ? "checked" : NULL ) ?>>Active</label>
+  <label class="label" for="tool">Tool<input class="input" type="text" name="tool" id="tool" value="<?php echo escape($loan["tool"]); ?>" ></label>
+  <label class="label" for="owner">Owner
+    <select class="input" name="owner" id="owner">
+      <?php foreach ($users as $row) : ?>
+        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($loan["owner"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["username"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
+  <label class="label" for="loanedto">Loaned to
+    <select class="input" name="loanedto" id="loanedto">
+      <?php foreach ($users as $row) : ?>
+        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($loan["loanedto"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["username"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
+  <label class="label" for="agreedstart">Agreed start<input class="input" type="text" name="agreedstart" id="agreedstart" value="<?php echo escape($loan["agreedstart"]); ?>" ></label>
+  <label class="label" for="agreedend">Agreed end<input class="input" type="text" name="agreedend" id="agreedend" value="<?php echo escape($loan["agreedend"]); ?>" ></label>
+  <label class="label" for="actualstart">Actual start<input class="input" type="text" name="actualstart" id="actualstart" value="<?php echo escape($loan["actualstart"]); ?>" ></label>
+  <label class="label" for="actualend">Actual end<input class="input" type="text" name="actualend" id="actualend" value="<?php echo escape($loan["actualend"]); ?>" ></label>
 
-    <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

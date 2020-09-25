@@ -58,7 +58,6 @@ try {
     <thead>
       <tr>
           <th>Action</th>
-          <th>ID</th>
           <th>Name</th>
           <th>Parent</th>
       </tr>
@@ -66,8 +65,7 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["id"]); ?></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>" class="submit">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["name"]); ?></td>
           <td><?php echo escape($row["parentname"]); ?></td>
       </tr>

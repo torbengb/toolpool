@@ -6,13 +6,13 @@ require "../common/header.php";
 <h2>Add new taxonomy</h2>
 
 <?php
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
-  try  {
+  try  { // create the record:
     $timestamp = date("Y-m-d H:i:s");
     
-    $new_tax = array(
+    $record = array(
       "created"      => $timestamp,
       "name"         => $_POST['name'],
       "parent"       => $_POST['parent']
@@ -20,17 +20,16 @@ if (isset($_POST['submit'])) {
     $sql = sprintf(
       "INSERT INTO %s (%s) values (%s)",
       "taxonomy",
-      implode(", ", array_keys($new_tax)),
-      ":" . implode(", :", array_keys($new_tax))
+      implode(", ", array_keys($record)),
+      ":" . implode(", :", array_keys($record))
     );
     $statement = $connection->prepare($sql);
-    $statement->execute($new_tax);
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-try {
+// Action on LOAD:
+try { // load foreign tables:
   $sql = "SELECT name, id FROM taxonomy
       WHERE deleted = '0000-00-00 00:00:00'
       ORDER BY name";
@@ -47,11 +46,11 @@ try {
 <?php endif; ?>
 
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
-  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+  <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
   <label class="label" for="name">Name<input type="text" name="name" id="name"></label>
   <label class="label" for="parent">Parent
-    <select name="parent" id="parent">
+    <select class="input" name="parent" id="parent">
       <?php foreach ($parents as $row) : ?>
         <option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["name"]); ?></option>
       <?php endforeach; ?>

@@ -21,9 +21,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $statement->bindValue(':id', $id);
     $statement->execute();
     $success = "Successfully deleted the tool.";
-  } catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-  }
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
 // Action on LOAD:
@@ -35,8 +33,30 @@ try { // load the record:
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
-} catch(PDOException $error) {
-  echo $sql . "<br>" . $error->getMessage();
+  try { // load foreign tables:
+    // list for taxonomy columns:
+    $sql = "SELECT name, id, parent FROM taxonomy
+        WHERE deleted = '0000-00-00 00:00:00'
+        ORDER BY name";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $tax = $statement->fetchAll();
+    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+
+function taxname($taxid) {
+  // input: INT taxonomy.id
+  // operation: look up the name based on the id.
+  // output: STR taxonomy.name
+  
+  // TODO: see "operation" above :)
+  
+  if ($taxid < "2")  // hide '(none)' and '(other)'
+  { return '-';
+  } else { 
+    //.............................?????????????????
+    return $taxid . 'name?';
+  };
 }
 ?>
 
@@ -48,7 +68,6 @@ try { // load the record:
     <thead>
       <tr>
           <th>Action</th>
-          <th>ID</th>
           <th>Owner</th>
           <th>Offered</th>
           <th>Tool name</th>
@@ -71,7 +90,6 @@ try { // load the record:
     <?php foreach ($result as $row) : ?>
       <tr>
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["id"]); ?></td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
@@ -79,11 +97,11 @@ try { // load the record:
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>
           <td><?php echo escape($row["weight"]); ?></td>
-          <td><?php echo escape($row["taxonomy1"]); ?></td>
-          <td><?php echo escape($row["taxonomy2"]); ?></td>
-          <td><?php echo escape($row["taxonomy3"]); ?></td>
-          <td><?php echo escape($row["taxonomy4"]); ?></td>
-          <td><?php echo escape($row["taxonomy5"]); ?></td>
+          <td><?php echo taxname(escape($row["taxonomy1"])) ; ?></td>
+          <td><?php echo taxname(escape($row["taxonomy2"])) ; ?></td>
+          <td><?php echo taxname(escape($row["taxonomy3"])) ; ?></td>
+          <td><?php echo taxname(escape($row["taxonomy4"])) ; ?></td>
+          <td><?php echo taxname(escape($row["taxonomy5"])) ; ?></td>
           <td><?php echo (escape($row["electrical230v"])) ? '230V' : '-' ; ?></td>
           <td><?php echo (escape($row["electrical400v"])) ? '400V' : '-' ; ?></td>
           <td><?php echo (escape($row["hydraulic"])) ? 'hydr' : '-' ; ?></td>

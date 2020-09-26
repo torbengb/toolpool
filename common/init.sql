@@ -36,11 +36,11 @@ CREATE TABLE tools (
 	weight VARCHAR(50) COMMENT 'weight of this tool',
 	privatenotes VARCHAR(50) COMMENT 'notes that only the user can read',
 	publicnotes VARCHAR(50) COMMENT 'notes that all users can read',
-	taxonomy1 VARCHAR(30) COMMENT 'broadest classification of this tool',
-	taxonomy2 VARCHAR(30) COMMENT '',
-	taxonomy3 VARCHAR(30) COMMENT '',
-	taxonomy4 VARCHAR(30) COMMENT '',
-	taxonomy5 VARCHAR(30) COMMENT 'narrowest classification of this tool',
+	taxonomy1 INT(11) NOT NULL DEFAULT 0 COMMENT 'id of the broadest classification of this tool',
+	taxonomy2 INT(11) NOT NULL DEFAULT 0 COMMENT 'id of the classification',
+	taxonomy3 INT(11) NOT NULL DEFAULT 0 COMMENT 'id of the classification',
+	taxonomy4 INT(11) NOT NULL DEFAULT 0 COMMENT 'id of the classification',
+	taxonomy5 INT(11) NOT NULL DEFAULT 0 COMMENT 'id of the narrowest classification of this tool',
 	electrical230v BOOLEAN DEFAULT FALSE COMMENT 'TRUE if the tool requires 230V AC' DEFAULT 0,
 	electrical400v BOOLEAN DEFAULT FALSE COMMENT 'TRUE if the tool requires 400V AC' DEFAULT 0,
 	hydraulic BOOLEAN DEFAULT FALSE COMMENT 'TRUE if tool operates with oil pressure' DEFAULT 0,
@@ -71,3 +71,8 @@ CREATE TABLE taxonomy (
 	parent INT(11) DEFAULT 0 COMMENT 'the parent of this taxonomy, or zero for top level'
 );
 
+INSERT INTO taxonomy (id,created,lastupdated,deleted,name,parent) 
+VALUES 
+ (0,SYSDATE(),NULL,NULL,'(none)',0)
+,(1,SYSDATE(),NULL,NULL,'(not specified)',0)
+;

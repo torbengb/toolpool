@@ -34,6 +34,24 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $statement->execute($record);
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
+
+// Action on LOAD:
+try { 
+  // load users:
+  $sql = "SELECT username, id FROM users
+      WHERE deleted = '0000-00-00 00:00:00'
+      ORDER BY username";
+  $statement = $connection->prepare($sql);
+  $statement->execute();
+  $users = $statement->fetchAll();
+  // load tools:
+  $sql = "SELECT toolname, id FROM tools
+      WHERE deleted = '0000-00-00 00:00:00'
+      ORDER BY toolname";
+  $statement = $connection->prepare($sql);
+  $statement->execute();
+  $tools = $statement->fetchAll();
+} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
@@ -44,13 +62,25 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
     <label class="label" for="active"><input class="input" type="checkbox" name="active" id="active" value=1 checked>active</label>
-    <label class="label" for="tool">tool<input class="input" type="text" name="tool" id="tool"></label>
-    <label class="label" for="owner">owner<input class="input" type="text" name="owner" id="owner"></label>
-    <label class="label" for="loanedto">loanedto<input class="input" type="text" name="loanedto" id="loanedto"></label>
+  <label class="label" for="tool">Tool
+    <select class="input" name="tool" id="tool">
+      <?php foreach ($tools as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["toolname"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
+  <label class="label" for="owner">Owner
+    <select class="input" name="owner" id="owner">
+      <?php foreach ($users as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
+  <label class="label" for="loanedto">Loaned to
+    <select class="input" name="loanedto" id="loanedto">
+      <?php foreach ($users as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
     <label class="label" for="agreedstart">agreedstart<input class="input" type="text" name="agreedstart" id="agreedstart"></label>
-    <label class="label" for="agreedend">agreedend<input class="input" type="text" name="agreedend" id="agreedend"></label>
+    <label class="label" for="agreedend"  >agreedend  <input class="input" type="text" name="agreedend"   id="agreedend"  ></label>
     <label class="label" for="actualstart">actualstart<input class="input" type="text" name="actualstart" id="actualstart"></label>
-    <label class="label" for="actualend">actualend<input class="input" type="text" name="actualend" id="actualend"></label>
+    <label class="label" for="actualend"  >actualend  <input class="input" type="text" name="actualend"   id="actualend"  ></label>
 
   <input class="submit" type="submit" name="submit" value="Submit">
 </form>

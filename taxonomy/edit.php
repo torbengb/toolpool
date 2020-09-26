@@ -37,11 +37,15 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $tax = $statement->fetch(PDO::FETCH_ASSOC);
     
   try { // load foreign tables:
-    $sql = "SELECT '(none)' as name,
-        0 as id,
-        0 as parent
-      UNION
-      SELECT name, id, parent FROM taxonomy
+    $sql = "SELECT name, id, parent FROM taxonomy
+        WHERE deleted = '0000-00-00 00:00:00'
+        ORDER BY name";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $parents = $statement->fetchAll();
+    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  try { // load foreign tables:
+    $sql = "SELECT name, id, parent FROM taxonomy
         WHERE deleted = '0000-00-00 00:00:00'
         ORDER BY name";
     $statement = $connection->prepare($sql);

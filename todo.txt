@@ -1,0 +1,14 @@
+TODO
+=====================
+
+install.php
+  not sure if I should add a 'switch ($dbname)' to 'DROP DATABASE' in non-prod environments?
+
+tool-list
+  tax name output
+
+tool-new
+  tax2..4 as adaptive dropdown
+
+tax-list
+  list order

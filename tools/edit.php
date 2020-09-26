@@ -61,7 +61,8 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
 }
   
 if (isset($_GET['id'])) { // Action on LOAD:
-  try { // load the record
+  try { 
+    // load the record
     $id = $_GET['id'];
     $sql = "SELECT * FROM tools WHERE id = :id";
     $statement = $connection->prepare($sql);
@@ -69,14 +70,22 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement->execute();
     $tool = $statement->fetch(PDO::FETCH_ASSOC);
     
-    try { // load foreign tables:
-      $sql = "SELECT username, id FROM users u
-          WHERE u.deleted = '0000-00-00 00:00:00'
-          ORDER BY username";
-      $statement = $connection->prepare($sql);
-      $statement->execute();
-      $users = $statement->fetchAll();
-    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+    // load usernames:
+    $sql = "SELECT username, id FROM users u
+        WHERE u.deleted = '0000-00-00 00:00:00'
+        ORDER BY username";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $users = $statement->fetchAll();
+    
+    // list for taxonomy columns:
+    $sql = "SELECT name, id, parent FROM taxonomy
+        WHERE deleted = '0000-00-00 00:00:00'
+        ORDER BY name";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $tax = $statement->fetchAll();
+
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } else {
     echo "Something went wrong!";
@@ -106,11 +115,66 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="dimensions">Dimensions<input class="input" type="text" name="dimensions" id="dimensions" value="<?php echo escape($tool["dimensions"]); ?>"></label>
   <label class="label" for="privatenotes">Privatenotes<input class="input" type="text" name="privatenotes" id="privatenotes" value="<?php echo escape($tool["privatenotes"]); ?>"></label>
   <label class="label" for="publicnotes">Publicnotes<input class="input" type="text" name="publicnotes" id="publicnotes" value="<?php echo escape($tool["publicnotes"]); ?>"></label>
-  <label class="label" for="taxonomy1">Taxonomy 1<input class="input" type="text" name="taxonomy1" id="taxonomy1" value="<?php echo escape($tool["taxonomy1"]); ?>"></label>
-  <label class="label" for="taxonomy2">Taxonomy 2<input class="input" type="text" name="taxonomy2" id="taxonomy2" value="<?php echo escape($tool["taxonomy2"]); ?>"></label>
-  <label class="label" for="taxonomy3">Taxonomy 3<input class="input" type="text" name="taxonomy3" id="taxonomy3" value="<?php echo escape($tool["taxonomy3"]); ?>"></label>
-  <label class="label" for="taxonomy4">Taxonomy 4<input class="input" type="text" name="taxonomy4" id="taxonomy4" value="<?php echo escape($tool["taxonomy4"]); ?>"></label>
-  <label class="label" for="taxonomy5">Taxonomy 5<input class="input" type="text" name="taxonomy5" id="taxonomy5" value="<?php echo escape($tool["taxonomy5"]); ?>"></label>
+  <label class="label" for="taxonomy1"><span class="labeltext">Taxonomy 1</span>
+    <select class="input" name="taxonomy1" id="taxonomy1">
+      <?php foreach ($tax as $row) : ?>
+        <option 
+          name="taxonomy1" 
+          id="taxonomy1"
+          value="<?php echo escape($row["id"]); ?>" 
+            <?php echo ( escape($row["id"]) == escape($tool["taxonomy1"]) ? "selected='selected'" : NULL ) ?>
+        ><?php echo escape($row["name"]) ; ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label class="label" for="taxonomy2"><span class="labeltext">Taxonomy 2</span>
+    <select class="input" name="taxonomy2" id="taxonomy2">
+      <?php foreach ($tax as $row) : ?>
+        <option 
+          name="taxonomy2" 
+          id="taxonomy2"
+          value="<?php echo escape($row["id"]); ?>" 
+            <?php echo ( escape($row["id"]) == escape($tool["taxonomy2"]) ? "selected='selected'" : NULL ) ?>
+        ><?php echo escape($row["name"]) ; ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label class="label" for="taxonomy3"><span class="labeltext">Taxonomy 3</span>
+    <select class="input" name="taxonomy3" id="taxonomy3">
+      <?php foreach ($tax as $row) : ?>
+        <option 
+          name="taxonomy3" 
+          id="taxonomy3"
+          value="<?php echo escape($row["id"]); ?>" 
+            <?php echo ( escape($row["id"]) == escape($tool["taxonomy3"]) ? "selected='selected'" : NULL ) ?>
+        ><?php echo escape($row["name"]) ; ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label class="label" for="taxonomy4"><span class="labeltext">Taxonomy 4</span>
+    <select class="input" name="taxonomy4" id="taxonomy4">
+      <?php foreach ($tax as $row) : ?>
+        <option 
+          name="taxonomy4" 
+          id="taxonomy4"
+          value="<?php echo escape($row["id"]); ?>" 
+            <?php echo ( escape($row["id"]) == escape($tool["taxonomy4"]) ? "selected='selected'" : NULL ) ?>
+        ><?php echo escape($row["name"]) ; ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
+  <label class="label" for="taxonomy5"><span class="labeltext">Taxonomy 5</span>
+    <select class="input" name="taxonomy5" id="taxonomy5">
+      <?php foreach ($tax as $row) : ?>
+        <option 
+          name="taxonomy5" 
+          id="taxonomy5"
+          value="<?php echo escape($row["id"]); ?>" 
+            <?php echo ( escape($row["id"]) == escape($tool["taxonomy5"]) ? "selected='selected'" : NULL ) ?>
+        ><?php echo escape($row["name"]) ; ?></option>
+      <?php endforeach; ?>
+    </select>
+  </label>
   <label class="label" for="electrical230v"><input class="input" type="checkbox" name="electrical230v" id="electrical230v" value="1" <?php echo ( escape($tool["electrical230v"]) ? "checked" : NULL ) ?>>Electrical230v</label>
   <label class="label" for="electrical400v"><input class="input" type="checkbox" name="electrical400v" id="electrical400v" value="1" <?php echo ( escape($tool["electrical400v"]) ? "checked" : NULL ) ?>>Electrical400v</label>
   <label class="label" for="hydraulic">     <input class="input" type="checkbox" name="hydraulic"      id="hydraulic"      value="1" <?php echo ( escape($tool["hydraulic"]     ) ? "checked" : NULL ) ?>>Hydraulic</label>

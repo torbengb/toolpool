@@ -45,16 +45,28 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
 
 // Action on LOAD:
 try { // load foreign tables:
+    // list of usernames:
   $sql = "SELECT username, id FROM users u
       WHERE u.deleted = '0000-00-00 00:00:00'
       ORDER BY username";
-
   $statement = $connection->prepare($sql);
   $statement->execute();
   $users = $statement->fetchAll();
-} catch(PDOException $error) {
-  echo $sql . "<br>" . $error->getMessage();
-}
+    
+  try { // load foreign tables:
+    // list for taxonomy1:
+    $sql = "SELECT name, id FROM taxonomy
+        WHERE deleted = '0000-00-00 00:00:00'
+        AND parent = 0 -- only fetch 1st level items
+        AND id > 0 -- do not fetch '(none)'
+        ORDER BY name";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $tax1 = $statement->fetchAll();
+    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+
+//var_dump($tax1);
 ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
@@ -78,7 +90,12 @@ try { // load foreign tables:
   <label class="label" for="weight">Weight<input class="input" type="text" name="weight" id="weight"></label>
   <label class="label" for="privatenotes">Private notes<input class="input" type="text" name="privatenotes" id="privatenotes"></label>
   <label class="label" for="publicnotes">Public notes<input class="input" type="text" name="publicnotes" id="publicnotes"></label>
-  <label class="label" for="taxonomy1">Taxonomy 1<input class="input" type="text" name="taxonomy1" id="taxonomy1"></label>
+  <label class="label" for="taxonomy1">Taxonomy 1
+    <select class="input" name="taxonomy1" id="taxonomy1">
+      <?php foreach ($tax1 as $row) : ?>
+        <option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["name"]); ?></option>
+      <?php endforeach; ?>
+    </select></label>
   <label class="label" for="taxonomy2">Taxonomy 2<input class="input" type="text" name="taxonomy2" id="taxonomy2"></label>
   <label class="label" for="taxonomy3">Taxonomy 3<input class="input" type="text" name="taxonomy3" id="taxonomy3"></label>
   <label class="label" for="taxonomy4">Taxonomy 4<input class="input" type="text" name="taxonomy4" id="taxonomy4"></label>

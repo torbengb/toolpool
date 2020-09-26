@@ -12,9 +12,9 @@ if (empty($_SESSION['csrf'])) {
 		$_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(32));
 	}
 }
+
 // determine which database to use:
-$myhost = $_SERVER['HTTP_HOST'];
-switch ($myhost) {
+switch ($_SERVER['HTTP_HOST']) {
   case "localhost":
   case "toolpool-dev.golfbravo.net":
     $dbname = "toolpool_dev";
@@ -26,7 +26,7 @@ switch ($myhost) {
     $dbname = "toolpool";
     break;
   default:
-    die('Unable to select database!');
+    die('Cannot determine environment!');
 }
 // then use that database:
 $connection = new PDO($dsn, $username, $password, $options);

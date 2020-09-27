@@ -6,14 +6,14 @@
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Tool Pool v<?php echo $version; ?></title>
+	<title>Tool Pool</title>
 
 	<link rel="stylesheet" href="/common/style.css">
 </head>
 
 <body>
 <div class="header">
-	<h1 class="sitename"><a href="/index.php"><?php echo $_SERVER['HTTP_HOST']; ?></a></h1>
+	<h1 class="sitename"><a href="/index.php">Tool Pool</a> on <?php echo $_SERVER['HTTP_HOST']; ?></h1>
   <div class="navbar">
     <div class="topics">
       || <a href="/index.php"><strong>Home</strong></a>

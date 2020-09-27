@@ -48,9 +48,8 @@ UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE deleted =
 <p><b>Tool Pool helps people to find tools they can borrow,</b> rather than buying them. Tool Pool helps people build a positive neighborhood. Tool Pool is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to meet new likeminded DIY enthusiasts!
 
 <h2>Known bugs</h2>
-<ul>
-<li>broken: "edit existing entries"
-</ul>
+<p>See the <a href="https://github.com/torbengb/toolpool/issues/" target="_new">issue tracker on GitHub</a>.
+</p>
 
 <h2>Features</h2>
 <p>These are some of the ideas to be explored with this prototype, sorted by approximate order of planned implementation:

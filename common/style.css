@@ -28,31 +28,26 @@ body {
 h1, h2 {
   margin:0;
   padding: 0 0 10px 0;
-  xborder:1px solid var(--color1);
 }
 .mainbody {
   margin: 0;
   padding: 5px;
-  xborder:1px solid var(--color1);
 }
 .label {
 	display: block;
 	margin: 0;
 	padding: 0.2em;
-  xborder:1px solid var(--color2);
 }
+
 .labeltext {
-	xdisplay: block;
   width:10em;
-  xborder:1px solid var(--color3);
 }
+
 .label:hover {
   background-color: var(--color4);
 }
 .input {
 	margin-left: 0.5em;
-  xborder:1px solid var(--color5);
-  xfloat:right;
 }
 
 table {
@@ -61,14 +56,31 @@ table {
   width: 100%
 }
 
-tr:hover {
+TH {
+  text-align: left;
+}
+.offered {
+  background-color: var(--color5);
+}
+.notoffered {
+  text-decoration: line-through;
+  background-color: var(--color1);
+}
+.loaned {
   background-color: var(--color4);
+}
+.deleted {
+  background-color: var(--color1);
+}
+
+tr:hover {
+  background-color: yellow;
 }
 
 td,
 th {
 	padding: 5px;
-	border-bottom: 1px solid var(--color4);
+	border-bottom: 1px solid black;
 }
 
 .submit {

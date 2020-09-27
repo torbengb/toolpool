@@ -26,38 +26,32 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
 
 // Action on LOAD:
 try { // load the record:
-  $sql = "SELECT * FROM users u, tools t 
-		  WHERE t.deleted = '0000-00-00 00:00:00'
-		  AND u.id = t.owner
-		  ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
+  $sql = "SELECT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
+    FROM tools t
+    JOIN users u ON u.id = t.owner
+    LEFT JOIN loans l ON l.tool = t.id 
+    			AND l.active = 1
+    LEFT JOIN taxonomy t1 ON t1.id = t.taxonomy1 
+    LEFT JOIN taxonomy t2 ON t2.id = t.taxonomy2 
+    LEFT JOIN taxonomy t3 ON t3.id = t.taxonomy3 
+    LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
+    LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
+    WHERE t.deleted = '0000-00-00 00:00:00'
+    AND u.id = t.owner
+    ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
   try { // load foreign tables:
     // list for taxonomy columns:
     $sql = "SELECT name, id, parent FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name";
+      WHERE deleted = '0000-00-00 00:00:00'
+      ORDER BY name";
     $statement = $connection->prepare($sql);
     $statement->execute();
     $tax = $statement->fetchAll();
     } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-
-function taxname($taxid) {
-  // input: INT taxonomy.id
-  // operation: look up the name based on the id.
-  // output: STR taxonomy.name
-  
-  // TODO: see "operation" above :)
-  
-  if ($taxid < "2")  // hide '(none)' and '(other)'
-  { return '-';
-  } else { 
-    //.............................?????????????????
-    return $taxid . 'name?';
-  };
-}
 ?>
 
 <?php if ($success) echo $success; ?>
@@ -88,7 +82,17 @@ function taxname($taxid) {
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
-      <tr>
+      <tr
+        <?php echo
+          ( escape($row["offered"])
+          ? ( escape($row["active"]) 
+            ? 'class="loaned" title="currently loaned"' 
+            : 'class="offered"' 
+            )
+          : 'class="notoffered" title="currently not offered"'
+          )
+        ?>
+      >
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
@@ -97,11 +101,11 @@ function taxname($taxid) {
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>
           <td><?php echo escape($row["weight"]); ?></td>
-          <td><?php echo taxname(escape($row["taxonomy1"])) ; ?></td>
-          <td><?php echo taxname(escape($row["taxonomy2"])) ; ?></td>
-          <td><?php echo taxname(escape($row["taxonomy3"])) ; ?></td>
-          <td><?php echo taxname(escape($row["taxonomy4"])) ; ?></td>
-          <td><?php echo taxname(escape($row["taxonomy5"])) ; ?></td>
+          <td><?php echo ( escape($row["taxonomy1"])==0 ? '-' : escape($row["t1"]) ) ; ?></td>
+          <td><?php echo ( escape($row["taxonomy2"])==0 ? '-' : escape($row["t2"]) ) ; ?></td>
+          <td><?php echo ( escape($row["taxonomy3"])==0 ? '-' : escape($row["t3"]) ) ; ?></td>
+          <td><?php echo ( escape($row["taxonomy4"])==0 ? '-' : escape($row["t4"]) ) ; ?></td>
+          <td><?php echo ( escape($row["taxonomy5"])==0 ? '-' : escape($row["t5"]) ) ; ?></td>
           <td><?php echo (escape($row["electrical230v"])) ? '230V' : '-' ; ?></td>
           <td><?php echo (escape($row["electrical400v"])) ? '400V' : '-' ; ?></td>
           <td><?php echo (escape($row["hydraulic"])) ? 'hydr' : '-' ; ?></td>

@@ -11,7 +11,7 @@ $success = null;
 if (isset($_POST["submit"])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
-  try {
+  try { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["submit"];
     $sql = "UPDATE users 
@@ -21,19 +21,18 @@ if (isset($_POST["submit"])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
     $success = "Successfully deleted the user.";
-  } catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-  }
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-try {
-  $sql = "SELECT * FROM users WHERE deleted = '0000-00-00 00:00:00'";
+try { // Action on LOAD:
+  $sql = "SELECT u.*, r.name AS region
+    FROM users u
+    LEFT JOIN regions r ON r.code = u.addr_region -- LEFT does not suppress users without a region
+    WHERE u.deleted = '0000-00-00 00:00:00'";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
-} catch(PDOException $error) {
-  echo $sql . "<br>" . $error->getMessage();
-}
+} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
 
 <?php if ($success) echo $success; ?>
@@ -45,6 +44,7 @@ try {
       <tr>
           <th>Action</th>
           <th>User name</th>
+          <th>Region</th>
           <th>Email</th>
           <th>First name</th>
           <th>Last name</th>
@@ -55,6 +55,9 @@ try {
       <tr>
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["username"]); ?></td>
+          <td><?php echo ( escape($row["addr_region"])== NULL 
+          ? NULL 
+          : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["region"]) ) ; ?></td>
           <td><?php echo escape($row["email"]); ?></td>
           <td><?php echo escape($row["firstname"]); ?></td>
           <td><?php echo escape($row["lastname"]); ?></td>

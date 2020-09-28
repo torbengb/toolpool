@@ -48,6 +48,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement->bindValue(':id', $id);
     $statement->execute();
     $loan = $statement->fetch(PDO::FETCH_ASSOC);
+
     // load users:
     $sql = "SELECT username, id FROM users
         WHERE deleted = '0000-00-00 00:00:00'
@@ -55,13 +56,16 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement = $connection->prepare($sql);
     $statement->execute();
     $users = $statement->fetchAll();
-    // load tools:
-    $sql = "SELECT toolname, id FROM tools
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY toolname";
+
+    // load tools and their owners:
+    $sql = "SELECT t.toolname, t.id, u.username
+      FROM tools t
+      JOIN users u ON u.id = t.owner
+      WHERE t.deleted = '0000-00-00 00:00:00'";
     $statement = $connection->prepare($sql);
     $statement->execute();
     $tools = $statement->fetchAll();
+
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } else {
     echo "Something went wrong!";
@@ -80,18 +84,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">
 
   <label class="label" for="active">Active<input class="input" type="checkbox" name="active" id="active" value="1" <?php echo ( escape($loan["active"]) ? "checked" : NULL ) ?>>Active</label>
-  <label class="label" for="tool">Tool
-    <select class="input" name="tool" id="tool">
-      <?php foreach ($tools as $row) : ?>
-        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($loan["tool"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["toolname"]); ?></option>
-      <?php endforeach; ?>
-    </select></label>
-  <label class="label" for="owner">Owner
-    <select class="input" name="owner" id="owner">
-      <?php foreach ($users as $row) : ?>
-        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($loan["owner"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["username"]); ?></option>
-      <?php endforeach; ?>
-    </select></label>
+  <label class="label" for="tool">Tool<input class="input" readonly type="text" name="tool" id="tool" value="<?php echo escape($loan["toolname"]); ?>"></label>
+  <label class="label" for="owner">Owner<input class="input" readonly type="text" name="owner" id="owner" value="<?php echo escape($tools["username"]); ?>"></label>
   <label class="label" for="loanedto">Loaned to
     <select class="input" name="loanedto" id="loanedto">
       <?php foreach ($users as $row) : ?>

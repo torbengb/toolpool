@@ -44,10 +44,12 @@ try {
   $statement = $connection->prepare($sql);
   $statement->execute();
   $users = $statement->fetchAll();
-  // load tools:
-  $sql = "SELECT toolname, id FROM tools
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY toolname";
+  // load tools and their owners:
+  $sql = "SELECT t.toolname, t.id, u.username
+    FROM tools t
+    JOIN users u ON u.id = t.owner
+    WHERE t.deleted = '0000-00-00 00:00:00'
+    ORDER BY t.toolname";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $tools = $statement->fetchAll();
@@ -67,20 +69,17 @@ try {
       <?php foreach ($tools as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["toolname"]); ?></option>
       <?php endforeach; ?>
     </select></label>
-  <label class="label" for="owner">Owner
-    <select class="input" name="owner" id="owner">
-      <?php foreach ($users as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></option>
-      <?php endforeach; ?>
-    </select></label>
+  <label class="label" for="owner">owner<input class="input" readonly type="text" name="owner" id="owner" value="<?php echo escape($row["username"]); ?>"></label>
   <label class="label" for="loanedto">Loaned to
     <select class="input" name="loanedto" id="loanedto">
       <?php foreach ($users as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></option>
       <?php endforeach; ?>
-    </select></label>
-    <label class="label" for="agreedstart">agreedstart<input class="input" type="text" name="agreedstart" id="agreedstart"></label>
-    <label class="label" for="agreedend"  >agreedend  <input class="input" type="text" name="agreedend"   id="agreedend"  ></label>
-    <label class="label" for="actualstart">actualstart<input class="input" type="text" name="actualstart" id="actualstart"></label>
-    <label class="label" for="actualend"  >actualend  <input class="input" type="text" name="actualend"   id="actualend"  ></label>
+    </select>
+  </label>
+  <label class="label" for="agreedstart">agreedstart<input class="input" type="text" name="agreedstart" id="agreedstart"></label>
+  <label class="label" for="agreedend"  >agreedend  <input class="input" type="text" name="agreedend"   id="agreedend"  ></label>
+  <label class="label" for="actualstart">actualstart<input class="input" type="text" name="actualstart" id="actualstart"></label>
+  <label class="label" for="actualend"  >actualend  <input class="input" type="text" name="actualend"   id="actualend"  ></label>
 
   <input class="submit" type="submit" name="submit" value="Submit">
 </form>

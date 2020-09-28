@@ -8,12 +8,51 @@ require "../common/header.php";
 <?php
 $success = null;
 
-if (isset($_POST['submit'])) { // Action on SUBMIT:
+if (isset($_POST['loan'])) { // Action on SUBMIT:
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  try { 
+// first collect the necessary data:
+    $id = $_POST["loan"];
+    $sql = "SELECT t.owner, t.toolname, u.username 
+      FROM tools t
+      JOIN users u ON u.id = t.owner
+      WHERE t.id = :id";
+    $statement = $connection->prepare($sql);
+    $statement->bindValue(':id', $id);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    //var_dump($result);
+    $owner     = $result[0][0]; // gives first value in a "multidimensional array", in this case the only value.
+    $toolname  = $result[0][1];
+    $ownername = $result[0][2];
+// create a new loan record:
+    $timestamp = date("Y-m-d H:i:s");
+    $loanedto  = 12; // TODO: get the current user id.
+    $record = array(
+      "created" => $timestamp,
+      "active" => 1,
+      "tool" => $id,
+      "owner" => $owner,
+      "loanedto" => $loanedto
+    );
+    $sql = sprintf(
+      "INSERT INTO %s (%s) values (%s)",
+      "loans",
+      implode(", ", array_keys($record)),
+      ":" . implode(", :", array_keys($record))
+    );
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+    //var_dump($statement);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+}
+
+if (isset($_POST['delete'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
-    $id = $_POST["submit"];
+    $id = $_POST["delete"];
     $sql = "UPDATE tools 
 			SET deleted = '$timestamp'
 			WHERE id = :id";
@@ -37,7 +76,6 @@ try { // load the record:
     LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
     LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
     WHERE t.deleted = '0000-00-00 00:00:00'
-    AND u.id = t.owner
     ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
   $statement = $connection->prepare($sql);
   $statement->execute();
@@ -53,6 +91,10 @@ try { // load the record:
     } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
+
+<?php if (isset($_POST['loan']) && $statement) : ?>
+  <blockquote>Successfully recorded the loan. Now you may pick up the <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.</blockquote>
+<?php endif; ?>
 
 <?php if ($success) echo $success; ?>
 
@@ -86,14 +128,16 @@ try { // load the record:
         <?php echo
           ( escape($row["offered"])
           ? ( escape($row["active"]) 
-            ? 'class="loaned" title="currently loaned"' 
-            : 'class="offered"' 
-            )
-          : 'class="notoffered" title="currently not offered"'
-          )
+            ? 'class="loaned" title="currently loaned"'
+            : 'class="offered"' )
+          : 'class="notoffered" title="currently not offered"' )
         ?>
       >
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td>
+            <button class="submit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
+            <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+            <button class="submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
+          </td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
@@ -101,15 +145,15 @@ try { // load the record:
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>
           <td><?php echo escape($row["weight"]); ?></td>
-          <td><?php echo ( escape($row["taxonomy1"])==0 ? '-' : escape($row["t1"]) ) ; ?></td>
-          <td><?php echo ( escape($row["taxonomy2"])==0 ? '-' : escape($row["t2"]) ) ; ?></td>
-          <td><?php echo ( escape($row["taxonomy3"])==0 ? '-' : escape($row["t3"]) ) ; ?></td>
-          <td><?php echo ( escape($row["taxonomy4"])==0 ? '-' : escape($row["t4"]) ) ; ?></td>
-          <td><?php echo ( escape($row["taxonomy5"])==0 ? '-' : escape($row["t5"]) ) ; ?></td>
-          <td><?php echo (escape($row["electrical230v"])) ? '230V' : '-' ; ?></td>
-          <td><?php echo (escape($row["electrical400v"])) ? '400V' : '-' ; ?></td>
-          <td><?php echo (escape($row["hydraulic"])) ? 'hydr' : '-' ; ?></td>
-          <td><?php echo (escape($row["pneumatic"])) ? 'pneu' : '-' ; ?></td>
+          <td><?php echo escape($row["taxonomy1"])==0 ? '-' : escape($row["t1"]) ; ?></td>
+          <td><?php echo escape($row["taxonomy2"])==0 ? '-' : escape($row["t2"]) ; ?></td>
+          <td><?php echo escape($row["taxonomy3"])==0 ? '-' : escape($row["t3"]) ; ?></td>
+          <td><?php echo escape($row["taxonomy4"])==0 ? '-' : escape($row["t4"]) ; ?></td>
+          <td><?php echo escape($row["taxonomy5"])==0 ? '-' : escape($row["t5"]) ; ?></td>
+          <td><?php echo escape($row["electrical230v"]) ? '230V' : '-' ; ?></td>
+          <td><?php echo escape($row["electrical400v"]) ? '400V' : '-' ; ?></td>
+          <td><?php echo escape($row["hydraulic"]) ? 'hydr' : '-' ; ?></td>
+          <td><?php echo escape($row["pneumatic"]) ? 'pneu' : '-' ; ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

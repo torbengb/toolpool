@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
             WHERE id = :id";
   $statement = $connection->prepare($sql);
     $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
   
 if (isset($_GET['id'])) { // Action on LOAD:
@@ -69,11 +69,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement->execute();
     $regions = $statement->fetchAll();
 
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-} else {
-    echo "Something went wrong!";
-    exit;
-}
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+} else { showMessage( __LINE__ , __FILE__ ) ; exit; }
 ?>
 
 <h2>Edit a user</h2>
@@ -82,7 +79,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="list.php">member list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
 
@@ -120,7 +117,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="privatenotes">privatenotes<input class="input" type="text" name="privatenotes" id="privatenotes" value="<?php echo escape($user["privatenotes"]); ?>"></label>
   <label class="label" for="publicnotes">publicnotes<input class="input" type="text" name="publicnotes" id="publicnotes" value="<?php echo escape($user["publicnotes"]); ?>"></label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

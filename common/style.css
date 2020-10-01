@@ -90,7 +90,7 @@ th {
 	border-bottom: 1px solid black;
 }
 
-.submit {
+.xbutton {
   background: none!important;
   border: none;
   padding: 0!important;
@@ -99,6 +99,14 @@ th {
   /*input has OS specific font-family*/
   text-decoration: underline;
   cursor: pointer;
+}
+
+.xsubmit {
+}
+
+.xdelete {
+  text: red;
+  background-color: red;
 }
 
 .success {

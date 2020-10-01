@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     );
     $statement = $connection->prepare($sql);
     $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 // Action on LOAD:
@@ -59,8 +59,8 @@ try { // load foreign tables:
     $statement = $connection->prepare($sql);
     $statement->execute();
     $tax1 = $statement->fetchAll();
-    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+    } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+} catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 
 //var_dump($tax1);
 ?>
@@ -71,7 +71,7 @@ try { // load foreign tables:
   <blockquote class="success">Successfully added <b><?php echo escape($_POST['toolname']); ?></b> to the <a href="list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
   <label class="label" for="owner">Owner
@@ -104,7 +104,7 @@ try { // load foreign tables:
   <label class="label" for="hydraulic"><input class="input" type="checkbox" name="hydraulic" id="hydraulic" value=1>Hydraulic</label>
   <label class="label" for="pneumatic"><input class="input" type="checkbox" name="pneumatic" id="pneumatic" value=1>Pneumatic</label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

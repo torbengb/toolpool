@@ -62,7 +62,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="list.php">taxonomy list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($tax['id']); ?>">
   
@@ -80,7 +80,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     </select>
   </label>
   
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

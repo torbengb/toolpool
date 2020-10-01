@@ -39,3 +39,13 @@ function escape($html) {
     return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
 }
 
+function showMessage($line = 0 , $file = "unknown" , $message = "") {
+  // usage: showMessage( __LINE__ , __FILE__ , "optional hint message" )
+  //    or: showMessage( __LINE__ , __FILE__ )
+  echo "An error occurred at line " . $line . " in file " . $file . "!" .
+      ( $message
+          ? "<br>Additional information:<br>" . $message
+          : "<br>No additional details were provided. Sorry about that."
+      );
+}
+

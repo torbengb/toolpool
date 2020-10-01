@@ -40,7 +40,7 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
     $statement = $connection->prepare($sql);
     $statement->execute($record);
     //var_dump($statement);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 if (isset($_POST['delete'])) { // Action on SUBMIT:
@@ -56,7 +56,7 @@ if (isset($_POST['delete'])) { // Action on SUBMIT:
     $statement->bindValue(':id', $id);
     $statement->execute();
     $success = "Successfully deleted the tool.";
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 // Action on LOAD:
@@ -86,7 +86,7 @@ try { // load the record:
   $statement->execute();
   $tax = $statement->fetchAll();
 
-} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+} catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
 
 <h2>Tool Pool || <a href="new.php">add new</a></h2>
@@ -125,9 +125,9 @@ try { // load the record:
     <?php foreach ($result as $row) : ?>
       <tr>
           <td>
-            <button class="submit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
+            <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
             <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
-            <button class="submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
+            <button class="button delete" type="submit" name="delete" value="<?php echo escape($row["id"]); ?> action="list.php">Delete!</button>
           </td>
           <td><?php echo escape($row["username"]); ?></td>
           <td

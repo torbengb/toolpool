@@ -14,18 +14,16 @@ try {
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
-} catch(PDOException $error) {
-  echo $sql . "<br>" . $error->getMessage();
-}
 
-$sql = "SELECT 'Total users', COUNT(*) as count FROM users WHERE deleted = '0000-00-00 00:00:00'
-UNION SELECT 'Total tools', COUNT(*) as count FROM tools WHERE deleted = '0000-00-00 00:00:00' AND offered=1
-UNION SELECT 'Total loans', COUNT(*) as count FROM loans WHERE deleted = '0000-00-00 00:00:00'
-UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE deleted = '0000-00-00 00:00:00'
-";
+  $sql = "SELECT 'Total users', COUNT(*) as count FROM users WHERE deleted = '0000-00-00 00:00:00'
+    UNION SELECT 'Total tools', COUNT(*) as count FROM tools WHERE deleted = '0000-00-00 00:00:00' AND offered=1
+    UNION SELECT 'Total loans', COUNT(*) as count FROM loans WHERE deleted = '0000-00-00 00:00:00'
+    UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE deleted = '0000-00-00 00:00:00'
+    ";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
+} catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
   <table>
     <tr><th colspan=2 align="center">Statistics</th></tr>

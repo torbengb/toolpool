@@ -69,7 +69,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">
   <input type="hidden" name="tool" id="tool" value="<?php echo escape($loan["tool"]); ?>"></label>
@@ -89,7 +89,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="actualstart">Actual start<input class="input" type="text" name="actualstart" id="actualstart" value="<?php echo escape($loan["actualstart"]); ?>" ></label>
   <label class="label" for="actualend">Actual end<input class="input" type="text" name="actualend" id="actualend" value="<?php echo escape($loan["actualend"]); ?>" ></label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

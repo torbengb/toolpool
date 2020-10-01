@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
             WHERE id = :id';
     $statement = $connection->prepare($sql);
     $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
   
 if (isset($_GET['id'])) { // Action on LOAD:
@@ -81,11 +81,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement->execute();
     $tax = $statement->fetchAll();
 
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-} else {
-    echo "Something went wrong!";
-    exit;
-}
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+} else { showMessage( __LINE__ , __FILE__ ); exit; }
 ?>
 
 <h2>Edit a tool</h2>
@@ -94,7 +91,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post">
+    <button class="button delete" type="submit" name="delete" value="<?php echo escape($tool["id"]); ?>" action="list.php">Delete!</button>
+</form>
+
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($tool['id']); ?>">
 
@@ -177,7 +178,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="hydraulic">     <input class="input" type="checkbox" name="hydraulic"      id="hydraulic"      value="1" <?php echo ( escape($tool["hydraulic"]     ) ? "checked" : NULL ) ?>>Hydraulic</label>
   <label class="label" for="pneumatic">     <input class="input" type="checkbox" name="pneumatic"      id="pneumatic"      value="1" <?php echo ( escape($tool["pneumatic"]     ) ? "checked" : NULL ) ?>>Pneumatic</label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

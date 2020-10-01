@@ -17,7 +17,7 @@ if (isset($_POST["submit"])) {
     $statement->bindValue(':id', $id);
     $statement->execute();
     $success = "Successfully deleted the user.";
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 try { // Action on LOAD:
@@ -28,7 +28,7 @@ try { // Action on LOAD:
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
-} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+} catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
 
 <h2>Members || <a href="new.php">add new</a></h2>
@@ -51,7 +51,7 @@ try { // Action on LOAD:
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class="submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class=" button submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["username"]); ?></td>
           <td><?php echo ( escape($row["addr_region"])== NULL 
           ? NULL 

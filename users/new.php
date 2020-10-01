@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     );
     $statement = $connection->prepare($sql);
     $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 // Action on LOAD:
@@ -50,7 +50,7 @@ try { // load foreign tables:
   $statement = $connection->prepare($sql);
   $statement->execute();
   $regions = $statement->fetchAll();
-} catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+} catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 
 //var_dump($countries);
 //var_dump($regions);
@@ -62,7 +62,7 @@ try { // load foreign tables:
     <blockquote class="success">Successfully added <b><?php echo escape($_POST['username']); ?></b> to the <a href="list.php">member list</a>.</blockquote>
   <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
   <label class="label" for="username">User name<input class="input" type="text" name="username" id="username"></label>
@@ -97,7 +97,7 @@ try { // load foreign tables:
   <label class="label" for="privatenotes">Private notes<input class="input" type="text" name="privatenotes" id="privatenotes"></label>
   <label class="label" for="publicnotes">Public notes<input class="input" type="text" name="publicnotes" id="publicnotes"></label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

@@ -58,7 +58,7 @@ try {
     <blockquote class="success">Successfully added a loan to the <a href="list.php">loans list</a>.</blockquote>
   <?php endif; ?>
 
-<form method="post"><input class="submit" type="submit" name="submit" value="Submit">
+<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
     <label class="label" for="active"><input class="input" type="checkbox" name="active" id="active" value=1 checked>active</label>
@@ -79,7 +79,7 @@ try {
   <label class="label" for="actualstart">actualstart<input class="input" type="text" name="actualstart" id="actualstart"></label>
   <label class="label" for="actualend"  >actualend  <input class="input" type="text" name="actualend"   id="actualend"  ></label>
 
-  <input class="submit" type="submit" name="submit" value="Submit">
+  <input class="button submit" type="submit" name="submit" value="Submit">
 </form>
 
 <?php require "../common/footer.php"; ?>

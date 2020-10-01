@@ -18,9 +18,7 @@ if (isset($_POST['submit'])) {
     $statement->execute();
 
     $result = $statement->fetchAll();
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 ?>
 <?php require "templates/header.php"; ?>
@@ -96,7 +94,7 @@ if (isset($_POST['submit'])) {
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <label for="owner">owner</label>
   <input type="text" id="owner" name="owner">
-  <input class="submit" type="submit" name="submit" value="View Results">
+  <input class="button submit" type="submit" name="submit" value="View Results">
 </form>
 
 <?php require "../common/footer.php"; ?>

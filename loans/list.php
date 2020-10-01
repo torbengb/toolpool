@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Loans || <a href="new.php">add new</a></h2>
-
-<?php
 $success = null;
 
 if (isset($_POST['submit'])) { // Action on SUBMIT:
@@ -53,6 +49,8 @@ $connection->exec($sql);
 }
 ?>
 
+<h2>Loans || <a href="new.php">add new</a></h2>
+
 <?php if ($success) echo $success; ?>
 
 <form method="post">
@@ -94,7 +92,7 @@ $connection->exec($sql);
 <!--
 id
 created
-lastupdated
+modified
 deleted
 active
 owner

@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Add new taxonomy</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -40,6 +36,8 @@ try { // load foreign tables:
   echo $sql . "<br>" . $error->getMessage();
 }
 ?>
+
+<h2>Add new taxonomy</h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
   <blockquote>Successfully added <b><?php echo escape($_POST['name']); ?></b> to the <a href="list.php">taxonomy list</a>.</blockquote>

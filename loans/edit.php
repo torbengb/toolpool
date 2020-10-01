@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Edit a loan</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -13,7 +9,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $record =[
       "id" => $_POST['id'],
-      "lastupdated" => $timestamp,
+      "modified" => $timestamp,
       "active" => $_POST['active'],
       "tool" => $_POST['tool'],
       "owner" => $_POST['owner'],
@@ -24,7 +20,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
       "actualend" => $_POST['actualend'],
     ];
     $sql = "UPDATE loans 
-            SET lastupdated = :lastupdated,
+            SET modified = :modified,
               active = :active,
               tool = :tool,
               owner = :owner,
@@ -41,15 +37,21 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
   
 if (isset($_GET['id'])) { // Action on LOAD:
   try { 
-    // load the record
+    // load the record:
     $id = $_GET['id'];
-    $sql = "SELECT * FROM loans WHERE id = :id";
+    $sql = "SELECT l.*, t.toolname, u.username
+      FROM loans l
+      JOIN tools t ON t.id = l.tool
+      JOIN users u ON u.id = l.owner
+      WHERE l.id = :id";
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
     $loan = $statement->fetch(PDO::FETCH_ASSOC);
+    //echo $loan;
+    //var_dump(loan);
 
-    // load users:
+    // load user list:
     $sql = "SELECT username, id FROM users
         WHERE deleted = '0000-00-00 00:00:00'
         ORDER BY username";
@@ -57,23 +59,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement->execute();
     $users = $statement->fetchAll();
 
-    // load tools and their owners:
-    $sql = "SELECT t.toolname, t.id, u.username
-      FROM tools t
-      JOIN users u ON u.id = t.owner
-      WHERE t.deleted = '0000-00-00 00:00:00'";
-    $statement = $connection->prepare($sql);
-    $statement->execute();
-    $tools = $statement->fetchAll();
-
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-} else {
-    echo "Something went wrong!";
-    exit;
-}
-
-//var_dump($tools);
+} else { echo "Something went wrong!"; exit; }
 ?>
+
+<h2>Edit a loan</h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
@@ -82,10 +72,12 @@ if (isset($_GET['id'])) { // Action on LOAD:
 <form method="post"><input class="submit" type="submit" name="submit" value="Submit">
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">
+  <input type="hidden" name="tool" id="tool" value="<?php echo escape($loan["tool"]); ?>"></label>
+  <input type="hidden" name="owner" id="owner" value="<?php echo escape($loan["owner"]); ?>"></label>
 
   <label class="label" for="active">Active<input class="input" type="checkbox" name="active" id="active" value="1" <?php echo ( escape($loan["active"]) ? "checked" : NULL ) ?>>Active</label>
-  <label class="label" for="tool">Tool<input class="input" readonly type="text" name="tool" id="tool" value="<?php echo escape($loan["toolname"]); ?>"></label>
-  <label class="label" for="owner">Owner<input class="input" readonly type="text" name="owner" id="owner" value="<?php echo escape($tools["username"]); ?>"></label>
+  <label class="label" for="tool">Tool<input class="input" readonly type="text" xname="tool" xid="tool" value="<?php echo escape($loan["toolname"]); ?>"></label>
+  <label class="label" for="owner">Owner<input class="input" readonly type="text" xname="owner" xid="owner" value="<?php echo escape($loan["username"]); ?>"></label>
   <label class="label" for="loanedto">Loaned to
     <select class="input" name="loanedto" id="loanedto">
       <?php foreach ($users as $row) : ?>

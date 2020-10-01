@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Tool Pool || <a href="new.php">add new</a></h2>
-
-<?php
 $success = null;
 
 if (isset($_POST['loan'])) { // Action on SUBMIT:
@@ -27,7 +23,7 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
     $ownername = $result[0][2];
 // create a new loan record:
     $timestamp = date("Y-m-d H:i:s");
-    $loanedto  = 12; // TODO: get the current user id.
+    $loanedto  = 12; // TODO: get the current user id. This is currently hardcoded! :(
     $record = array(
       "created" => $timestamp,
       "active" => 1,
@@ -70,30 +66,33 @@ try { // load the record:
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
     			AND l.active = 1
-    LEFT JOIN taxonomy t1 ON t1.id = t.taxonomy1 
+    LEFT JOIN taxonomy t1 ON t1.id = t.taxonomy1 -- LEFT includes tools without a taxonomy.
     LEFT JOIN taxonomy t2 ON t2.id = t.taxonomy2 
     LEFT JOIN taxonomy t3 ON t3.id = t.taxonomy3 
     LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
     LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
     WHERE t.deleted = '0000-00-00 00:00:00'
-    ORDER BY offered DESC, taxonomy1, taxonomy2, taxonomy3, taxonomy4, taxonomy5";
+    ORDER BY t.toolname -- t1, t2, t3, T4, t5 -- TODO: order the list meaningfully.
+    ";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
-  try { // load foreign tables:
-    // list for taxonomy columns:
-    $sql = "SELECT name, id, parent FROM taxonomy
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY name";
-    $statement = $connection->prepare($sql);
-    $statement->execute();
-    $tax = $statement->fetchAll();
-    } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+
+  // list for taxonomy columns:
+  $sql = "SELECT name, id, parent FROM taxonomy
+    WHERE deleted = '0000-00-00 00:00:00'
+    ORDER BY name";
+  $statement = $connection->prepare($sql);
+  $statement->execute();
+  $tax = $statement->fetchAll();
+
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
 
+<h2>Tool Pool || <a href="new.php">add new</a></h2>
+
 <?php if (isset($_POST['loan']) && $statement) : ?>
-  <blockquote>Successfully recorded the loan. Now you may pick up the <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.</blockquote>
+  <blockquote>Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.</blockquote>
 <?php endif; ?>
 
 <?php if ($success) echo $success; ?>
@@ -124,22 +123,29 @@ try { // load the record:
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
-      <tr
-        <?php echo
-          ( escape($row["offered"])
-          ? ( escape($row["active"]) 
-            ? 'class="loaned" title="currently loaned"'
-            : 'class="offered"' )
-          : 'class="notoffered" title="currently not offered"' )
-        ?>
-      >
+      <tr>
           <td>
             <button class="submit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
             <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
             <button class="submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
           </td>
           <td><?php echo escape($row["username"]); ?></td>
-          <td><?php echo (escape($row["offered"])) ? 'o' : '-' ; ?></td>
+          <td
+              <?php echo
+              ( escape($row["offered"])
+                  ? ( escape($row["active"])
+                      ? 'class="loaned" title="currently loaned"'
+                      : 'class="offered"' )
+                  : 'class="notoffered" title="currently not offered"' )
+              ?>
+          >
+            <?php echo
+            ( escape($row["offered"])
+                ? ( escape($row["active"])
+                    ? "loaned"
+                    : "available" )
+                : "not offered" )
+            ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>

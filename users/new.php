@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Add new user</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -59,6 +55,8 @@ try { // load foreign tables:
 //var_dump($countries);
 //var_dump($regions);
 ?>
+
+<h2>Add new user</h2>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully added <b><?php echo escape($_POST['username']); ?></b> to the <a href="list.php">member list</a>.</blockquote>

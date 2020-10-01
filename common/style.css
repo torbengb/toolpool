@@ -25,6 +25,12 @@ body {
   background-color: var(--color4);
   padding:5px;
 }
+.meta, .meta A {
+  margin:0;
+  color: var(--color4);
+  background-color: var(--color1);
+  padding:5px;
+}
 h1, h2 {
   margin:0;
   padding: 0 0 10px 0;
@@ -63,7 +69,8 @@ TH {
   background-color: var(--color5);
 }
 .notoffered {
-  text-decoration: line-through;
+  x-text-decoration: line-through;
+  color: var(--color4);
   background-color: var(--color1);
 }
 .loaned {

@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Taxonomy || <a href="new.php">add new</a></h2>
-
-<?php
 $success = null;
 
 if (isset($_POST["submit"])) {
@@ -49,6 +45,8 @@ try {
   echo $sql . "<br>" . $error->getMessage();
 }
 ?>
+
+<h2>Taxonomy || <a href="new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
 

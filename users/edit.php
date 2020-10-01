@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Edit a user</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -13,7 +9,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $record =[
       "id"            => $_POST['id'],
-      "lastupdated"   => $timestamp,
+      "modified"   => $timestamp,
       "username"      => $_POST['username'],
       "email"         => $_POST['email'],
       "firstname"     => $_POST['firstname'],
@@ -29,7 +25,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
       "publicnotes"   => $_POST['publicnotes']
     ];
     $sql = "UPDATE users 
-            SET lastupdated = :lastupdated,
+            SET modified = :modified,
               username = :username,
               email = :email,
               firstname = :firstname,
@@ -79,6 +75,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     exit;
 }
 ?>
+
+<h2>Edit a user</h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="list.php">member list</a>.</blockquote>

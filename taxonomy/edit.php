@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Edit a taxonomy</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   
@@ -13,12 +9,12 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $record =[
       "id"            => $_POST['id'],
-      "lastupdated" => $timestamp,
+      "modified" => $timestamp,
       "name"          => $_POST['name'],
       "parent"        => $_POST['parent']
     ];
     $sql = "UPDATE taxonomy 
-            SET lastupdated = :lastupdated,
+            SET modified = :modified,
               name = :name,
               parent = :parent
             WHERE id = :id";
@@ -59,6 +55,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
 }
 
 ?>
+
+<h2>Edit a taxonomy</h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="list.php">taxonomy list</a>.</blockquote>

@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Add new loan</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -55,6 +51,8 @@ try {
   $tools = $statement->fetchAll();
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
+
+<h2>Add new loan</h2>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully added a loan to the <a href="list.php">loans list</a>.</blockquote>

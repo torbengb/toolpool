@@ -1,11 +1,6 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
-
-<h2>Edit a tool</h2>
-
-<?php
 
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -14,7 +9,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $record =array(
       "id" => $_POST['id'],
-      "lastupdated" => $timestamp,
+      "modified" => $timestamp,
       "owner" => $_POST['owner'],
       "offered" => $_POST['offered'],
       "toolname" => $_POST['toolname'],
@@ -35,7 +30,7 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
       "pneumatic" => $_POST['pneumatic']
     );
     $sql = 'UPDATE tools 
-            SET lastupdated = :lastupdated,
+            SET modified = :modified,
               owner = :owner,
               offered = :offered,
               toolname = :toolname,
@@ -92,6 +87,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     exit;
 }
 ?>
+
+<h2>Edit a tool</h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>

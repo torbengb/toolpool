@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Add new tool</h2>
-
-<?php
 if (isset($_POST['submit'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -69,6 +65,8 @@ try { // load foreign tables:
 //var_dump($tax1);
 ?>
 
+<h2>Add new tool</h2>
+
 <?php if (isset($_POST['submit']) && $statement) : ?>
   <blockquote class="success">Successfully added <b><?php echo escape($_POST['toolname']); ?></b> to the <a href="list.php">tool pool</a>.</blockquote>
 <?php endif; ?>
@@ -92,7 +90,8 @@ try { // load foreign tables:
   <label class="label" for="publicnotes">Public notes<input class="input" type="text" name="publicnotes" id="publicnotes"></label>
   <label class="label" for="taxonomy1">Taxonomy 1
     <select class="input" name="taxonomy1" id="taxonomy1">
-      <?php foreach ($tax1 as $row) : ?>
+      <?php // TODO: make tax2..4 into adaptive dropdowns depending on the parent value.
+      foreach ($tax1 as $row) : ?>
         <option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["name"]); ?></option>
       <?php endforeach; ?>
     </select></label>

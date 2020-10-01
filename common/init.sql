@@ -1,11 +1,7 @@
--- CREATE DATABASE IF NOT EXISTS toolpool_dev; -- this was moved into 'install.php'!
-
--- USE toolpool_dev; -- this was moved into 'install.php'!
-
 CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
 	email VARCHAR(50) NOT NULL COMMENT 'obvious',
@@ -25,10 +21,10 @@ CREATE TABLE users (
 CREATE TABLE tools (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	owner int(11) NOT NULL COMMENT 'users.id of owner',
-	offered BOOLEAN DEFAULT FALSE DEFAULT FALSE COMMENT 'TRUE if owner currently offers to loan this tool',
+	offered BOOLEAN DEFAULT FALSE COMMENT 'TRUE if owner currently offers to loan this tool',
 	toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',
 	brand VARCHAR(50) COMMENT 'the make of this tool',
 	model VARCHAR(50) COMMENT 'the model of this tool',
@@ -50,7 +46,7 @@ CREATE TABLE tools (
 CREATE TABLE loans (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	active BOOLEAN DEFAULT FALSE COMMENT 'TRUE if this loan is ongoing, FALSE if kept for historical records',
 	tool int(11) NOT NULL COMMENT 'tools.id of the borrowed tool',
@@ -65,13 +61,13 @@ CREATE TABLE loans (
 CREATE TABLE taxonomy (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	taxonomy VARCHAR(50) NOT NULL COMMENT 'name of the taxonomy',
 	parent INT(11) DEFAULT 0 COMMENT 'taxonomy.id of the parent of this taxonomy, or zero for top level'
 );
 
-INSERT INTO taxonomy (id,created,lastupdated,deleted,name,parent) 
+INSERT INTO taxonomy (id,created,modified,deleted,name,parent) 
 VALUES 
  (0,SYSDATE(),NULL,NULL,'(none)',0)
 ,(1,SYSDATE(),NULL,NULL,'(not specified)',0)
@@ -79,12 +75,12 @@ VALUES
 
 CREATE TABLE countries (
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	code VARCHAR(2) PRIMARY KEY COMMENT '2-char ISO country code',
 	name VARCHAR(50) NOT NULL
 );
-INSERT INTO countries (created,lastupdated,deleted,code,name) 
+INSERT INTO countries (created,modified,deleted,code,name) 
 VALUES 
 ,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0','(not specified)',0)
 ,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','Austria',0)
@@ -92,13 +88,13 @@ VALUES
 
 CREATE TABLE regions (
 	created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-	lastupdated TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+	modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
 	country VARCHAR(2) NOT NULL COMMENT 'countries.code of the region',
 	code VARCHAR(10) PRIMARY KEY COMMENT 'national region code',
 	name VARCHAR(80) NOT NULL
 );
-INSERT INTO regions (created,lastupdated,country,deleted,name) 
+INSERT INTO regions (created,modified,country,deleted,name) 
 VALUES 
  (SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0','0','(not specified)',0)
  (SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','0','(not specified)',0)

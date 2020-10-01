@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
         <tr>
           <td><?php echo escape($row["id"]); ?></td>
           <td><?php echo escape($row["created"]); ?></td>
-          <td><?php echo escape($row["lastupdated"]); ?></td>
+          <td><?php echo escape($row["modified"]); ?></td>
           <td><?php echo escape($row["owner"]); ?></td>
           <td><?php echo escape($row["offered"]); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>

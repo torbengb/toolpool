@@ -1,11 +1,7 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-?>
 
-<h2>Members || <a href="new.php">add new</a></h2>
-
-<?php
 $success = null;
 
 if (isset($_POST["submit"])) {
@@ -27,13 +23,15 @@ if (isset($_POST["submit"])) {
 try { // Action on LOAD:
   $sql = "SELECT u.*, r.name AS region
     FROM users u
-    LEFT JOIN regions r ON r.code = u.addr_region -- LEFT does not suppress users without a region
+    LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
     WHERE u.deleted = '0000-00-00 00:00:00'";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 ?>
+
+<h2>Members || <a href="new.php">add new</a></h2>
 
 <?php if ($success) echo $success; ?>
 

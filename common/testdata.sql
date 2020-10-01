@@ -3,7 +3,7 @@
  * These entries will be inserted automatically by 'install.php' in non-prod environments
  ************************************************************************************* */
 
-INSERT INTO users (created,lastupdated,deleted,username,email,firstname,lastname,phone,addr_country,addr_region,addr_city,addr_zip,addr_street,addr_number,privatenotes,publicnotes) 
+INSERT INTO users (created,modified,deleted,username,email,firstname,lastname,phone,addr_country,addr_region,addr_city,addr_zip,addr_street,addr_number,privatenotes,publicnotes) 
 VALUES 
  ('2020-09-17 10:46:47.0','2020-09-17 13:46:21.0',NULL,'4d4m','one','Adam','Apple','','','','','','','','','')
 ,('2020-09-17 12:35:51.0','2020-09-17 13:46:32.0',NULL,'b0b','two','Bob','''s Burgers','','','','','','','','','')
@@ -20,7 +20,7 @@ VALUES
 ,('2020-09-21 20:42:09.0','2020-09-23 13:08:24.0',NULL,'clever','smart','clever!','smart','','','','','','','','','')
 ;
 
-INSERT INTO tools (created,lastupdated,deleted,owner,offered,toolname,brand,model,dimensions,weight,privatenotes,publicnotes,taxonomy1,taxonomy2,taxonomy3,taxonomy4,taxonomy5,electrical230v,electrical400v,hydraulic,pneumatic) 
+INSERT INTO tools (created,modified,deleted,owner,offered,toolname,brand,model,dimensions,weight,privatenotes,publicnotes,taxonomy1,taxonomy2,taxonomy3,taxonomy4,taxonomy5,electrical230v,electrical400v,hydraulic,pneumatic) 
 VALUES 
  ('2020-09-17 13:34:17.0','2020-09-22 10:49:37.0',NULL,1,1,'hammer','','','','','','',0,0,0,0,0,0,0,0,0)
 ,('2020-09-17 15:33:24.0','2020-09-17 17:35:06.0',NULL,2,1,'small hand saw','','','','','','',0,0,0,0,0,0,0,0,0)
@@ -55,7 +55,7 @@ VALUES
 ,('2020-09-26 14:44:46.0',NULL,'2020-09-26 14:45:16.0',5,1,'arst','','','','','','',9,0,0,0,0,NULL,NULL,NULL,NULL)
 ;
 
-INSERT INTO loans (created,lastupdated,deleted,active,tool,owner,loanedto,agreedstart,agreedend,actualstart,actualend) 
+INSERT INTO loans (created,modified,deleted,active,tool,owner,loanedto,agreedstart,agreedend,actualstart,actualend) 
 VALUES 
  ('2020-09-26 19:28:53.0',NULL,'2020-09-26 19:30:44.0',1,14,5,5,NULL,NULL,NULL,NULL)
 ,('2020-09-25 14:46:12.0','2020-09-25 20:15:58.0',NULL,NULL,12,2,3,NULL,NULL,NULL,NULL)
@@ -69,7 +69,7 @@ VALUES
 ,('2020-09-17 19:47:31.0','2020-09-20 21:52:52.0',NULL,0,3,8,9,NULL,NULL,NULL,NULL)
 ;
 
-INSERT INTO toolpool_dev.taxonomy (created,lastupdated,deleted,name,parent) 
+INSERT INTO toolpool_dev.taxonomy (created,modified,deleted,name,parent) 
 VALUES 
  ('2020-09-26 13:43:43.0',NULL,NULL,'(none)',0)
 ,('2020-09-26 16:13:15.0',NULL,NULL,'(not specified)',0)

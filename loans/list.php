@@ -38,7 +38,8 @@ $connection->exec($sql);
 		  JOIN tools t ON l.tool = t.id
 		  JOIN users u1 ON l.owner = u1.id
 		  JOIN users u2 ON l.loanedto = u2.id
-		  WHERE l.deleted = '0000-00-00 00:00:00'";
+		  WHERE l.deleted = '0000-00-00 00:00:00'
+		  ORDER BY l.active DESC, t.toolname";
 
   $statement = $connection->prepare($sql);
   $statement->execute();

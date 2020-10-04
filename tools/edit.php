@@ -1,59 +1,6 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =array(
-      "id" => $_POST['id'],
-      "modified" => $timestamp,
-      "owner" => $_POST['owner'],
-      "offered" => $_POST['offered'],
-      "toolname" => $_POST['toolname'],
-      "brand" => $_POST['brand'],
-      "model" => $_POST['model'],
-      "dimensions" => $_POST['dimensions'],
-      "weight" => $_POST['weight'],
-      "privatenotes" => $_POST['privatenotes'],
-      "publicnotes" => $_POST['publicnotes'],
-      "taxonomy1" => $_POST['taxonomy1'],
-      "taxonomy2" => $_POST['taxonomy2'],
-      "taxonomy3" => $_POST['taxonomy3'],
-      "taxonomy4" => $_POST['taxonomy4'],
-      "taxonomy5" => $_POST['taxonomy5'],
-      "electrical230v" => $_POST['electrical230v'],
-      "electrical400v" => $_POST['electrical400v'],
-      "hydraulic" => $_POST['hydraulic'],
-      "pneumatic" => $_POST['pneumatic']
-    );
-    $sql = 'UPDATE tools 
-            SET modified = :modified,
-              owner = :owner,
-              offered = :offered,
-              toolname = :toolname,
-              brand = :brand,
-              model = :model,
-              dimensions = :dimensions,
-              weight = :weight,
-              privatenotes = :privatenotes,
-              publicnotes = :publicnotes,
-              taxonomy1 = :taxonomy1,
-              taxonomy2 = :taxonomy2,
-              taxonomy3 = :taxonomy3,
-              taxonomy4 = :taxonomy4,
-              taxonomy5 = :taxonomy5,
-              electrical230v = :electrical230v,
-              electrical400v = :electrical400v,
-              hydraulic = :hydraulic,
-              pneumatic = :pneumatic
-            WHERE id = :id';
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
   
 if (isset($_GET['id'])) { // Action on LOAD:
   try { 
@@ -87,17 +34,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
 
 <h2>Edit a tool</h2>
 
-<?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote class="success">Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
-<?php endif; ?>
-
-<form method="post">
-    <button class="button delete" type="submit" name="delete" value="<?php echo escape($tool["id"]); ?>" action="list.php">Delete!</button>
-</form>
-
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form action="list.php" method="post">
+  <button class="button delete" type="submit" name="update" value="update">Update</button>
+  <button class="button delete" type="submit" name="delete" value="delete">Delete</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-  <input type="hidden" name="id" value="<?php echo escape($tool['id']); ?>">
+  <input type="hidden" name="id"   value="<?php echo escape($tool['id']); ?>">
 
   <label class="label" for="owner">Owner
     <select class="input" name="owner" id="owner">
@@ -178,7 +119,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="hydraulic">     <input class="input" type="checkbox" name="hydraulic"      id="hydraulic"      value="1" <?php echo ( escape($tool["hydraulic"]     ) ? "checked" : NULL ) ?>>Hydraulic</label>
   <label class="label" for="pneumatic">     <input class="input" type="checkbox" name="pneumatic"      id="pneumatic"      value="1" <?php echo ( escape($tool["pneumatic"]     ) ? "checked" : NULL ) ?>>Pneumatic</label>
 
-  <input class="button submit" type="submit" name="submit" value="Submit">
+  <button class="button delete" type="submit" name="update" value="update">Update</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

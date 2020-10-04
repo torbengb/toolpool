@@ -90,7 +90,7 @@ try { // load foreign tables:
   <label class="label" for="publicnotes">Public notes<input class="input" type="text" name="publicnotes" id="publicnotes"></label>
   <label class="label" for="taxonomy1">Taxonomy 1
     <select class="input" name="taxonomy1" id="taxonomy1">
-      <?php // TODO: make tax2..4 into adaptive dropdowns depending on the parent value.
+      <?php // TODO: issue #10 https://github.com/torbengb/toolpool/issues/10
       foreach ($tax1 as $row) : ?>
         <option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["name"]); ?></option>
       <?php endforeach; ?>

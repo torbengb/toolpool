@@ -31,7 +31,8 @@ try {
   $sql = "SELECT t1.*, t2.name as parentname
     FROM taxonomy t1 
     LEFT OUTER JOIN taxonomy t2 ON t1.parent = t2.id
-    WHERE t1.deleted = '0000-00-00 00:00:00'
+    WHERE ( t1.deleted = '0000-00-00 00:00:00'
+        OR  t1.deleted IS NULL )
     AND ( t1.parent = t2.id 
        OR t1.parent = ''
     )

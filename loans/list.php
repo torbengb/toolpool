@@ -39,6 +39,7 @@ $connection->exec($sql);
 		  JOIN users u1 ON l.owner = u1.id
 		  JOIN users u2 ON l.loanedto = u2.id
 		  WHERE l.deleted = '0000-00-00 00:00:00'
+    	    OR  l.deleted IS NULL
 		  ORDER BY l.active DESC, t.toolname";
 
   $statement = $connection->prepare($sql);

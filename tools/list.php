@@ -117,13 +117,16 @@ try { // load the record:
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
     			AND l.active = 1
-    			AND l.deleted = '0000-00-00 00:00:00'
+    			AND ( l.deleted = '0000-00-00 00:00:00'
+    			  OR  l.deleted IS NULL
+    			)
     LEFT JOIN taxonomy t1 ON t1.id = t.taxonomy1 -- LEFT includes tools without a taxonomy.
     LEFT JOIN taxonomy t2 ON t2.id = t.taxonomy2 
     LEFT JOIN taxonomy t3 ON t3.id = t.taxonomy3 
     LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
     LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
     WHERE t.deleted = '0000-00-00 00:00:00'
+      OR  t.deleted IS NULL
     ORDER BY t.toolname -- t1, t2, t3, T4, t5 -- TODO: order the list meaningfully.
     ";
   $statement = $connection->prepare($sql);

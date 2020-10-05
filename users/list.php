@@ -24,7 +24,8 @@ try { // Action on LOAD:
   $sql = "SELECT u.*, r.name AS region
     FROM users u
     LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
-    WHERE u.deleted = '0000-00-00 00:00:00'";
+    WHERE u.deleted = '0000-00-00 00:00:00'
+      OR  u.deleted IS NULL ";
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();

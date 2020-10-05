@@ -68,23 +68,3 @@ VALUES
 ,('2020-09-17 19:48:27.0','2020-09-20 22:02:58.0',NULL,1,6,8,3,NULL,NULL,NULL,NULL)
 ,('2020-09-17 19:47:31.0','2020-09-20 21:52:52.0',NULL,0,3,8,9,NULL,NULL,NULL,NULL)
 ;
-
-INSERT INTO toolpool_dev.taxonomy (created,modified,deleted,name,parent) 
-VALUES 
- ('2020-09-26 13:43:43.0',NULL,NULL,'(none)',0)
-,('2020-09-26 16:13:15.0',NULL,NULL,'(not specified)',0)
-,('2020-09-20 13:13:15.0',NULL,'2020-09-20 13:13:21.0','trash',0)
-,('2020-09-20 13:14:06.0','2020-09-25 20:13:07.0',NULL,'Construction',0)
-,('2020-09-20 13:14:34.0','2020-09-25 20:11:50.0',NULL,'Bricklaying',3)
-,('2020-09-20 13:22:15.0','2020-09-25 18:56:47.0',NULL,'other construction',3)
-,('2020-09-20 13:22:30.0',NULL,NULL,'happy gardening',15)
-,('2020-09-20 13:22:38.0',NULL,NULL,'necessary gardening',15)
-,('2020-09-20 13:22:43.0',NULL,NULL,'other gardening',15)
-,('2020-09-20 13:22:57.0','2020-09-25 20:12:51.0',NULL,'Automotive',0)
-,('2020-09-20 13:24:47.0',NULL,NULL,'roofing',3)
-,('2020-09-20 13:25:14.0',NULL,NULL,'sheet metal roofing',10)
-,('2020-09-20 13:49:52.0','2020-09-25 18:53:51.0',NULL,'oil work',9)
-,('2020-09-21 12:41:05.0','2020-09-26 14:54:22.0',NULL,'earth work',15)
-,('2020-09-21 20:42:59.0',NULL,NULL,'plumbing',3)
-,('2020-09-20 13:12:09.0','2020-09-20 13:12:46.0',NULL,'Gardening',0)
-;

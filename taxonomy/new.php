@@ -2,28 +2,6 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try  { // create the record:
-    $timestamp = date("Y-m-d H:i:s");
-    
-    $record = array(
-      "created"      => $timestamp,
-      "name"         => $_POST['name'],
-      "parent"       => $_POST['parent']
-    );
-    $sql = sprintf(
-      "INSERT INTO %s (%s) values (%s)",
-      "taxonomy",
-      implode(", ", array_keys($record)),
-      ":" . implode(", :", array_keys($record))
-    );
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-}
-
 // Action on LOAD:
 try { // load foreign tables:
   $sql = "SELECT name, id FROM taxonomy
@@ -43,7 +21,8 @@ try { // load foreign tables:
   <blockquote>Successfully added <b><?php echo escape($_POST['name']); ?></b> to the <a href="list.php">taxonomy list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form method="post" action="list.php">
+  <button class="button submit" type="submit" name="create" value="create">Add</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
   <label class="label" for="name">Name<input type="text" name="name" id="name"></label>
@@ -55,7 +34,7 @@ try { // load foreign tables:
     </select>
   </label>
 
-  <input class="button submit" type="submit" name="submit" value="Submit">
+  <button class="button submit" type="submit" name="create" value="create">Add</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

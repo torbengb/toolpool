@@ -1,49 +1,6 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-      "id"            => $_POST['id'],
-      "modified"   => $timestamp,
-      "username"      => $_POST['username'],
-      "email"         => $_POST['email'],
-      "firstname"     => $_POST['firstname'],
-      "lastname"      => $_POST['lastname'],
-      "phone"         => $_POST['phone'],
-      "addr_country"  => $_POST['addr_country'],
-      "addr_region"   => $_POST['addr_region'],
-      "addr_city"     => $_POST['addr_city'],
-      "addr_zip"      => $_POST['addr_zip'],
-      "addr_street"   => $_POST['addr_street'],
-      "addr_number"   => $_POST['addr_number'],
-      "privatenotes"  => $_POST['privatenotes'],
-      "publicnotes"   => $_POST['publicnotes']
-    ];
-    $sql = "UPDATE users 
-            SET modified = :modified,
-              username = :username,
-              email = :email,
-              firstname = :firstname,
-              lastname = :lastname,
-              phone = :phone,
-              addr_country = :addr_country,
-              addr_region = :addr_region,
-              addr_city = :addr_city,
-              addr_zip = :addr_zip,
-              addr_street = :addr_street,
-              addr_number = :addr_number,
-              privatenotes = :privatenotes,
-              publicnotes = :publicnotes
-            WHERE id = :id";
-  $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
   
 if (isset($_GET['id'])) { // Action on LOAD:
   try { // load the record
@@ -79,7 +36,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in the <a href="list.php">member list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form method="post" action="list.php">
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
 
@@ -117,7 +75,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="privatenotes">privatenotes<input class="input" type="text" name="privatenotes" id="privatenotes" value="<?php echo escape($user["privatenotes"]); ?>"></label>
   <label class="label" for="publicnotes">publicnotes<input class="input" type="text" name="publicnotes" id="publicnotes" value="<?php echo escape($user["publicnotes"]); ?>"></label>
 
-  <input class="button submit" type="submit" name="submit" value="Submit">
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

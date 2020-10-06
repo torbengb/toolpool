@@ -2,28 +2,76 @@
 require "../common/common.php";
 require "../common/header.php";
 
-$success = null;
-
-if (isset($_POST['submit'])) { // Action on SUBMIT:
+if (isset($_POST['create'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
+  try  { // create the record:
+    $timestamp = date("Y-m-d H:i:s");
+    $record = array(
+        "created" => $timestamp,
+        "active"      => $_POST['active'],
+        "tool"        => $_POST['tool'],
+        "owner"       => $_POST['owner'],
+        "loanedto"    => $_POST['loanedto'],
+        "agreedstart" => $_POST['agreedstart'],
+        "agreedend"   => $_POST['agreedend'],
+        "actualstart" => $_POST['actualstart'],
+        "actualend"   => $_POST['actualend']
+    );
+    $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "loans",
+        implode(", ", array_keys($record)),
+        ":" . implode(", :", array_keys($record))
+    );
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+}
+
+if (isset($_POST['update'])) {
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  try { // update the record:
+    $timestamp = date("Y-m-d H:i:s");
+    $record =[
+        "id" => $_POST['id'],
+        "modified" => $timestamp,
+        "active" => $_POST['active'],
+        "tool" => $_POST['tool'],
+        "owner" => $_POST['owner'],
+        "loanedto" => $_POST['loanedto'],
+        "agreedstart" => $_POST['agreedstart'],
+        "agreedend" => $_POST['agreedend'],
+        "actualstart" => $_POST['actualstart'],
+        "actualend" => $_POST['actualend'],
+    ];
+    $sql = "UPDATE loans 
+            SET modified = :modified,
+              active = :active,
+              tool = :tool,
+              owner = :owner,
+              loanedto = :loanedto,
+              agreedstart = :agreedstart,
+              agreedend = :agreedend,
+              actualstart = :actualstart,
+              actualend = :actualend
+            WHERE id = :id";
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+}
+
+if (isset($_POST['delete'])) {
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try {
-////$connection = new PDO($dsn, $username, $password, $options);
-////$sql = "USE " . $dbname;
-////$connection->exec($sql);
-	
 	$timestamp = date("Y-m-d H:i:s");
-  
-    $id = $_POST["submit"];
+    $id = $_POST["delete"];
     $sql = "UPDATE loans 
 			SET deleted = '$timestamp'
             WHERE id = :id";
-
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-
-    $success = "Successfully deleted the loan.";
   } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
@@ -53,7 +101,17 @@ $connection->exec($sql);
 
 <h2>Loans || <a href="new.php">add new</a></h2>
 
-<?php if ($success) echo $success; ?>
+<?php if (isset($_POST['create']) && $statement) : ?>
+    <blockquote class="success">Successfully loaned the tool!</blockquote>
+<?php endif; ?>
+
+<?php if (isset($_POST['update']) && $statement) : ?>
+    <blockquote class="success">Successfully updated the loan of the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
+<?php endif; ?>
+
+<?php if (isset($_POST['delete']) && $statement) : ?>
+    <blockquote class="success">Successfully deleted the loan.</blockquote>
+<?php endif; ?>
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -74,7 +132,8 @@ $connection->exec($sql);
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class=" button submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
+              <button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>
@@ -90,17 +149,3 @@ $connection->exec($sql);
 </form>
 
 <?php require "../common/footer.php"; ?>
-
-<!--
-id
-created
-modified
-deleted
-active
-owner
-loanedto
-agreedstart
-agreedend
-actualstart
-actualend
--->

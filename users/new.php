@@ -2,38 +2,6 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try  { // create the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-      "created"       => $timestamp,
-      "username"      => $_POST['username'],
-      "email"         => $_POST['email'],
-      "firstname"     => $_POST['firstname'],
-      "lastname"      => $_POST['lastname'],
-      "phone"         => $_POST['phone'],
-      "addr_country"  => $_POST['addr_country'],
-      "addr_region"   => $_POST['addr_region'],
-      "addr_city"     => $_POST['addr_city'],
-      "addr_zip"      => $_POST['addr_zip'],
-      "addr_street"   => $_POST['addr_street'],
-      "addr_number"   => $_POST['addr_number'],
-      "privatenotes"  => $_POST['privatenotes'],
-      "publicnotes"   => $_POST['publicnotes']
-    ];
-    $sql = sprintf(
-      "INSERT INTO %s (%s) values (%s)",
-      "users",
-      implode(", ", array_keys($record)),
-      ":" . implode(", :", array_keys($record))
-    );
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
-
 // Action on LOAD:
 try { // load foreign tables:
   // list of countries:
@@ -62,7 +30,8 @@ try { // load foreign tables:
     <blockquote class="success">Successfully added <b><?php echo escape($_POST['username']); ?></b> to the <a href="list.php">member list</a>.</blockquote>
   <?php endif; ?>
 
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form method="post" action="list.php">
+  <button class="button submit" type="submit" name="create" value="create">Register</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
   <label class="label" for="username">User name<input class="input" type="text" name="username" id="username"></label>
@@ -97,7 +66,7 @@ try { // load foreign tables:
   <label class="label" for="privatenotes">Private notes<input class="input" type="text" name="privatenotes" id="privatenotes"></label>
   <label class="label" for="publicnotes">Public notes<input class="input" type="text" name="publicnotes" id="publicnotes"></label>
 
-  <input class="button submit" type="submit" name="submit" value="Submit">
+  <button class="button submit" type="submit" name="create" value="create">Register</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

@@ -2,27 +2,6 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-      "id"            => $_POST['id'],
-      "modified" => $timestamp,
-      "name"          => $_POST['name'],
-      "parent"        => $_POST['parent']
-    ];
-    $sql = "UPDATE taxonomy 
-            SET modified = :modified,
-              name = :name,
-              parent = :parent
-            WHERE id = :id";
-  $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-}
-
 if (isset($_GET['id'])) { // Action on LOAD:
   try { // load the record
     $id = $_GET['id'];
@@ -62,7 +41,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="list.php">taxonomy list</a>.</blockquote>
 <?php endif; ?>
 
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form method="post" action="list.php">
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($tax['id']); ?>">
   
@@ -79,8 +59,8 @@ if (isset($_GET['id'])) { // Action on LOAD:
       <?php endforeach; ?>
     </select>
   </label>
-  
-  <input class="button submit" type="submit" name="submit" value="Submit">
+
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

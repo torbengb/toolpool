@@ -1,39 +1,6 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
-
-if (isset($_POST['submit'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-      "id" => $_POST['id'],
-      "modified" => $timestamp,
-      "active" => $_POST['active'],
-      "tool" => $_POST['tool'],
-      "owner" => $_POST['owner'],
-      "loanedto" => $_POST['loanedto'],
-      "agreedstart" => $_POST['agreedstart'],
-      "agreedend" => $_POST['agreedend'],
-      "actualstart" => $_POST['actualstart'],
-      "actualend" => $_POST['actualend'],
-    ];
-    $sql = "UPDATE loans 
-            SET modified = :modified,
-              active = :active,
-              tool = :tool,
-              owner = :owner,
-              loanedto = :loanedto,
-              agreedstart = :agreedstart,
-              agreedend = :agreedend,
-              actualstart = :actualstart,
-              actualend = :actualend
-            WHERE id = :id";
-  $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-}
   
 if (isset($_GET['id'])) { // Action on LOAD:
   try { 
@@ -65,15 +32,13 @@ if (isset($_GET['id'])) { // Action on LOAD:
 
 <h2>Edit a loan</h2>
 
-<?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote class="success">Successfully updated the loan in the <a href="list.php">loan list</a>.</blockquote>
-<?php endif; ?>
-
-<form method="post"><input class="button submit" type="submit" name="submit" value="Submit">
+<form method="post" action="list.php">
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">
-  <input type="hidden" name="tool" id="tool" value="<?php echo escape($loan["tool"]); ?>"></label>
-  <input type="hidden" name="owner" id="owner" value="<?php echo escape($loan["owner"]); ?>"></label>
+  <input type="hidden" name="tool" id="tool" value="<?php echo escape($loan["tool"]); ?>">
+  <input type="hidden" name="toolname" id="toolname" value="<?php echo escape($loan["toolname"]); ?>">
+  <input type="hidden" name="owner" id="owner" value="<?php echo escape($loan["owner"]); ?>">
 
   <label class="label" for="active">Active<input class="input" type="checkbox" name="active" id="active" value="1" <?php echo ( escape($loan["active"]) ? "checked" : NULL ) ?>>Active</label>
   <label class="label" for="tool">Tool<input class="input" readonly type="text" xname="tool" xid="tool" value="<?php echo escape($loan["toolname"]); ?>"></label>
@@ -89,7 +54,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="actualstart">Actual start<input class="input" type="text" name="actualstart" id="actualstart" value="<?php echo escape($loan["actualstart"]); ?>" ></label>
   <label class="label" for="actualend">Actual end<input class="input" type="text" name="actualend" id="actualend" value="<?php echo escape($loan["actualend"]); ?>" ></label>
 
-  <input class="button submit" type="submit" name="submit" value="Submit">
+  <button class="button submit" type="submit" name="update" value="update">Save</button>
 </form>
 
 <?php require "../common/footer.php"; ?>

@@ -21,7 +21,7 @@ if (isset($_POST["submit"])) {
 }
 
 try { // Action on LOAD:
-  $sql = "SELECT u.*, r.name AS region
+  $sql = "SELECT u.*, r.name AS regionname
     FROM users u
     LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
     WHERE u.deleted = '0000-00-00 00:00:00'
@@ -54,9 +54,9 @@ try { // Action on LOAD:
       <tr>
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;<button class=" button submit" type="submit" name="submit" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["username"]); ?></td>
-          <td><?php echo ( escape($row["addr_region"])== NULL 
+          <td><?php echo ( escape($row["addr_region"]) == NULL
           ? NULL 
-          : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["region"]) ) ; ?></td>
+          : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["regionname"]) ) ; ?></td>
           <td><?php echo escape($row["email"]); ?></td>
           <td><?php echo escape($row["firstname"]); ?></td>
           <td><?php echo escape($row["lastname"]); ?></td>

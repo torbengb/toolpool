@@ -2,35 +2,61 @@
 require "common.php";
 
 function runsqlfile($file) {
+  echo __LINE__ . "<br>";
   $sql = file_get_contents($file);
   $connection->exec($sql);
+  echo __LINE__ . "<br>";
   return;
 }
 
-try
-{ // first create database:
-  $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname; 
+/**
+ * @param PDO $connection
+ */
+function arst(PDO $connection, str $file): void
+{
+  echo __LINE__ . "<br>";
+  $sql = file_get_contents($file);
   $connection->exec($sql);
-  // then open database:
-  $sql = "USE " . $dbname; 
-  $connection->exec($sql);
-  // and then create tables:
-  //$sql = file_get_contents("init.sql");
-  //$connection->exec($sql);
-  runsqlfile("init.sql");
-  echo "Successfully created database and tables.<br>";
-  runsqlfile("taxonomy.sql");
-  runsqlfile("countries.sql");
-  runsqlfile("regions.sql");
-  echo "Successfully inserted base data.<br>";
+  echo __LINE__ . "<br>";
+}
 
-  // now load test data unless it's in production:
-  switch ($dbname) { // determine environment:
-    case "toolpool": // do nothing in production!
+try {
+// first create database:
+  /* INSTALLER CANNOT CREATE DATABASE!!
+   * The database MUST exist before the installer is run!
+   * The installer dcan do everything after that.
+  $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
+  $connection->exec($sql);
+   */
+  echo __LINE__ . "<br>";
+// then open database:
+  $sql = "USE " . $dbname;
+  $connection->exec($sql);
+  echo __LINE__ . "<br>";
+  // and then create tables:
+  $sql = file_get_contents("../database/countries.sql");
+  $connection->exec($sql);
+  echo __LINE__ . "<br>";
+  $sql = file_get_contents("../database/regions.sql");
+  $connection->exec($sql);
+  $sql = file_get_contents("../database/users.sql");
+  $connection->exec($sql);
+  $sql = file_get_contents("../database/taxonomy.sql");
+  $connection->exec($sql);
+  $sql = file_get_contents("../database/tools.sql");
+  $connection->exec($sql);
+  $sql = file_get_contents("../database/loans.sql");
+  $connection->exec($sql);
+  echo __LINE__ . "Successfully created tables and inserted base data.<br>";
+
+// now load test data unless it's in production:
+  switch ($dbname) {
+    case "toolpool":
+      // do nothing in production!
       break;
     case "toolpool_dev":
     case "toolpool_test":
-      runsqlfile("testdata.sql");
+//      runsqlfile("../database/testdata.sql");
       echo "Successfully inserted test data.<br>";
       break;
     default:

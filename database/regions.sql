@@ -3,10 +3,20 @@
  * These entries will be inserted automatically by 'install.php'.
  ************************************************************************************* */
 
-INSERT INTO regions (created,modified,country,deleted,name)
+CREATE TABLE IF NOT EXISTS regions (
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+  deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
+  country VARCHAR(2) NOT NULL COMMENT 'countries.code of the region',
+  code VARCHAR(10) COMMENT 'national region code',
+  name VARCHAR(80) NOT NULL
+);
+
+INSERT INTO regions (created,modified,deleted,country,code,name)
 VALUES
- (SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0','0','(not specified)',0)
-,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','0','(not specified)',0)
+ (SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0','0','(not specified)')
+,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','0','(not specified)')
 ,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','AM','Amstetten')
 ,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','BN','Baden')
 ,(SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','AT','BZ','Bludenz')

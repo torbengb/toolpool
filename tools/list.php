@@ -3,7 +3,6 @@ require "../common/common.php";
 require "../common/header.php";
 
 if (isset($_POST['update'])) {
-  echo __LINE__ . ":update:" . $_POST["id"] . "<br>";
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try { // update the record:
@@ -174,12 +173,9 @@ try { // load the record:
           <th>Brand</th>
           <th>Model</th>
           <th>Dimensions</th>
-          <th>Weight</th>
           <th>Taxonomy1</th>
           <th>Taxonomy2</th>
           <th>Taxonomy3</th>
-          <th>Taxonomy4</th>
-          <th>Taxonomy5</th>
           <th>230V</th>
           <th>400V</th>
           <th>Hydraulic</th>
@@ -215,12 +211,9 @@ try { // load the record:
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>
-          <td><?php echo escape($row["weight"]); ?></td>
           <td><?php echo escape($row["taxonomy1"])==0 ? '-' : escape($row["t1"]) ; ?></td>
           <td><?php echo escape($row["taxonomy2"])==0 ? '-' : escape($row["t2"]) ; ?></td>
           <td><?php echo escape($row["taxonomy3"])==0 ? '-' : escape($row["t3"]) ; ?></td>
-          <td><?php echo escape($row["taxonomy4"])==0 ? '-' : escape($row["t4"]) ; ?></td>
-          <td><?php echo escape($row["taxonomy5"])==0 ? '-' : escape($row["t5"]) ; ?></td>
           <td><?php echo escape($row["electrical230v"]) ? '230V' : '-' ; ?></td>
           <td><?php echo escape($row["electrical400v"]) ? '400V' : '-' ; ?></td>
           <td><?php echo escape($row["hydraulic"]) ? 'hydr' : '-' ; ?></td>

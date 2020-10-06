@@ -19,11 +19,25 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $statement = $connection->prepare($sql);
     $statement->execute();
     $users = $statement->fetchAll();
-    
+
     // list for taxonomy columns:
-    $sql = "SELECT name, id, parent FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name";
+    $sql = "SELECT t.name, t.id
+        FROM taxonomy t
+        WHERE t.deleted = '0000-00-00 00:00:00'
+        AND t.id > 1 -- defaults to '(not specified)' while suppressing '(none)'.
+        AND t.parent = 1 -- this gets us only first-level categories.
+        ORDER BY t.name";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+    $tax1 = $statement->fetchAll();
+
+    // list for taxonomy columns:
+    $sql = "SELECT t.name, t.id
+        FROM taxonomy t
+        WHERE t.deleted = '0000-00-00 00:00:00'
+        -- AND ( t.parent <> 2   -- this gets us only non-first-level categories.
+        --    OR t.parent = 1 ) -- allows '(none)'. 
+        ORDER BY t.name";
     $statement = $connection->prepare($sql);
     $statement->execute();
     $tax = $statement->fetchAll();
@@ -56,7 +70,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <label class="label" for="publicnotes">Publicnotes<input class="input" type="text" name="publicnotes" id="publicnotes" value="<?php echo escape($tool["publicnotes"]); ?>"></label>
   <label class="label" for="taxonomy1"><span class="labeltext">Taxonomy 1</span>
     <select class="input" name="taxonomy1" id="taxonomy1">
-      <?php foreach ($tax as $row) : ?>
+      <?php foreach ($tax1 as $row) : ?>
         <option 
           name="taxonomy1" 
           id="taxonomy1"

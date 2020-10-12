@@ -108,29 +108,45 @@ try {
     if ( escape($level1["id"]) < 3          // skip "(none)" and "(not specified)" in the top level.
         || escape($level1["parent"]) != 1 ) // skip anything that is not top level (has no real parent).
       continue;
-    echo "[edit] [delete] "
+    echo ' <a href="edit.php?id=' . escape($level1["id"]) . '" class="submit">Edit</a> '
+        . " [delete] "
         . escape($level1["name"]) . "<br>";
     foreach ($tax as $level2) {
       if ( escape($level2["id"]) > 1 // skip "(none)" in the top level.
           && escape($level2["parent"]) == escape($level1["id"]) )
-      {   echo "[edit] [delete] "
+      {   echo "<a href='edit.php?id=" . escape($level2["id"]) . "' class='submit'>Edit</a>"
+          . " [delete] "
           . escape($level1["name"]) . " &gt; "
           . escape($level2["name"]) . "<br>" ;
         foreach ($tax as $level3) {
           if ( escape($level3["id"]) > 1 // skip "(none)" in the top level.
               && escape($level3["parent"]) == escape($level2["id"]) )
-          {   echo "[edit] [delete] "
+          {   echo "<a href='edit.php?id=" . escape($level3["id"]) . "' class='submit'>Edit</a>"
+              . " [delete] "
               . escape($level1["name"]) . " &gt; "
               . escape($level2["name"]) . " &gt; "
               . escape($level3["name"]) . "<br>" ;
             foreach ($tax as $level4) {
               if ( escape($level4["id"]) > 1 // skip "(none)" in the top level.
                   && escape($level4["parent"]) == escape($level3["id"]) )
-              {   echo "[edit] [delete] "
+              {   echo "<a href='edit.php?id=" . escape($level4["id"]) . "' class='submit'>Edit</a>"
+                  . " [delete] "
                   . escape($level1["name"]) . " &gt; "
                   . escape($level2["name"]) . " &gt; "
                   . escape($level3["name"]) . " &gt; "
                   . escape($level4["name"]) . "<br>" ;
+                foreach ($tax as $level5) {
+                  if ( escape($level5["id"]) > 1 // skip "(none)" in the top level.
+                      && escape($level5["parent"]) == escape($level4["id"]) )
+                  {   echo "<a href='edit.php?id=" . escape($level5["id"]) . "' class='submit'>Edit</a>"
+                      . " [delete] "
+                      . escape($level1["name"]) . " &gt; "
+                      . escape($level2["name"]) . " &gt; "
+                      . escape($level3["name"]) . " &gt; "
+                      . escape($level4["name"]) . " &gt; "
+                      . escape($level5["name"]) . "<br>" ;
+                  }//level5-if
+                }//level5
               }//level4-if
             }//level4
           }//level3-if
@@ -144,6 +160,7 @@ try {
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+
   <table>
     <thead>
       <tr>

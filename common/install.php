@@ -24,7 +24,7 @@ try {
 // first create database:
   /* INSTALLER CANNOT CREATE DATABASE!!
    * The database MUST exist before the installer is run!
-   * The installer dcan do everything after that.
+   * The installer can do everything after that.
   $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
   $connection->exec($sql);
    */

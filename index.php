@@ -4,7 +4,7 @@ require "common/header.php";
 ?>
 
 <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
-<?php 
+<?php
 try {
   $sql = "SELECT 'Total users', COUNT(*) as count FROM users";
   $statement = $connection->prepare($sql);
@@ -48,10 +48,6 @@ try {
 
 <p>Tool Pool helps people build a positive neighborhood. Tool Pool is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to meet new likeminded DIY enthusiasts in your neighborhood!
 
-<h2>Known bugs</h2>
-<p>See the <a href="https://github.com/torbengb/toolpool/issues/" target="_new">issue tracker on GitHub</a>.
-</p>
-
 <h2>Features</h2>
 <p>These are some of the ideas to be explored with this prototype, sorted by approximate order of planned implementation:
 <ul>
@@ -68,7 +64,7 @@ try {
 <li>commenting, flagging, reporting on users and tools for moderator attention
 </ul>
 
-<h2>Bugs?</h2>
-<p><a href=" href="https://github.com/torbengb/toolpool/issues/new">Please submit an issue!</a>
+<h2>Known bugs</h2>
+<p>Found a bug? Check whether it's already in the <a href="https://github.com/torbengb/toolpool/issues/" target="_new">issue tracker on GitHub</a>. If it isn't, <a href="https://github.com/torbengb/toolpool/issues/new">please submit an issue!</a>
 
 <?php require "common/footer.php"; ?>

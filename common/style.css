@@ -18,7 +18,7 @@ body {
 .footer {
   background-color: var(--color3);
   margin:0;
-  padding:5px;
+  xpadding:5px;
 }
 .navbar {
   margin:0;

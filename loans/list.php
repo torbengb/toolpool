@@ -133,7 +133,7 @@ $connection->exec($sql);
     <?php foreach ($result as $row) : ?>
       <tr>
           <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-              <button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+              <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>

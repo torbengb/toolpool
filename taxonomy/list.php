@@ -2,7 +2,7 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['create'])) { // Action on SUBMIT:
+if (isset($_POST['create'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try  { // create the record:
     $timestamp = date("Y-m-d H:i:s");
@@ -22,7 +22,7 @@ if (isset($_POST['create'])) { // Action on SUBMIT:
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-if (isset($_POST['update'])) { // Action on SUBMIT:
+if (isset($_POST['update'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
@@ -71,6 +71,16 @@ try {
   $statement = $connection->prepare($sql);
   $statement->execute();
   $result = $statement->fetchAll();
+
+  $sql = "SELECT *
+    FROM taxonomy t1
+    WHERE ( t1.deleted = '0000-00-00 00:00:00'
+        OR  t1.deleted IS NULL )
+    ORDER BY parent, name";
+  $statement = $connection->prepare($sql);
+  $statement->execute();
+  $tax = $statement->fetchAll();
+
 } catch(PDOException $error) {
   echo $sql . "<br>" . $error->getMessage();
 }
@@ -91,6 +101,48 @@ try {
 <?php endif; ?>
 
 <form method="post">
+    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+
+  <?php
+  foreach ($tax as $level1) {
+    if ( escape($level1["id"]) < 3          // skip "(none)" and "(not specified)" in the top level.
+        || escape($level1["parent"]) != 1 ) // skip anything that is not top level (has no real parent).
+      continue;
+    echo "[edit] [delete] "
+        . escape($level1["name"]) . "<br>";
+    foreach ($tax as $level2) {
+      if ( escape($level2["id"]) > 1 // skip "(none)" in the top level.
+          && escape($level2["parent"]) == escape($level1["id"]) )
+      {   echo "[edit] [delete] "
+          . escape($level1["name"]) . " &gt; "
+          . escape($level2["name"]) . "<br>" ;
+        foreach ($tax as $level3) {
+          if ( escape($level3["id"]) > 1 // skip "(none)" in the top level.
+              && escape($level3["parent"]) == escape($level2["id"]) )
+          {   echo "[edit] [delete] "
+              . escape($level1["name"]) . " &gt; "
+              . escape($level2["name"]) . " &gt; "
+              . escape($level3["name"]) . "<br>" ;
+            foreach ($tax as $level4) {
+              if ( escape($level4["id"]) > 1 // skip "(none)" in the top level.
+                  && escape($level4["parent"]) == escape($level3["id"]) )
+              {   echo "[edit] [delete] "
+                  . escape($level1["name"]) . " &gt; "
+                  . escape($level2["name"]) . " &gt; "
+                  . escape($level3["name"]) . " &gt; "
+                  . escape($level4["name"]) . "<br>" ;
+              }//level4-if
+            }//level4
+          }//level3-if
+        }//level3
+      }//level2-if
+    }//level2
+    echo "<br>";
+  }//level1
+  ?>
+</form>
+
+<form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
     <thead>
@@ -103,7 +155,8 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>" class="submit">Edit</a>&nbsp;<button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>" class="submit">Edit</a>&nbsp;
+              <button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
           <td><?php echo escape($row["name"]); ?></td>
           <td><?php echo escape($row["parentname"]); ?></td>
       </tr>

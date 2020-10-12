@@ -42,17 +42,61 @@ if (isset($_POST['update'])) {
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-if (isset($_POST["delete"])) {
+if (isset($_GET['id'])) { // Action on LOAD:
+  echo __LINE__;
+//  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  $id = $_GET["id"];
+  echo __LINE__;
+  echo " Deleting ID:" . $id;
+  $deleted = "SELECT name FROM taxonomy
+            WHERE id = :id";
+  $statement = $connection->prepare($deleted);
+  $statement->bindValue(':id', $id);
+  $statement->execute();
+  $deletedname = $statement->fetchAll();
+  var_dump($deletedname);
+  echo escape($deletedname["name"]);
+}
+
+if (isset($_POST['delete'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try {
-	$timestamp = date("Y-m-d H:i:s");
+    $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["delete"];
+    $sql = "UPDATE taxonomy 
+			SET deleted = '$timestamp'
+            WHERE id = :id";
+    $statement = $connection->prepare($sql);
+    $statement->bindValue(':id', $id);
+    $statement->execute();
+  } catch(PDOException $error) {
+    echo $sql . "<br>" . $error->getMessage();
+  }
+}
+
+
+
+if (isset($_POST["XXXXXXXdelete"])) {
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  $id = $_POST["delete"];
+  echo " Deleting ID:" . $id;
+  try {
+
+    $deleted = "SELECT name FROM taxonomy
+            WHERE id = :id";
+    $statement = $connection->prepare($deleted);
+    $statement->bindValue(':id', $id);
+    $statement->execute();
+    $deletedname = $statement->fetchAll();
+
+    $timestamp = date("Y-m-d H:i:s");
     $tax = "UPDATE taxonomy 
 			SET deleted = '$timestamp'
             WHERE id = :id";
     $statement = $connection->prepare($tax);
     $statement->bindValue(':id', $id);
     $statement->execute();
+
   } catch(PDOException $error) {
     echo $tax . "<br>" . $error->getMessage();
   }
@@ -96,8 +140,8 @@ try {
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b>.</blockquote>
 <?php endif; ?>
 
-<?php if (isset($_POST['delete']) && $statement) : ?>
-    <blockquote class="success">Successfully deleted the taxonomy.</blockquote>
+<?php if (isset($_POST['delxete']) && $statement) : ?>
+    <blockquote class="success">Successfully deleted <b><?php echo escape($deletedname["name"]); ?></b>.</blockquote>
 <?php endif; ?>
 
 <form method="post">
@@ -109,37 +153,39 @@ try {
         || escape($level1["parent"]) != 1 ) // skip anything that is not top level (has no real parent).
       continue;
     echo ' <a href="edit.php?id=' . escape($level1["id"]) . '" class="submit">Edit</a> '
-        . " [delete] "
+        . ' <button class="button submit" type="submit" name="delete" value="' . escape($level1["id"]) . '">Delete!</button> '
+        //. ' <a href="list.php?id=' . escape($level1["id"]) . '" class="submit">Delete</a> '
+        //. ' <input type="hidden" name="delete" value="' . escape($level1["id"]) . '"><a href="list.php" class="submit">Delete</a> '
         . escape($level1["name"]) . "<br>";
     foreach ($tax as $level2) {
-      if ( escape($level2["id"]) > 1 // skip "(none)" in the top level.
+      if ( escape($level2["id"]) > 1 // skip "(none)".
           && escape($level2["parent"]) == escape($level1["id"]) )
       {   echo "<a href='edit.php?id=" . escape($level2["id"]) . "' class='submit'>Edit</a>"
-          . " [delete] "
+          . ' <button class="button submit" type="submit" name="delete" value="' . escape($level2["id"]) . '">Delete!</button> '
           . escape($level1["name"]) . " &gt; "
           . escape($level2["name"]) . "<br>" ;
         foreach ($tax as $level3) {
-          if ( escape($level3["id"]) > 1 // skip "(none)" in the top level.
+          if ( escape($level3["id"]) > 1 // skip "(none)".
               && escape($level3["parent"]) == escape($level2["id"]) )
           {   echo "<a href='edit.php?id=" . escape($level3["id"]) . "' class='submit'>Edit</a>"
-              . " [delete] "
+              . ' <button class="button submit" type="submit" name="delete" value="' . escape($level3["id"]) . '">Delete!</button> '
               . escape($level1["name"]) . " &gt; "
               . escape($level2["name"]) . " &gt; "
               . escape($level3["name"]) . "<br>" ;
             foreach ($tax as $level4) {
-              if ( escape($level4["id"]) > 1 // skip "(none)" in the top level.
+              if ( escape($level4["id"]) > 1 // skip "(none)".
                   && escape($level4["parent"]) == escape($level3["id"]) )
               {   echo "<a href='edit.php?id=" . escape($level4["id"]) . "' class='submit'>Edit</a>"
-                  . " [delete] "
+                  . ' <button class="button submit" type="submit" name="delete" value="' . escape($level4["id"]) . '">Delete!</button> '
                   . escape($level1["name"]) . " &gt; "
                   . escape($level2["name"]) . " &gt; "
                   . escape($level3["name"]) . " &gt; "
                   . escape($level4["name"]) . "<br>" ;
                 foreach ($tax as $level5) {
-                  if ( escape($level5["id"]) > 1 // skip "(none)" in the top level.
+                  if ( escape($level5["id"]) > 1 // skip "(none)".
                       && escape($level5["parent"]) == escape($level4["id"]) )
                   {   echo "<a href='edit.php?id=" . escape($level5["id"]) . "' class='submit'>Edit</a>"
-                      . " [delete] "
+                      . ' <button class="button submit" type="submit" name="delete" value="' . escape($level5["id"]) . '">Delete!</button> '
                       . escape($level1["name"]) . " &gt; "
                       . escape($level2["name"]) . " &gt; "
                       . escape($level3["name"]) . " &gt; "
@@ -153,33 +199,9 @@ try {
         }//level3
       }//level2-if
     }//level2
-    echo "<br>";
+    echo "<br>"; // one blank line between top-level items.
   }//level1
   ?>
-</form>
-
-<form method="post">
-  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-
-  <table>
-    <thead>
-      <tr>
-          <th>Action</th>
-          <th>Name</th>
-          <th>Parent</th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($result as $row) : ?>
-      <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>" class="submit">Edit</a>&nbsp;
-              <button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["name"]); ?></td>
-          <td><?php echo escape($row["parentname"]); ?></td>
-      </tr>
-    <?php endforeach; ?>
-    </tbody>
-  </table>
 </form>
 
 <?php require "../common/footer.php"; ?>

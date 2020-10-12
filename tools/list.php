@@ -124,8 +124,9 @@ try { // load the record:
     LEFT JOIN taxonomy t3 ON t3.id = t.taxonomy3 
     LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
     LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
-    WHERE t.deleted = '0000-00-00 00:00:00'
-      OR  t.deleted IS NULL
+    WHERE ( t.deleted = '0000-00-00 00:00:00'
+      OR  t.deleted IS NULL )
+      AND t.offered = 1 -- comment this line to show notoffered items in the tools list.
     ORDER BY t.toolname -- t1, t2, t3, T4, t5 -- TODO: order the list meaningfully.
     ";
   $statement = $connection->prepare($sql);
@@ -159,10 +160,6 @@ try { // load the record:
 
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <table><tr><td width="25%" align="right">Legend:</td>
-            <td width="25%" align="center" class="offered">Available</td>
-            <td width="25%" align="center" class="loaned">Waiting list</td>
-            <td width="25%" align="center" class="notoffered">Currently not loanable</td></tr></table>
   <table>
     <thead>
       <tr>
@@ -203,7 +200,7 @@ try { // load the record:
             <?php echo
             ( escape($row["offered"])
                 ? ( escape($row["active"])
-                    ? "loaned"
+                    ? "waiting list"
                     : "available" )
                 : "not offered" )
             ?></td>

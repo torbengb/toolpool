@@ -31,22 +31,22 @@ try {
   </table>
 </div>
 
-<h2>Welcome to your tool pool!</h2>
+<h2>Welcome to your TOOL||POOL!</h2>
 
 <p>This prototype aims to provide a proof of concept for a community of people wanting to share their tools for DIY home-improvement projects.</p>
 
 <p style="color:red;background-color:yellow;"><b>!! UNDER CONSTRUCTION !!</b> No warranties, neither expressed nor implied. Use at your own peril.</p>
 
-<h3>Tool Pool helps people to find tools they can borrow, rather than buying them</h3>
+<h3>TOOL||POOL helps people to find tools they can borrow, rather than buying them</h3>
 <p>Imagine this:</p>
 
 <ol>
 <li><b>You need a tool that you don't have,</b> let's say a nail gun for a fence, or a tile cutter. Do you really want to go out and buy one, just for this one use? It's expensive and you will probably not need it again for a long time, if ever.
-<li><b>A guy down the road has the tool in his garage.</b> He almost never uses it. He is a member of the Tool Pool community, and you find his tool offered here on the site. You request to borrow the tool, and he says you can pick it up today after work and return it in a week!
+<li><b>A guy down the road has the tool in his garage.</b> He almost never uses it. He is a member of the TOOL||POOL community, and you find his tool offered here on the site. You request to borrow the tool, and he says you can pick it up today after work and return it in a week!
 <li><b>You're happy</b> that you didn't have to buy an expensive tool, <b>and he's happy</b> that his tool doesn't just collect dust.
 </ol>
 
-<p>Tool Pool helps people build a positive neighborhood. Tool Pool is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to meet new likeminded DIY enthusiasts in your neighborhood!
+<p>TOOL||POOL helps people build a positive neighborhood. TOOL||POOL is a volunteer community: there are no fees, no subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to meet new likeminded DIY enthusiasts in your neighborhood!
 
 <h2>Features</h2>
 <p>These are some of the ideas to be explored with this prototype, sorted by approximate order of planned implementation:

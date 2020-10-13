@@ -1,4 +1,4 @@
-# This is a prototype!!
+# README
 
 This prototype of `Tool Pool` aims to provide a proof of concept for a community of people wanting to share their tools for DIY home-improvement projects.
 

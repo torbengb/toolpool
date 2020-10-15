@@ -14,99 +14,101 @@ CREATE TABLE IF NOT EXISTS taxonomy (
 
 INSERT INTO taxonomy (id,created,modified,deleted,name,parent)
 VALUES
- ( 1,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','(none)',1)
-,( 2,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','(not specified)',1)
-,( 3,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Haus, Bauen',1)
-,( 4,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Garten',1)
-,( 5,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Maschinen',1)
-,( 6,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkstatt',1)
-,( 7,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Elektro',3)
-,( 8,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Malen, Spachteln',3)
-,( 9,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Fenster, Türen',3)
-,(10,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Fliesen, Böden',3)
-,(11,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Heizung, Öfen, Klima',3)
-,(12,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Photovoltaik, Solar',3)
-,(13,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Farben, Lacke',8)
-,(14,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Tapezieren',8)
-,(15,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Fliesen',10)
-,(16,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Laminat, Parkett, Linoleum, Teppich',10)
-,(17,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Gartengeräte',4)
-,(18,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Pflanzen, Bäume, Blumen',4)
-,(19,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Pool',4)
-,(20,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Reinigung',4)
-,(21,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Baumaschinen',5)
-,(22,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Landwirtschaftliche Maschinen',5)
-,(23,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Bagger',21)
-,(24,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Bauwagen',21)
-,(25,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Betonmischer',21)
-,(26,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Blech-, Metallverarbeitung',21)
-,(27,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Kräne',21)
-,(28,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Übrige Baumaschinen',21)
-,(29,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Holzspalter',21)
-,(30,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Obstverarbeitung',21)
-,(31,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schneepflüge, -fräsen',21)
-,(32,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Traktoren',21)
-,(33,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Übrige landwirtschaftliche Maschinen',21)
-,(34,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkstatt, Ausstattung',6)
-,(35,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Arbeitsbekleidung',34)
-,(36,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Arbeitslampen',34)
-,(37,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Drehbänke',34)
-,(38,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Fräsmaschinen',34)
-,(39,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hebebühnen',34)
-,(40,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hobelmaschinen',34)
-,(41,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hubwägen',34)
-,(42,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Kompressoren',34)
-,(43,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Leitern',34)
-,(44,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Rodeln, Sackkarren',34)
-,(45,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Säge-, Schneidemaschinen',34)
-,(46,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schraubstöcke',34)
-,(47,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkbänke',34)
-,(48,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkzeug',6)
-,(49,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Elektrowerkzeuge',48)
-,(50,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Reinigungsgeräte',48)
-,(51,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Handwerkzeuge',48)
-,(52,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Akkubohrer',49)
-,(53,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Bodenschleifgeräte',49)
-,(54,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Bohrmaschinen',49)
-,(55,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Bohrzubehör, Trennscheiben',49)
-,(56,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Dampfreiniger',50)
-,(57,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Heißklebepistolen',49)
-,(58,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hochdruckreiniger',50)
-,(59,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Kreissägen, Schneidgeräte',49)
-,(60,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Lötgeräte',49)
-,(61,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Nass-, Trockensauger',50)
-,(62,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Poliergeräte',49)
-,(63,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schleifmaschinen',49)
-,(64,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schweißgeräte, -zubehör',49)
-,(65,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Stichsägen',49)
-,(66,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Übrige Geräte',49)
-,(67,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Druckluftwerkzeuge',51)
-,(68,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hämmer',51)
-,(69,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Hobeln',51)
-,(70,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Handsägen',51)
-,(71,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Messgeräte, -lehren',51)
-,(72,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Ratschen, Nüsse',51)
-,(73,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schraubenschlüssel',51)
-,(74,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schraubenzieher',51)
-,(75,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkzeugsets',51)
-,(76,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Zangen',51)
-,(77,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Übrige Handwerkzeuge',51)
-,(78,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Aussaat-, Streuwägen',17)
-,(79,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Häcksler',17)
-,(80,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Heckenscheren',17)
-,(81,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Kehrmaschinen',17)
-,(82,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Laubgebläse, -sauger',17)
-,(83,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Motorsägen, Kettensägen',17)
-,(84,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Rasenmäher',17)
-,(85,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Rasenscheren',17)
-,(86,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Rechen, Besen',17)
-,(87,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Schaufeln, Spaten',17)
-,(88,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Scheibtruhen',17)
-,(89,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Sensen',17)
-,(90,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Vertikutierer',17)
-,(91,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Abdeckplanen',4)
-,(92,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','KFZ-Spezialwerkzeuge',6)
-,(93,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Werkzeug für Flüssigkeiten, Öle',92)
-,(94,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','Motorrad-Werkzeug',92)
-,(95,SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','KFZ-Lacke',92)
-;
+ (1,SYSDATE(),NULL,NULL,'(none)',1),
+ (2,SYSDATE(),NULL,NULL,'(not specified)',1),
+ (3,SYSDATE(),NULL,NULL,'Haus, Bauen',1),
+ (4,SYSDATE(),NULL,NULL,'Garten',1),
+ (5,SYSDATE(),NULL,NULL,'Maschinen',1),
+ (6,SYSDATE(),NULL,NULL,'Werkstatt, KFZ',1),
+ (7,SYSDATE(),NULL,NULL,'Elektro',3),
+ (8,SYSDATE(),NULL,NULL,'Malen, Spachteln',3),
+ (9,SYSDATE(),NULL,NULL,'Fenster, TÃ¼ren',3),
+(10,SYSDATE(),NULL,NULL,'Fliesen, BÃ¶den',3),
+(11,SYSDATE(),NULL,NULL,'Heizung, Ã–fen, Klima',3),
+(12,SYSDATE(),NULL,NULL,'Photovoltaik, Solar',3),
+(13,SYSDATE(),NULL,NULL,'Farben, Lacke',8),
+(14,SYSDATE(),NULL,NULL,'Tapezieren',8),
+(15,SYSDATE(),NULL,NULL,'Fliesen',10),
+(16,SYSDATE(),NULL,NULL,'Laminat, Parkett, Linoleum, Teppich',10),
+(17,SYSDATE(),NULL,NULL,'GartengerÃ¤te',4),
+(18,SYSDATE(),NULL,NULL,'Pflanzen, BÃ¤ume, Blumen',4),
+(19,SYSDATE(),NULL,NULL,'Pool',4),
+(20,SYSDATE(),NULL,NULL,'Reinigung',4),
+(21,SYSDATE(),NULL,NULL,'Baumaschinen',5),
+(22,SYSDATE(),NULL,NULL,'Landwirtschaftliche Maschinen',5),
+(23,SYSDATE(),NULL,NULL,'Bagger',21),
+(24,SYSDATE(),NULL,NULL,'Bauwagen',21),
+(25,SYSDATE(),NULL,NULL,'Betonmischer',21),
+(26,SYSDATE(),NULL,NULL,'Blech-, Metallverarbeitung',21),
+(27,SYSDATE(),NULL,NULL,'KrÃ¤ne',21),
+(28,SYSDATE(),NULL,NULL,'Ãœbrige Baumaschinen',21),
+(29,SYSDATE(),NULL,NULL,'Holzspalter',22),
+(30,SYSDATE(),NULL,NULL,'Obstverarbeitung',22),
+(31,SYSDATE(),NULL,NULL,'SchneepflÃ¼ge, -frÃ¤sen',22),
+(32,SYSDATE(),NULL,NULL,'Traktoren',22),
+(33,SYSDATE(),NULL,NULL,'Ãœbrige landwirtschaftliche Maschinen',22),
+(34,SYSDATE(),NULL,NULL,'Werkstatt, Ausstattung',6),
+(35,SYSDATE(),NULL,NULL,'Arbeitsbekleidung',34),
+(36,SYSDATE(),NULL,NULL,'Arbeitslampen',34),
+(37,SYSDATE(),NULL,NULL,'DrehbÃ¤nke',34),
+(38,SYSDATE(),NULL,NULL,'FrÃ¤smaschinen',34),
+(39,SYSDATE(),NULL,NULL,'HebebÃ¼hnen',34),
+(40,SYSDATE(),NULL,NULL,'Hobelmaschinen',34),
+(41,SYSDATE(),NULL,NULL,'HubwÃ¤gen',34),
+(42,SYSDATE(),NULL,NULL,'Kompressoren',34),
+(43,SYSDATE(),NULL,NULL,'Leitern',34),
+(44,SYSDATE(),NULL,NULL,'Rodeln, Sackkarren',34),
+(45,SYSDATE(),NULL,NULL,'SÃ¤ge-, Schneidemaschinen',34),
+(46,SYSDATE(),NULL,NULL,'SchraubstÃ¶cke',34),
+(47,SYSDATE(),NULL,NULL,'WerkbÃ¤nke',34),
+(48,SYSDATE(),NULL,NULL,'Werkzeug',6),
+(49,SYSDATE(),NULL,NULL,'Elektrowerkzeuge',48),
+(50,SYSDATE(),NULL,NULL,'ReinigungsgerÃ¤te',48),
+(51,SYSDATE(),NULL,NULL,'Handwerkzeuge',48),
+(52,SYSDATE(),NULL,NULL,'Akkubohrer',49),
+(53,SYSDATE(),NULL,NULL,'SchleifgerÃ¤te',49),
+(54,SYSDATE(),NULL,NULL,'Bohrmaschinen',49),
+(55,SYSDATE(),NULL,NULL,'BohrzubehÃ¶r',49),
+(56,SYSDATE(),NULL,NULL,'Dampfreiniger',50),
+(57,SYSDATE(),NULL,NULL,'HeiÃŸklebepistolen',49),
+(58,SYSDATE(),NULL,NULL,'Hochdruckreiniger',50),
+(59,SYSDATE(),NULL,NULL,'KreissÃ¤gen, SchneidgerÃ¤te',49),
+(60,SYSDATE(),NULL,NULL,'LÃ¶tgerÃ¤te',49),
+(61,SYSDATE(),NULL,NULL,'Nass-, Trockensauger',50),
+(62,SYSDATE(),NULL,NULL,'PoliergerÃ¤te',49),
+(63,SYSDATE(),NULL,NULL,'Schleifmaschinen',49),
+(64,SYSDATE(),NULL,NULL,'SchweiÃŸgerÃ¤te, -zubehÃ¶r',49),
+(65,SYSDATE(),NULL,NULL,'StichsÃ¤gen',59),
+(66,SYSDATE(),NULL,NULL,'Ãœbrige GerÃ¤te',49),
+(67,SYSDATE(),NULL,NULL,'Druckluftwerkzeuge',51),
+(68,SYSDATE(),NULL,NULL,'HÃ¤mmer',51),
+(69,SYSDATE(),NULL,NULL,'Hobeln',51),
+(70,SYSDATE(),NULL,NULL,'HandsÃ¤gen',51),
+(71,SYSDATE(),NULL,NULL,'MessgerÃ¤te, -lehren',51),
+(72,SYSDATE(),NULL,NULL,'Ratschen, NÃ¼sse',51),
+(73,SYSDATE(),NULL,NULL,'SchraubenschlÃ¼ssel',51),
+(74,SYSDATE(),NULL,NULL,'Schraubenzieher',51),
+(75,SYSDATE(),NULL,NULL,'Werkzeugsets',51),
+(76,SYSDATE(),NULL,NULL,'Zangen',51),
+(77,SYSDATE(),NULL,NULL,'Ãœbrige Handwerkzeuge',51),
+(78,SYSDATE(),NULL,NULL,'Aussaat-, StreuwÃ¤gen',17),
+(79,SYSDATE(),NULL,NULL,'HÃ¤cksler',17),
+(80,SYSDATE(),NULL,NULL,'Heckenscheren',17),
+(81,SYSDATE(),NULL,NULL,'Kehrmaschinen',20),
+(82,SYSDATE(),NULL,NULL,'LaubgeblÃ¤se, -sauger',17),
+(83,SYSDATE(),NULL,NULL,'MotorsÃ¤gen, KettensÃ¤gen',17),
+(84,SYSDATE(),NULL,NULL,'RasenmÃ¤her',17),
+(85,SYSDATE(),NULL,NULL,'Rasenscheren',17),
+(86,SYSDATE(),NULL,NULL,'Rechen, Besen',17),
+(87,SYSDATE(),NULL,NULL,'Schaufeln, Spaten',17),
+(88,SYSDATE(),NULL,NULL,'Scheibtruhen',17),
+(89,SYSDATE(),NULL,NULL,'Sensen',17),
+(90,SYSDATE(),NULL,NULL,'Vertikutierer',17),
+(91,SYSDATE(),NULL,NULL,'Abdeckplanen',4),
+(92,SYSDATE(),NULL,NULL,'KFZ-Spezialwerkzeuge',6),
+(93,SYSDATE(),NULL,NULL,'Werkzeug fÃ¼r FlÃ¼ssigkeiten, Ã–le',92),
+(94,SYSDATE(),NULL,NULL,'Motorrad-Werkzeug',92),
+(95,SYSDATE(),NULL,NULL,'KFZ-Lacke',92),
+(98,SYSDATE(),NULL,NULL,'Trennscheiben',59),
+(99,SYSDATE(),NULL,NULL,'Winkelschleifer, Flex',59),
+(101,SYSDATE(),NULL,NULL,'Kehrmaschinen',50);

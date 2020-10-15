@@ -6,39 +6,41 @@ if (isset($_GET['id'])) { // Action on LOAD:
   try { 
     // load the record
     $id = $_GET['id'];
-    $sql = "SELECT * FROM tools WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT * FROM tools WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $tool = $statement->fetch(PDO::FETCH_ASSOC);
     
     // load usernames:
-    $sql = "SELECT username, id FROM users u
-        WHERE u.deleted = '0000-00-00 00:00:00'
-        ORDER BY username";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT username, id FROM users
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY username
+        ");
     $statement->execute();
     $users = $statement->fetchAll();
 
     // list for taxonomy columns:
-    $sql = "SELECT t.name, t.id
-        FROM taxonomy t
-        WHERE t.deleted = '0000-00-00 00:00:00'
-        AND t.id > 1 -- defaults to '(not specified)' while suppressing '(none)'.
-        AND t.parent = 1 -- this gets us only first-level categories.
-        ORDER BY t.name";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT name, id
+        FROM taxonomy
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        AND id > 1 -- defaults to '(not specified)' while suppressing '(none)'.
+        AND parent = 1 -- this gets us only first-level categories.
+        ORDER BY name
+        ");
     $statement->execute();
     $tax1 = $statement->fetchAll();
 
     // list for taxonomy columns:
-    $sql = "SELECT t.name, t.id
-        FROM taxonomy t
-        WHERE t.deleted = '0000-00-00 00:00:00'
-        -- AND ( t.parent <> 2   -- this gets us only non-first-level categories.
-        --    OR t.parent = 1 ) -- allows '(none)'. 
-        ORDER BY t.name";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT name, id
+        FROM taxonomy
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY name
+        ");
     $statement->execute();
     $tax = $statement->fetchAll();
 

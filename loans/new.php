@@ -5,19 +5,21 @@ require "../common/header.php";
 // Action on LOAD:
 try { 
   // load users:
-  $sql = "SELECT username, id FROM users
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY username";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+      SELECT username, id FROM users
+      WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+      ORDER BY username
+      ");
   $statement->execute();
   $users = $statement->fetchAll();
   // load tools and their owners:
-  $sql = "SELECT t.toolname, t.id, u.username
-    FROM tools t
-    JOIN users u ON u.id = t.owner
-    WHERE t.deleted = '0000-00-00 00:00:00'
-    ORDER BY t.toolname";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+      SELECT t.toolname, t.id, u.username
+        FROM tools t
+        JOIN users u ON u.id = t.owner
+        WHERE ( t.deleted = '0000-00-00 00:00:00' OR t.deleted IS NULL )
+        ORDER BY t.toolname
+        ");
   $statement->execute();
   $tools = $statement->fetchAll();
 } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }

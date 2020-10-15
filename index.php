@@ -6,17 +6,12 @@ require "common/header.php";
 <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
 <?php
 try {
-  $sql = "SELECT 'Total users', COUNT(*) as count FROM users";
-  $statement = $connection->prepare($sql);
-  $statement->execute();
-  $result = $statement->fetchAll();
-
-  $sql = "SELECT 'Total users', COUNT(*) as count FROM users WHERE deleted = '0000-00-00 00:00:00'
-    UNION SELECT 'Total tools', COUNT(*) as count FROM tools WHERE deleted = '0000-00-00 00:00:00' AND offered=1
-    UNION SELECT 'Total loans', COUNT(*) as count FROM loans WHERE deleted = '0000-00-00 00:00:00'
-    UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE deleted = '0000-00-00 00:00:00'
-    ";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+    SELECT 'Total users',            COUNT(*) as count FROM users    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
+    UNION SELECT 'Total tools',      COUNT(*) as count FROM tools    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
+    UNION SELECT 'Total loans',      COUNT(*) as count FROM loans    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
+    UNION SELECT 'Total categories', COUNT(*) as count FROM taxonomy WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
+    ");
   $statement->execute();
   $result = $statement->fetchAll();
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }

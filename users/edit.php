@@ -5,24 +5,25 @@ require "../common/header.php";
 if (isset($_GET['id'])) { // Action on LOAD:
   try { // load the record
     $id = $_GET['id'];
-    $sql = "SELECT * FROM users WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("SELECT * FROM users WHERE id = :id");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $user = $statement->fetch(PDO::FETCH_ASSOC);
 
     // list of countries:
-    $sql = "SELECT code, name FROM countries
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT code, name FROM countries
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY name
+        ");
     $statement->execute();
     $countries = $statement->fetchAll();
     // list for regions:
-    $sql = "SELECT code, name FROM regions
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY code";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT code, name FROM regions
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY code
+        ");
     $statement->execute();
     $regions = $statement->fetchAll();
 

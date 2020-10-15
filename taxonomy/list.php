@@ -48,15 +48,17 @@ if (isset($_POST['delete'])) {
     // first mark the record as deleted>
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["delete"];
-    $sql = "UPDATE taxonomy 
-			SET deleted = '$timestamp'
-            WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        UPDATE taxonomy 
+		SET deleted = '$timestamp'
+        WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     //then get the name to put in the confirmation:
-    $deleted = "SELECT name FROM taxonomy WHERE id = :id";
-    $statement = $connection->prepare($deleted);
+    $statement = $connection->prepare("
+        SELECT name FROM taxonomy WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $tmp = $statement->fetchAll();
@@ -67,25 +69,25 @@ if (isset($_POST['delete'])) {
 }
 
 try {
-  $sql = "SELECT t1.*, t2.name as parentname
-    FROM taxonomy t1 
-    LEFT OUTER JOIN taxonomy t2 ON t1.parent = t2.id
-    WHERE ( t1.deleted = '0000-00-00 00:00:00'
-        OR  t1.deleted IS NULL )
-    AND ( t1.parent = t2.id 
-       OR t1.parent = ''
+  $statement = $connection->prepare("
+      SELECT t1.*, t2.name as parentname
+      FROM taxonomy t1 
+      LEFT OUTER JOIN taxonomy t2 ON t1.parent = t2.id
+      WHERE ( t1.deleted = '0000-00-00 00:00:00' OR t1.deleted IS NULL )
+      AND ( t1.parent = t2.id 
+           OR t1.parent = ''
     )
-    ORDER BY parentname, name";
-  $statement = $connection->prepare($sql);
+    ORDER BY parentname, name
+    ");
   $statement->execute();
   $result = $statement->fetchAll();
 
-  $sql = "SELECT *
-    FROM taxonomy t1
-    WHERE ( t1.deleted = '0000-00-00 00:00:00'
-        OR  t1.deleted IS NULL )
-    ORDER BY parent, name";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+      SELECT *
+      FROM taxonomy t1
+      WHERE ( t1.deleted = '0000-00-00 00:00:00' OR  t1.deleted IS NULL )
+      ORDER BY parent, name
+    ");
   $statement->execute();
   $tax = $statement->fetchAll();
 

@@ -4,10 +4,11 @@ require "../common/header.php";
 
 // Action on LOAD:
 try { // load foreign tables:
-  $sql = "SELECT name, id FROM taxonomy
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY name";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+      SELECT name, id FROM taxonomy
+      WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+      ORDER BY name
+      ");
   $statement->execute();
   $parents = $statement->fetchAll();
 } catch(PDOException $error) {

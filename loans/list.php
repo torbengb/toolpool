@@ -45,7 +45,8 @@ if (isset($_POST['update'])) {
         "actualstart" => $_POST['actualstart'],
         "actualend" => $_POST['actualend'],
     ];
-    $sql = "UPDATE loans 
+    $statement = $connection->prepare("
+        UPDATE loans 
             SET modified = :modified,
               active = :active,
               tool = :tool,
@@ -55,8 +56,8 @@ if (isset($_POST['update'])) {
               agreedend = :agreedend,
               actualstart = :actualstart,
               actualend = :actualend
-            WHERE id = :id";
-    $statement = $connection->prepare($sql);
+            WHERE id = :id
+        ");
     $statement->execute($record);
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
@@ -66,10 +67,11 @@ if (isset($_POST['delete'])) {
   try {
 	$timestamp = date("Y-m-d H:i:s");
     $id = $_POST["delete"];
-    $sql = "UPDATE loans 
-			SET deleted = '$timestamp'
-            WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        UPDATE loans 
+		SET deleted = '$timestamp'
+        WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
   } catch(PDOException $error) {
@@ -82,15 +84,14 @@ try { // load the record
 $connection = new PDO($dsn, $username, $password, $options);
 $sql = "USE " . $dbname;
 $connection->exec($sql);
-  $sql = "SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l
-		  JOIN tools t ON l.tool = t.id
-		  JOIN users u1 ON l.owner = u1.id
-		  JOIN users u2 ON l.loanedto = u2.id
-		  WHERE l.deleted = '0000-00-00 00:00:00'
-    	    OR  l.deleted IS NULL
-		  ORDER BY l.active DESC, t.toolname";
-
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l
+		JOIN tools t ON l.tool = t.id
+		JOIN users u1 ON l.owner = u1.id
+		JOIN users u2 ON l.loanedto = u2.id
+		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
+		ORDER BY l.active DESC, t.toolname
+    ");
   $statement->execute();
 
   $result = $statement->fetchAll();

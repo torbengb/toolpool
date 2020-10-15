@@ -5,17 +5,19 @@ require "../common/header.php";
 // Action on LOAD:
 try { // load foreign tables:
   // list of countries:
-  $sql = "SELECT code, name FROM countries
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY code";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT code, name FROM countries
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY code
+        ");
   $statement->execute();
   $countries = $statement->fetchAll();
   // list for regions:
-  $sql = "SELECT code, name FROM regions
-      WHERE deleted = '0000-00-00 00:00:00'
-      ORDER BY code";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT code, name FROM regions
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY code
+        ");
   $statement->execute();
   $regions = $statement->fetchAll();
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }

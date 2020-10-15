@@ -29,7 +29,8 @@ if (isset($_POST['update'])) {
         "hydraulic" => $_POST['hydraulic'],
         "pneumatic" => $_POST['pneumatic']
     );
-    $sql = 'UPDATE tools 
+    $statement = $connection->prepare("
+        UPDATE tools 
             SET modified = :modified,
               owner = :owner,
               offered = :offered,
@@ -49,8 +50,8 @@ if (isset($_POST['update'])) {
               electrical400v = :electrical400v,
               hydraulic = :hydraulic,
               pneumatic = :pneumatic
-            WHERE id = :id';
-    $statement = $connection->prepare($sql);
+            WHERE id = :id
+        ");
     $statement->execute($record);
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
@@ -61,10 +62,11 @@ if (isset($_POST['delete'])) { // Action on SUBMIT:
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST['id'];
-    $sql = "UPDATE tools 
+    $statement = $connection->prepare("
+        UPDATE tools 
 			SET deleted = '$timestamp'
-			WHERE id = :id";
-    $statement = $connection->prepare($sql);
+			WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
@@ -75,11 +77,12 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
   try {
 // first collect the necessary data:
     $id = $_POST["loan"];
-    $sql = "SELECT t.owner, t.toolname, u.username 
-      FROM tools t
-      JOIN users u ON u.id = t.owner
-      WHERE t.id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT t.owner, t.toolname, u.username 
+        FROM tools t
+        JOIN users u ON u.id = t.owner
+        WHERE t.id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $result = $statement->fetchAll();
@@ -134,10 +137,11 @@ try { // load the record:
   $result = $statement->fetchAll();
 
   // list for taxonomy columns:
-  $sql = "SELECT name, id, parent FROM taxonomy
-    WHERE deleted = '0000-00-00 00:00:00'
-    ORDER BY name";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT name, id, parent FROM taxonomy
+        WHERE deleted = '0000-00-00 00:00:00'
+        ORDER BY name
+        ");
   $statement->execute();
   $tax = $statement->fetchAll();
 

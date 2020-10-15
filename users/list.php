@@ -56,7 +56,8 @@ if (isset($_POST['update'])) { // Action on SUBMIT:
         "privatenotes"  => $_POST['privatenotes'],
         "publicnotes"   => $_POST['publicnotes']
     ];
-    $sql = "UPDATE users 
+    $statement = $connection->prepare("
+        UPDATE users 
             SET modified = :modified,
               username = :username,
               email = :email,
@@ -71,8 +72,8 @@ if (isset($_POST['update'])) { // Action on SUBMIT:
               addr_number = :addr_number,
               privatenotes = :privatenotes,
               publicnotes = :publicnotes
-            WHERE id = :id";
-    $statement = $connection->prepare($sql);
+            WHERE id = :id
+        ");
     $statement->execute($record);
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
@@ -83,22 +84,19 @@ if (isset($_POST["delete"])) {
   try { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["delete"];
-    $sql = "UPDATE users 
-			SET deleted = '$timestamp'
-            WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("UPDATE users  SET deleted = '$timestamp' WHERE id = :id");
     $statement->bindValue(':id', $id);
     $statement->execute();
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
 try { // Action on LOAD:
-  $sql = "SELECT u.*, r.name AS regionname
-    FROM users u
-    LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
-    WHERE u.deleted = '0000-00-00 00:00:00'
-      OR  u.deleted IS NULL ";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT u.*, r.name AS regionname
+        FROM users u
+        LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
+        WHERE ( u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL )
+        ");
   $statement->execute();
   $result = $statement->fetchAll();
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }

@@ -5,25 +5,28 @@ require "../common/header.php";
 if (isset($_GET['id'])) { // Action on LOAD:
   try { // load the record
     $id = $_GET['id'];
-    $sql = "SELECT * FROM taxonomy WHERE id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT * FROM taxonomy WHERE id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $tax = $statement->fetch(PDO::FETCH_ASSOC);
     
   try { // load foreign tables:
-    $sql = "SELECT name, id, parent FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT name, id, parent FROM taxonomy
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY name
+        ");
     $statement->execute();
     $parents = $statement->fetchAll();
     } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
   try { // load foreign tables:
-    $sql = "SELECT name, id, parent FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT name, id, parent FROM taxonomy
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY name
+        ");
     $statement->execute();
     $parents = $statement->fetchAll();
     } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }

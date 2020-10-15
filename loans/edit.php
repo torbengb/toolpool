@@ -6,12 +6,13 @@ if (isset($_GET['id'])) { // Action on LOAD:
   try { 
     // load the record:
     $id = $_GET['id'];
-    $sql = "SELECT l.*, t.toolname, u.username
-      FROM loans l
-      JOIN tools t ON t.id = l.tool
-      JOIN users u ON u.id = l.owner
-      WHERE l.id = :id";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT l.*, t.toolname, u.username
+        FROM loans l
+        JOIN tools t ON t.id = l.tool
+        JOIN users u ON u.id = l.owner
+        WHERE l.id = :id
+        ");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $loan = $statement->fetch(PDO::FETCH_ASSOC);
@@ -19,10 +20,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
     //var_dump(loan);
 
     // load user list:
-    $sql = "SELECT username, id FROM users
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY username";
-    $statement = $connection->prepare($sql);
+    $statement = $connection->prepare("
+        SELECT username, id FROM users
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY username
+        ");
     $statement->execute();
     $users = $statement->fetchAll();
 

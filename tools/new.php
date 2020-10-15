@@ -42,21 +42,23 @@ if (isset($_POST['submit'])) { // Action on SUBMIT:
 // Action on LOAD:
 try { // load foreign tables:
     // list of usernames:
-  $sql = "SELECT username, id FROM users u
-      WHERE u.deleted = '0000-00-00 00:00:00'
-      ORDER BY username";
-  $statement = $connection->prepare($sql);
+  $statement = $connection->prepare("
+        SELECT username, id FROM users
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
+        ORDER BY username
+        ");
   $statement->execute();
   $users = $statement->fetchAll();
     
   try { // load foreign tables:
     // list for taxonomy1:
-    $sql = "SELECT name, id FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
+    $statement = $connection->prepare("
+        SELECT name, id FROM taxonomy
+        WHERE ( deleted = '0000-00-00 00:00:00' OR deleted IS NULL )
         AND parent = 0 -- only fetch 1st level items
         AND id > 0 -- do not fetch '(none)'
-        ORDER BY name";
-    $statement = $connection->prepare($sql);
+        ORDER BY name
+        ");
     $statement->execute();
     $tax1 = $statement->fetchAll();
     } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }

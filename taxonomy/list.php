@@ -42,25 +42,10 @@ if (isset($_POST['update'])) {
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-if (isset($_GET['id'])) { // Action on LOAD:
-  echo __LINE__;
-//  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  $id = $_GET["id"];
-  echo __LINE__;
-  echo " Deleting ID:" . $id;
-  $deleted = "SELECT name FROM taxonomy
-            WHERE id = :id";
-  $statement = $connection->prepare($deleted);
-  $statement->bindValue(':id', $id);
-  $statement->execute();
-  $deletedname = $statement->fetchAll();
-  var_dump($deletedname);
-  echo escape($deletedname["name"]);
-}
-
 if (isset($_POST['delete'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try {
+    // first mark the record as deleted>
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST["delete"];
     $sql = "UPDATE taxonomy 
@@ -69,36 +54,15 @@ if (isset($_POST['delete'])) {
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);
     $statement->execute();
-  } catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-  }
-}
-
-
-
-if (isset($_POST["XXXXXXXdelete"])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  $id = $_POST["delete"];
-  echo " Deleting ID:" . $id;
-  try {
-
-    $deleted = "SELECT name FROM taxonomy
-            WHERE id = :id";
+    //then get the name to put in the confirmation:
+    $deleted = "SELECT name FROM taxonomy WHERE id = :id";
     $statement = $connection->prepare($deleted);
     $statement->bindValue(':id', $id);
     $statement->execute();
-    $deletedname = $statement->fetchAll();
-
-    $timestamp = date("Y-m-d H:i:s");
-    $tax = "UPDATE taxonomy 
-			SET deleted = '$timestamp'
-            WHERE id = :id";
-    $statement = $connection->prepare($tax);
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-
+    $tmp = $statement->fetchAll();
+    $deletedname = escape($tmp[0][0]);
   } catch(PDOException $error) {
-    echo $tax . "<br>" . $error->getMessage();
+    echo $sql . "<br>" . $error->getMessage();
   }
 }
 
@@ -140,8 +104,8 @@ try {
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b>.</blockquote>
 <?php endif; ?>
 
-<?php if (isset($_POST['delxete']) && $statement) : ?>
-    <blockquote class="success">Successfully deleted <b><?php echo escape($deletedname["name"]); ?></b>.</blockquote>
+<?php if (isset($_POST['delete']) && $statement) : ?>
+    <blockquote class="success">Successfully deleted <b><?php echo escape($deletedname); ?></b>.</blockquote>
 <?php endif; ?>
 
 <form method="post">

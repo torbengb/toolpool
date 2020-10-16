@@ -5,6 +5,38 @@ if ($_SESSION['debug']) echo __FILE__."<br>";
 require "../common/header.php";
 if ($_SESSION['debug']) echo __FILE__."<br>";
 
+if (isset($_POST['create'])) { // Action on SUBMIT:
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+
+  try  { // create the record:
+    $timestamp = date("Y-m-d H:i:s");
+    $record =[
+        "created"       => $timestamp,
+        "username"      => $_POST['username'],
+        "email"         => $_POST['email'],
+        "firstname"     => $_POST['firstname'],
+        "lastname"      => $_POST['lastname'],
+        "phone"         => $_POST['phone'],
+        "addr_country"  => $_POST['addr_country'],
+        "addr_region"   => $_POST['addr_region'],
+        "addr_city"     => $_POST['addr_city'],
+        "addr_zip"      => $_POST['addr_zip'],
+        "addr_street"   => $_POST['addr_street'],
+        "addr_number"   => $_POST['addr_number'],
+        "privatenotes"  => $_POST['privatenotes'],
+        "publicnotes"   => $_POST['publicnotes']
+    ];
+    $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "users",
+        implode(", ", array_keys($record)),
+        ":" . implode(", :", array_keys($record))
+    );
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+}
+
 if (isset($_POST['update'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -49,6 +81,22 @@ if (isset($_POST['update'])) { // Action on SUBMIT:
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
+if (isset($_POST["delete"])) {
+  //if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+
+  try { // Action on SUBMIT:
+    $timestamp = date("Y-m-d H:i:s");
+    $id = $_SESSION['currentuserid'];
+    $statement = $connection->prepare("UPDATE users  SET deleted = '$timestamp' WHERE id = :id");
+    $statement->bindValue(':id', $id);
+    $statement->execute();
+    // remove all session variables
+    session_unset();
+    // destroy the session
+    session_destroy();
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+}
+
 ?>
 
 <?php if (isset($_SESSION['currentusername'])) : ?>
@@ -90,6 +138,18 @@ if (isset($_POST['update'])) { // Action on SUBMIT:
     <?php endif; ?>
     <div><a href="tool-list.php">My tools</a></div>
     <hr />
+    <form method="post"><button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></form>
+<?php else : ?>
+    <a href="../users/new.php">Register!</a>
+
+  <?php if (isset($_POST['create']) && $statement) : ?>
+        <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>!</blockquote>
+  <?php endif; ?>
+
+  <?php if (isset($_POST['delete']) && $statement) : ?>
+        <blockquote class="success">Successfully deleted your profile!</blockquote>
+  <?php endif; ?>
+
 <?php endif; ?>
 
 <form method="post">

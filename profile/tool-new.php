@@ -21,7 +21,7 @@ try { // load foreign tables:
 <h2>Add new tool</h2>
 
 <form method="post" action="tool-list.php">
-    <input class="button submit" type="submit" name="submit" value="Submit">
+    <input class="button submit" type="submit" name="create" value="Submit">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
     <input type="hidden" name="owner" value="<?php echo escape($_SESSION['currentusername']) ?>">
     <label class="label" for="offered"><input class="input" type="checkbox" name="offered" id="offered" value=1 checked>Offered</label>

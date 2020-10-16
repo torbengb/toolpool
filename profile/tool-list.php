@@ -1,12 +1,69 @@
 <?php
 require "../common/common.php";
 require "../common/header.php";
+
+if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
+if (isset($_POST['create'])) { // Action on SUBMIT:
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
+
+  try  { // create the record:
+    $timestamp = date("Y-m-d H:i:s");
+    $record = array(
+        "created" => $timestamp,
+        "owner" => $_SESSION["currentuserid"],
+        "offered" => $_POST['offered'],
+        "toolname" => $_POST['toolname'],
+        "brand" => $_POST['brand'],
+        "model" => $_POST['model'],
+        "dimensions" => $_POST['dimensions'],
+        "weight" => $_POST['weight'],
+        "privatenotes" => $_POST['privatenotes'],
+        "publicnotes" => $_POST['publicnotes'],
+        "taxonomy1" => $_POST['taxonomy1'],
+        "taxonomy2" => $_POST['taxonomy2'],
+        "taxonomy3" => $_POST['taxonomy3'],
+        "taxonomy4" => $_POST['taxonomy4'],
+        "taxonomy5" => $_POST['taxonomy5'],
+        "electrical230v" => $_POST['electrical230v'],
+        "electrical400v" => $_POST['electrical400v'],
+        "hydraulic" => $_POST['hydraulic'],
+        "pneumatic" => $_POST['pneumatic']
+    );
+    if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
+    $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "tools",
+        implode(", ", array_keys($record)),
+        ":" . implode(", :", array_keys($record))
+    );
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+}
+
 if (isset($_POST['update'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf']))
     die();
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
-    $record    = array("id" => $_POST['id'], "modified" => $timestamp, "owner" => $_POST['owner'], "offered" => $_POST['offered'], "toolname" => $_POST['toolname'], "brand" => $_POST['brand'], "model" => $_POST['model'], "dimensions" => $_POST['dimensions'], "weight" => $_POST['weight'], "privatenotes" => $_POST['privatenotes'], "publicnotes" => $_POST['publicnotes'], "taxonomy1" => $_POST['taxonomy1'], "taxonomy2" => $_POST['taxonomy2'], "taxonomy3" => $_POST['taxonomy3'], "taxonomy4" => $_POST['taxonomy4'], "taxonomy5" => $_POST['taxonomy5'], "electrical230v" => $_POST['electrical230v'], "electrical400v" => $_POST['electrical400v'], "hydraulic" => $_POST['hydraulic'], "pneumatic" => $_POST['pneumatic']);
+    $record    = array(
+            "id" => $_POST['id'],
+            "modified" => $timestamp,
+            "owner" => $_POST['owner'],
+            "offered" => $_POST['offered'],
+            "toolname" => $_POST['toolname'],
+            "brand" => $_POST['brand'],
+            "model" => $_POST['model'],
+            "dimensions" => $_POST['dimensions'],
+            "weight" => $_POST['weight'],
+            "privatenotes" => $_POST['privatenotes'],
+            "publicnotes" => $_POST['publicnotes'],
+            "taxonomy1" => $_POST['taxonomy1'],
+            "taxonomy2" => $_POST['taxonomy2'],
+            "taxonomy3" => $_POST['taxonomy3'], "taxonomy4" => $_POST['taxonomy4'], "taxonomy5" => $_POST['taxonomy5'],
+            "electrical230v" => $_POST['electrical230v'], "electrical400v" => $_POST['electrical400v'],
+            "hydraulic" => $_POST['hydraulic'], "pneumatic" => $_POST['pneumatic']);
     $statement = $connection->prepare("
         UPDATE tools 
             SET modified = :modified,

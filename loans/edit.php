@@ -32,7 +32,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
 } else { echo "Something went wrong!"; exit; }
 ?>
 
-<h2>Edit a loan</h2>
+<h2>Edit a loan || <a href="list.php">back to list</a> </h2>
 
 <form method="post" action="list.php">
   <button class="button submit" type="submit" name="update" value="update">Save</button>

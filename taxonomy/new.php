@@ -16,7 +16,7 @@ try { // load foreign tables:
 }
 ?>
 
-<h2>Add new taxonomy</h2>
+<h2>Add new taxonomy || <a href="list.php">back to list</a></h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
   <blockquote>Successfully added <b><?php echo escape($_POST['name']); ?></b> to the <a href="list.php">taxonomy list</a>.</blockquote>

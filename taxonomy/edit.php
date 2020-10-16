@@ -38,7 +38,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
 
 ?>
 
-<h2>Edit a taxonomy</h2>
+<h2>Edit a taxonomy || <a href="list.php">back to list</a></h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['name']); ?></b> in the <a href="list.php">taxonomy list</a>.</blockquote>

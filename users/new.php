@@ -26,13 +26,13 @@ try { // load foreign tables:
 //var_dump($regions);
 ?>
 
-<h2>Add new user</h2>
+<h2>Register || <a href="list.php">back to list</a></h2>
 
   <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully added <b><?php echo escape($_POST['username']); ?></b> to the <a href="list.php">member list</a>.</blockquote>
   <?php endif; ?>
 
-<form method="post" action="list.php">
+<form method="post" action="/profile/index.php">
   <button class="button submit" type="submit" name="create" value="create">Register</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 

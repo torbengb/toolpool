@@ -2,82 +2,6 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['create'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try  { // create the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-        "created"       => $timestamp,
-        "username"      => $_POST['username'],
-        "email"         => $_POST['email'],
-        "firstname"     => $_POST['firstname'],
-        "lastname"      => $_POST['lastname'],
-        "phone"         => $_POST['phone'],
-        "addr_country"  => $_POST['addr_country'],
-        "addr_region"   => $_POST['addr_region'],
-        "addr_city"     => $_POST['addr_city'],
-        "addr_zip"      => $_POST['addr_zip'],
-        "addr_street"   => $_POST['addr_street'],
-        "addr_number"   => $_POST['addr_number'],
-        "privatenotes"  => $_POST['privatenotes'],
-        "publicnotes"   => $_POST['publicnotes']
-    ];
-    $sql = sprintf(
-        "INSERT INTO %s (%s) values (%s)",
-        "users",
-        implode(", ", array_keys($record)),
-        ":" . implode(", :", array_keys($record))
-    );
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
-
-if (isset($_POST['update'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-        "id"            => $_POST['id'],
-        "modified"   => $timestamp,
-        "username"      => $_POST['username'],
-        "email"         => $_POST['email'],
-        "firstname"     => $_POST['firstname'],
-        "lastname"      => $_POST['lastname'],
-        "phone"         => $_POST['phone'],
-        "addr_country"  => $_POST['addr_country'],
-        "addr_region"   => $_POST['addr_region'],
-        "addr_city"     => $_POST['addr_city'],
-        "addr_zip"      => $_POST['addr_zip'],
-        "addr_street"   => $_POST['addr_street'],
-        "addr_number"   => $_POST['addr_number'],
-        "privatenotes"  => $_POST['privatenotes'],
-        "publicnotes"   => $_POST['publicnotes']
-    ];
-    $statement = $connection->prepare("
-        UPDATE users 
-            SET modified = :modified,
-              username = :username,
-              email = :email,
-              firstname = :firstname,
-              lastname = :lastname,
-              phone = :phone,
-              addr_country = :addr_country,
-              addr_region = :addr_region,
-              addr_city = :addr_city,
-              addr_zip = :addr_zip,
-              addr_street = :addr_street,
-              addr_number = :addr_number,
-              privatenotes = :privatenotes,
-              publicnotes = :publicnotes
-            WHERE id = :id
-        ");
-    $statement->execute($record);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
-
 if (isset($_POST["delete"])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -121,26 +45,15 @@ try { // Action on LOAD:
   <table>
     <thead>
       <tr>
-          <th>Action</th>
           <th>User name</th>
           <th>Region</th>
-          <th>Email</th>
-          <th>First name</th>
-          <th>Last name</th>
       </tr>
     </thead>
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-              <button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-          <td><?php echo escape($row["username"]); ?></td>
-          <td><?php echo ( escape($row["addr_region"]) == NULL
-          ? NULL 
-          : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["regionname"]) ) ; ?></td>
-          <td><?php echo escape($row["email"]); ?></td>
-          <td><?php echo escape($row["firstname"]); ?></td>
-          <td><?php echo escape($row["lastname"]); ?></td>
+          <td><a href="view.php?id=<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></a></td>
+          <td><?php echo ( escape($row["addr_region"]) == '0' ? NULL : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["regionname"]) ) ; ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>

@@ -48,20 +48,15 @@ if (isset($_GET['id'])) { // Action on LOAD:
 } else { showMessage( __LINE__ , __FILE__ ); exit; }
 ?>
 
-<h2>Edit a tool</h2>
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Edit a tool || <a href="tool-list.php">back to list</a></h2>
 
 <form action="tool-list.php" method="post">
   <button class="button delete" type="submit" name="update" value="update">Update</button>
   <button class="button delete" type="submit" name="delete" value="delete">Delete</button>
-  <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-  <input type="hidden" name="id"   value="<?php echo escape($tool['id']); ?>">
+  <input type="hidden" name="csrf"  value="<?php echo escape($_SESSION['csrf']); ?>">
+  <input type="hidden" name="id"    value="<?php echo escape($tool['id']); ?>">
+  <input type="hidden" name="owner" value="<?php echo escape($tool['owner']); ?>">
 
-  <label class="label" for="owner">Owner
-    <select class="input" name="owner" id="owner">
-      <?php foreach ($users as $row) : ?>
-        <option value="<?php echo escape($row["id"]); ?>" <?php echo ( escape($tool["owner"]) == escape($row["id"]) ? "selected='selected'" : NULL ) ?>><?php echo escape($row["username"]); ?></option>
-      <?php endforeach; ?>
-    </select></label>
   <label class="label" for="offered"><input class="input" type="checkbox" name="offered" id="offered" value="1" <?php echo ( escape($tool["offered"]) ? "checked" : NULL ) ?>>Offered</label>
   <label class="label" for="toolname">Tool name<input class="input" type="text" name="toolname" id="toolname" type="text" value="<?php echo escape($tool["toolname"]); ?>"></label>
   <label class="label" for="brand">Brand<input class="input" type="text" name="brand" id="brand" value="<?php echo escape($tool["brand"]); ?>"></label>

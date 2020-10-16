@@ -100,7 +100,7 @@ if (isset($_POST["delete"])) {
 ?>
 
 <?php if (isset($_SESSION['currentusername'])) : ?>
-    <h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || My profile || <a href="profile-edit.php">edit</a></h2>
+    <h2><?php echo escape($_SESSION['currentusername']); ?> || My profile || <a href="profile-edit.php">edit</a></h2>
 
     <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
         <?php

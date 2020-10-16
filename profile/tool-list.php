@@ -2,11 +2,8 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
 if (isset($_POST['create'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
-
   try  { // create the record:
     $timestamp = date("Y-m-d H:i:s");
     $record = array(
@@ -30,7 +27,6 @@ if (isset($_POST['create'])) { // Action on SUBMIT:
         "hydraulic" => $_POST['hydraulic'],
         "pneumatic" => $_POST['pneumatic']
     );
-    if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
     $sql = sprintf(
         "INSERT INTO %s (%s) values (%s)",
         "tools",
@@ -109,38 +105,7 @@ if (isset($_POST['delete'])) { // Action on SUBMIT:
     echo $sql . "<br>" . $error->getMessage();
   }
 }
-if (isset($_POST['loan'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf']))
-    die();
-  try {
-    // first collect the necessary data:
-    $id        = $_POST["loan"];
-    $statement = $connection->prepare("
-        SELECT t.owner, t.toolname, u.username 
-        FROM tools t
-        JOIN users u ON u.id = t.owner
-        WHERE t.id = :id
-        ");
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-    $result = $statement->fetchAll();
-    //var_dump($result);
-    $owner     = $result[0][0]; // gives first value in a "multidimensional array", in this case the only value.
-    $toolname  = $result[0][1];
-    $ownername = $result[0][2];
-    // create a new loan record:
-    $timestamp = date("Y-m-d H:i:s");
-    //echo __LINE__ . escape($_SESSION['currentusername']);
-    $loanedto  = escape($_SESSION['currentuserid']);
-    $record    = array("created" => $timestamp, "active" => 1, "tool" => $id, "owner" => $owner, "loanedto" => $loanedto);
-    $sql       = sprintf("INSERT INTO %s (%s) VALUES (%s)", "loans", implode(", ", array_keys($record)), ":" . implode(", :", array_keys($record)));
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-    //var_dump($statement);
-  } catch (PDOException $error) {
-    showMessage(__LINE__, __FILE__, $sql . "<br>" . $error->getMessage());
-  }
-}
+
 // Action on LOAD:
 try { // load the record:
   $owner     = escape($_SESSION['currentuserid']);
@@ -179,7 +144,7 @@ try { // load the record:
 }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || My Tools || <a href="tool-new.php">add
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || My tools || <a href="tool-new.php">add
         new</a></h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
@@ -206,7 +171,6 @@ try { // load the record:
         <thead>
         <tr>
             <th align="center">Action</th>
-            <th>Owner</th>
             <th>Availability</th>
             <th>Tool name</th>
             <th>Brand</th>
@@ -226,12 +190,8 @@ try { // load the record:
             <tr>
                 <td align="center">
                     <a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
-                    <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">
-                        Loan
-                    </button>
                     <!--button class="button delete" type="submit" name="delete" value="<?php echo escape($row["id"]); ?> action="list.php">Delete!</button-->
                 </td>
-                <td><?php echo escape($row["username"]); ?></td>
                 <td
                     <?php echo(escape($row["offered"]) ? (escape($row["active"]) ? 'class="loaned" title="currently loaned"' : 'class="offered"') : 'class="notoffered" title="currently not offered"')
                     ?>

@@ -38,12 +38,7 @@ try {
       <?php endforeach; ?>
     </select></label>
   <label class="label" for="owner">owner<input class="input" readonly type="text" name="owner" id="owner" value="<?php echo escape($row["username"]); ?>"></label>
-  <label class="label" for="loanedto">Loaned to
-    <select class="input" name="loanedto" id="loanedto">
-      <?php foreach ($users as $row) : ?><option value="<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></option>
-      <?php endforeach; ?>
-    </select>
-  </label>
+  <label class="label" for="loanedto">loanedto<input class="input" type="text" name="loanedto" id="loanedto" value="<?php echo escape($_SESSION['currentusername']) ?>" disabled></label>
   <label class="label" for="agreedstart">agreedstart<input class="input" type="text" name="agreedstart" id="agreedstart"></label>
   <label class="label" for="agreedend"  >agreedend  <input class="input" type="text" name="agreedend"   id="agreedend"  ></label>
   <label class="label" for="actualstart">actualstart<input class="input" type="text" name="actualstart" id="actualstart"></label>

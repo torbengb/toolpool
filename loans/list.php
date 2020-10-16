@@ -90,7 +90,7 @@ $connection->exec($sql);
 		JOIN users u1 ON l.owner = u1.id
 		JOIN users u2 ON l.loanedto = u2.id
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-		ORDER BY l.active DESC, t.toolname
+		ORDER BY l.created DESC -- l.active DESC, t.toolname
     ");
   $statement->execute();
 
@@ -100,7 +100,7 @@ $connection->exec($sql);
 }
 ?>
 
-<h2>Loans || <a href="new.php">add new</a></h2>
+<h2>Loans</h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
     <blockquote class="success">Successfully loaned the tool!</blockquote>
@@ -124,6 +124,7 @@ $connection->exec($sql);
           <th>Tool</th>
           <th>Owner</th>
           <th>Loaned to</th>
+          <th>Created</th>
           <th>Agreed start</th>
           <th>Agreed end</th>
           <th>Actual start</th>
@@ -139,6 +140,7 @@ $connection->exec($sql);
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["username1"]); ?></td>
           <td><?php echo escape($row["username2"]); ?></td>
+          <td><?php echo escape($row["created"]); ?></td>
           <td><?php echo escape($row["agreedstart"]); ?></td>
           <td><?php echo escape($row["agreedend"]); ?></td>
           <td><?php echo escape($row["actualstart"]); ?></td>

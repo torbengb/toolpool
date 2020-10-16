@@ -28,7 +28,7 @@ try { // load the record
 }
 ?>
 
-<h2>Edit your profile</h2>
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Edit your profile || <a href="index.php">back to profile</a></h2>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in

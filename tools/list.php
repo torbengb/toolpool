@@ -2,6 +2,43 @@
 require "../common/common.php";
 require "../common/header.php";
 
+if (isset($_POST['create'])) { // Action on SUBMIT:
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+
+  try  { // create the record:
+    $timestamp = date("Y-m-d H:i:s");
+    $record = array(
+        "created" => $timestamp,
+        "owner" => $_POST['owner'],
+        "offered" => $_POST['offered'],
+        "toolname" => $_POST['toolname'],
+        "brand" => $_POST['brand'],
+        "model" => $_POST['model'],
+        "dimensions" => $_POST['dimensions'],
+        "weight" => $_POST['weight'],
+        "privatenotes" => $_POST['privatenotes'],
+        "publicnotes" => $_POST['publicnotes'],
+        "taxonomy1" => $_POST['taxonomy1'],
+        "taxonomy2" => $_POST['taxonomy2'],
+        "taxonomy3" => $_POST['taxonomy3'],
+        "taxonomy4" => $_POST['taxonomy4'],
+        "taxonomy5" => $_POST['taxonomy5'],
+        "electrical230v" => $_POST['electrical230v'],
+        "electrical400v" => $_POST['electrical400v'],
+        "hydraulic" => $_POST['hydraulic'],
+        "pneumatic" => $_POST['pneumatic']
+    );
+    $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "tools",
+        implode(", ", array_keys($record)),
+        ":" . implode(", :", array_keys($record))
+    );
+    $statement = $connection->prepare($sql);
+    $statement->execute($record);
+  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
+}
+
 if (isset($_POST['update'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
@@ -92,7 +129,8 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
     $ownername = $result[0][2];
 // create a new loan record:
     $timestamp = date("Y-m-d H:i:s");
-    $loanedto  = 12; // TODO: get the current user id. This is currently hardcoded! :(
+    //echo __LINE__ . escape($_SESSION['currentusername']);
+    $loanedto  = escape($_SESSION['currentuserid']);
     $record = array(
       "created" => $timestamp,
       "active" => 1,
@@ -114,7 +152,7 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
 
 // Action on LOAD:
 try { // load the record:
-  $sql = "SELECT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
+  $sql = "SELECT DISTINCT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
     FROM tools t
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
@@ -148,15 +186,7 @@ try { // load the record:
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
 
-<h2>Tool Pool || <a href="new.php">add new</a></h2>
-
-<?php if (isset($_POST['update']) && $statement) : ?>
-    <blockquote class="success">Successfully updated your <b><?php echo escape($_POST['toolname']); ?></b> in the <a href="list.php">tool pool</a>.</blockquote>
-<?php endif; ?>
-
-<?php if (isset($_POST['delete']) && $statement) : ?>
-    <blockquote class="success">Successfully deleted your <b><?php echo escape($_POST['toolname']); ?></b>!</blockquote>
-<?php endif; ?>
+<h2>Tool Pool</h2>
 
 <?php if (isset($_POST['loan']) && $statement) : ?>
     <blockquote>Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.</blockquote>
@@ -187,9 +217,9 @@ try { // load the record:
     <?php foreach ($result as $row) : ?>
       <tr>
           <td align="center">
-            <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
-            <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
-            <!--button class="button delete" type="submit" name="delete" value="<?php echo escape($row["id"]); ?> action="list.php">Delete!</button-->
+              <?php if (isset($_SESSION['currentusername'])) : ?>
+              <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
+              <?php endif; ?>
           </td>
           <td><?php echo escape($row["username"]); ?></td>
           <td

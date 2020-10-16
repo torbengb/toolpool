@@ -88,7 +88,7 @@ if (isset($_POST['loan'])) { // Action on SUBMIT:
 try { // load the record:
   $owner     = escape($_SESSION['currentuserid']);
   $statement = $connection->prepare("
-    SELECT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
+    SELECT DISTINCT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
     FROM tools t
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 

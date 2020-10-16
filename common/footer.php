@@ -5,7 +5,6 @@
       || <a href="/index.php"><strong>Home</strong></a>
       || <a href="/tools/list.php"><strong>Tools</strong></a>
       || <a href="/users/list.php"><strong>Members</strong></a>
-      || <a href="/loans/list.php"><strong>Loans</strong></a>
       || <a href="/taxonomy/list.php"><strong>Taxonomy</strong></a>
       ||
     </span>

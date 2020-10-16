@@ -97,25 +97,26 @@ if (isset($_POST["delete"])) {
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
-?>
-
-<?php if (isset($_SESSION['currentusername'])) : ?>
-    <h2><?php echo escape($_SESSION['currentusername']); ?> || My profile || <a href="profile-edit.php">edit</a></h2>
-
-    <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
-        <?php
-        $userid = $_SESSION['currentuserid'];
-            $statement = $connection->prepare("
-                SELECT 'Your are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
+$userid = $_SESSION['currentuserid'];
+$statement = $connection->prepare("
+                SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
                 UNION 
                 SELECT 'You are lending',   COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
                 UNION 
                 SELECT 'You are loaning',   COUNT(*) AS count FROM loans WHERE loanedto=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
             ");
-            $statement->bindValue('userid', $userid);
-            $statement->execute();
-            $stats = $statement->fetchAll();
-        ?>
+$statement->bindValue('userid', $userid);
+$statement->execute();
+$stats = $statement->fetchAll();
+$numoffers=$stats[0][1][0];
+$numlends =$stats[1][1][0];
+$numloans =$stats[2][1][0];
+?>
+
+<?php if (isset($_SESSION['currentusername'])) : ?>
+    <h2><?php echo escape($_SESSION['currentusername']); ?> || My profile || <a href="profile-edit.php">edit</a></h2>
+
+    <div style="display:none;float:left;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
         <table>
             <tr>
                 <th colspan=2 align="center">Statistics</th>
@@ -136,7 +137,11 @@ if (isset($_POST["delete"])) {
     <?php if (isset($_POST['update']) && $statement) : ?>
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
-    <div><a href="tool-list.php">My tools</a></div>
+    <div>
+        You are <a href="tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span> tools</a>.<br>
+        You are <a href="loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span> tools</a> to others.<br>
+        You are <a href="loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span> tools</a> from others.<br>
+    </div>
     <hr />
     <form method="post"><button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></form>
 <?php else : ?>

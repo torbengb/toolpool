@@ -8,8 +8,8 @@ require "common/header.php";
       try {
         $statement = $connection->prepare("
         SELECT 'Total users',            COUNT(*) AS count FROM users    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
-        UNION SELECT 'Total tools',      COUNT(*) AS count FROM tools    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
-        UNION SELECT 'Total loans',      COUNT(*) AS count FROM loans    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
+        UNION SELECT 'Total tools',      COUNT(*) AS count FROM tools t  JOIN users u ON u.id = t.owner WHERE offered=1 AND ( t.deleted = '0000-00-00 00:00:00' OR t.deleted IS NULL ) AND ( u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL )
+        UNION SELECT 'Total loans',      COUNT(*) AS count FROM loans    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
         UNION SELECT 'Total categories', COUNT(*) AS count FROM taxonomy WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
         ");
         $statement->execute();

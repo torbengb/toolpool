@@ -32,9 +32,9 @@ if (isset($_GET['id'])) { // Action on LOAD:
 } else { echo "Something went wrong!"; exit; }
 ?>
 
-<h2>Edit a loan || <a href="list.php">back to list</a> </h2>
+<h2>Edit a loan || <a href="/profile/loan-out.php">back to list</a> </h2>
 
-<form method="post" action="list.php">
+<form method="post" action="/profile/loan-out.php">
   <button class="button submit" type="submit" name="update" value="update">Save</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
   <input type="hidden" name="id" value="<?php echo escape($loan['id']); ?>">

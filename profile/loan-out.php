@@ -53,10 +53,7 @@ if (isset($_POST['delete'])) {
 }
 
 // Action on LOAD:
-try { // load the record
-  $connection = new PDO($dsn, $username, $password, $options);
-  $sql = "USE " . $dbname;
-  $connection->exec($sql);
+try {
   $userid = $_SESSION['currentuserid'];
   $statement = $connection->prepare("
         SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l

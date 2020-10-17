@@ -48,12 +48,14 @@ h1, h2 {
 .labeltext {
   width:10em;
 }
-
 .label:hover {
   background-color: var(--color4);
 }
 .input {
 	margin-left: 0.5em;
+}
+.formhint {
+  font-size: 85%;
 }
 
 table {

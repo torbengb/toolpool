@@ -46,6 +46,7 @@ try { // Action on LOAD:
     <thead>
       <tr>
           <th>User name</th>
+          <th>Country</th>
           <th>Region</th>
       </tr>
     </thead>
@@ -53,6 +54,7 @@ try { // Action on LOAD:
     <?php foreach ($result as $row) : ?>
       <tr>
           <td><a href="view.php?id=<?php echo escape($row["id"]); ?>"><?php echo escape($row["username"]); ?></a></td>
+          <td><?php echo ( escape($row["addr_country"]) == '0' ? NULL : escape($row["addr_country"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["countryname"]) ) ; ?></td>
           <td><?php echo ( escape($row["addr_region"]) == '0' ? NULL : escape($row["addr_region"]) . "&nbsp;&nbsp;&nbsp;" . escape($row["regionname"]) ) ; ?></td>
       </tr>
     <?php endforeach; ?>

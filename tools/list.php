@@ -4,7 +4,6 @@ require "../common/header.php";
 
 if (isset($_POST['create'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
   try  { // create the record:
     $timestamp = date("Y-m-d H:i:s");
     $record = array(
@@ -41,7 +40,6 @@ if (isset($_POST['create'])) { // Action on SUBMIT:
 
 if (isset($_POST['update'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
     $record =array(
@@ -95,7 +93,6 @@ if (isset($_POST['update'])) {
 
 if (isset($_POST['delete'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
   try { // update the record:
     $timestamp = date("Y-m-d H:i:s");
     $id = $_POST['id'];
@@ -109,50 +106,9 @@ if (isset($_POST['delete'])) { // Action on SUBMIT:
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-if (isset($_POST['loan'])) { // Action on SUBMIT:
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  try {
-// first collect the necessary data:
-    $id = $_POST["loan"];
-    $statement = $connection->prepare("
-        SELECT t.owner, t.toolname, u.username 
-        FROM tools t
-        JOIN users u ON u.id = t.owner
-        WHERE t.id = :id
-        ");
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-    $result = $statement->fetchAll();
-    //var_dump($result);
-    $owner     = $result[0][0]; // gives first value in a "multidimensional array", in this case the only value.
-    $toolname  = $result[0][1];
-    $ownername = $result[0][2];
-// create a new loan record:
-    $timestamp = date("Y-m-d H:i:s");
-    //echo __LINE__ . escape($_SESSION['currentusername']);
-    $loanedto  = escape($_SESSION['currentuserid']);
-    $record = array(
-      "created" => $timestamp,
-      "active" => 1,
-      "tool" => $id,
-      "owner" => $owner,
-      "loanedto" => $loanedto
-    );
-    $sql = sprintf(
-      "INSERT INTO %s (%s) values (%s)",
-      "loans",
-      implode(", ", array_keys($record)),
-      ":" . implode(", :", array_keys($record))
-    );
-    $statement = $connection->prepare($sql);
-    $statement->execute($record);
-    //var_dump($statement);
-  } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
-}
-
 // Action on LOAD:
 try { // load the record:
-  $sql = "SELECT DISTINCT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
+  $sql = "SELECT DISTINCT t.*, u.username, u.id AS userid, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
     FROM tools t
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
@@ -186,10 +142,6 @@ try { // load the record:
 
 <h2>Tool Pool</h2>
 
-<?php if (isset($_POST['loan']) && $statement) : ?>
-    <blockquote>Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.</blockquote>
-<?php endif; ?>
-
 <form method="post">
   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
@@ -216,10 +168,13 @@ try { // load the record:
       <tr>
           <td align="center">
               <?php if (isset($_SESSION['currentusername'])) : ?>
-              <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
+              <form method="post" action="/profile/loan-in.php">
+                  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                  <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
+              </form>
               <?php endif; ?>
           </td>
-          <td><?php echo escape($row["username"]); ?></td>
+          <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>"><?php echo escape($row["username"]); ?></a></td>
           <td
               <?php echo
               ( escape($row["offered"])

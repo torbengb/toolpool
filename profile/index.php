@@ -1,9 +1,6 @@
 <?php
-if ($_SESSION['debug']) echo __FILE__."<br>";
 require "../common/common.php";
-if ($_SESSION['debug']) echo __FILE__."<br>";
 require "../common/header.php";
-if ($_SESSION['debug']) echo __FILE__."<br>";
 
 if (isset($_POST['create'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -82,7 +79,7 @@ if (isset($_POST['update'])) { // Action on SUBMIT:
 }
 
 if (isset($_POST["delete"])) {
-  //if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try { // Action on SUBMIT:
     $timestamp = date("Y-m-d H:i:s");
@@ -116,48 +113,35 @@ $numloans =$stats[2][1][0];
 <?php if (isset($_SESSION['currentusername'])) : ?>
     <h2><?php echo escape($_SESSION['currentusername']); ?> || My profile || <a href="profile-edit.php">edit</a></h2>
 
-    <div style="display:none;float:left;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
-        <table>
-            <tr>
-                <th colspan=2 align="center">Statistics</th>
-            </tr>
-          <?php foreach ($stats as $row) : ?>
-              <tr>
-                  <td><?php echo $row["0"]; ?></td>
-                  <td><?php echo $row["count"]; ?></td>
-              </tr>
-          <?php endforeach; ?>
-        </table>
-    </div>
-
     <form method="post">
         <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-        <button class="button submit" type="submit" name="logout" value="logout">Log out!</button>
-    </form><br>
+        <button style="float: right;" class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete this account</button>
+    </form>
+
+    <form method="post" action="/index.php">
+        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+        <button style="float: right;" class="button submit" type="submit" name="logout" value="logout">Log out!</button>
+    </form>
     <?php if (isset($_POST['update']) && $statement) : ?>
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
     <div>
-        You are <a href="tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span> tools</a>.<br>
-        You are <a href="loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span> tools</a> to others.<br>
-        You are <a href="loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span> tools</a> from others.<br>
+        You are <a href="tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
+        You are <a href="loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others.<br>
+        You are <a href="loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
     </div>
     <hr />
-    <form method="post"><button class=" button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></form>
 <?php else : ?>
     <a href="../users/new.php">Register!</a>
-
-  <?php if (isset($_POST['create']) && $statement) : ?>
-        <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>!</blockquote>
-  <?php endif; ?>
-
-  <?php if (isset($_POST['delete']) && $statement) : ?>
+    <?php if (isset($_POST['create']) && $statement) : ?>
+        <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>! Now you can <a href="/profile/">log in</a>.</blockquote>
+    <?php endif; ?>
+    <?php if (isset($_POST['delete']) && $statement) : ?>
         <blockquote class="success">Successfully deleted your profile!</blockquote>
-  <?php endif; ?>
-
+    <?php endif; ?>
 <?php endif; ?>
 
-<form method="post">
+<form method="post" action="/">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
     <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
     <label class="label" for="user"><span class="labeltext">select user:</span>

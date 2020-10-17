@@ -1,6 +1,20 @@
 <?php
 require "common/common.php";
 require "common/header.php";
+$userid = $_SESSION['currentuserid'];
+$statement = $connection->prepare("
+                SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
+                UNION 
+                SELECT 'You are lending',   COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
+                UNION 
+                SELECT 'You are loaning',   COUNT(*) AS count FROM loans WHERE loanedto=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
+            ");
+$statement->bindValue('userid', $userid);
+$statement->execute();
+$stats = $statement->fetchAll();
+$numoffers=$stats[0][1][0];
+$numlends =$stats[1][1][0];
+$numloans =$stats[2][1][0];
 ?>
 
     <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">
@@ -9,7 +23,7 @@ require "common/header.php";
         $statement = $connection->prepare("
         SELECT 'Total users',            COUNT(*) AS count FROM users    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
         UNION SELECT 'Total tools',      COUNT(*) AS count FROM tools t  JOIN users u ON u.id = t.owner WHERE offered=1 AND ( t.deleted = '0000-00-00 00:00:00' OR t.deleted IS NULL ) AND ( u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL )
-        UNION SELECT 'Total loans',      COUNT(*) AS count FROM loans    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
+        UNION SELECT 'Total loans',      COUNT(*) AS count FROM loans    WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) -- AND active=1
         UNION SELECT 'Total categories', COUNT(*) AS count FROM taxonomy WHERE ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL )
         ");
         $statement->execute();
@@ -36,10 +50,24 @@ require "common/header.php";
         </table>
     </div>
 
-    <h2>Welcome to your TOOL||POOL!</h2>
+    <h2>Welcome to your TOOL||POOL<?php if (isset($_SESSION['currentusername'])) echo ", " . $_SESSION['currentusername'] ?>!</h2>
+
+<?php if (isset($_POST['logout'])) : ?>
+    <blockquote class="success">You have been logged out. See you soon!</blockquote>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['currentusername'])) : ?>
+    <div>
+        You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="profile/tool-new.php">Add another!</a><br>
+        You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others.<br>
+        You are <a href="/profile/loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
+    </div>
+<?php endif ?>
 
     <p>This prototype aims to provide a proof of concept for a community of people wanting to share their tools for DIY
-        home-improvement projects.</p>
+    home-improvement projects. <a href="/users/new.php">Register</a> if you're not a user already, or just <a href="tools/list.php">browse all
+    the tools</a> that are available already. You can also <a href="/profile/tool-list.php">offer your own
+    tools</a> for the benefit of your neighbors and local community.
 
     <h3>TOOL||POOL helps people to find tools they can borrow, rather than buying them.</h3>
 
@@ -58,7 +86,7 @@ require "common/header.php";
     <p>TOOL||POOL helps people build a positive neighborhood. TOOL||POOL is a volunteer community: there are no fees, no
         subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't
         fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to
-        meet new likeminded DIY enthusiasts in your neighborhood!
+        meet new like-minded DIY enthusiasts in your neighborhood!
 
     <h2>Known bugs</h2>
     <p>Found a bug? Check whether it's already in the <a href="https://github.com/torbengb/toolpool/issues/"

@@ -17,15 +17,7 @@
     <div class="navbar">
         <div class="topics">
             || <a href="/index.php"><strong>Home</strong></a>
-            || <a href="/tools/list.php"><strong>Tools</strong></a>
-            || <a href="/profile"><strong>My account</strong></a>
-            || <span style="float:right"><?php
-            if (isset($_SESSION['currentusername'])) {
-              echo '<a href="/profile/">Hello <b>' . escape($_SESSION['currentusername']) . '</b>!</a>';
-            } else {
-              echo '<a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>';
-            }
-            ?></span>
+            || 
         </div>
     </div>
 </div>

@@ -1,2 +1,5 @@
+common/config.php
+todo.txt
+.idea/
 
-config/config.php
+common/dbconfig.php

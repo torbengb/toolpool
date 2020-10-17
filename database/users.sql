@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-  modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
-  deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified TIMESTAMP NULL DEFAULT NULL,
+  deleted TIMESTAMP NULL DEFAULT NULL COMMENT 'treat as deleted when value is not zero',
   username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
   email VARCHAR(50) NOT NULL COMMENT 'obvious',
   firstname VARCHAR(50) COMMENT 'obvious',
@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO users (created,modified,deleted,username,email,firstname,lastname,phone,addr_country,addr_region,addr_city,addr_zip,addr_street,addr_number,privatenotes,publicnotes)
-VALUES (SYSDATE(),'0000-00-00 00:00:00','0000-00-00 00:00:00','torbengb','torben@g-b.dk','Torben','G-B','123123123','AT','NO','Kbg','2100','Jag','15','hemli','nemli')
+VALUES (SYSDATE(),NULL,NULL,'torbengb','torben@g-b.dk','Torben','G-B','123123123','AT','NO','Kbg','2100','Jag','15','hemli','nemli')
 ;
 

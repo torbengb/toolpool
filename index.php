@@ -89,8 +89,8 @@ $numloans =$stats[3][1][0];
             doesn't just collect dust.
     </ol>
 
-    <p>TOOL||POOL helps people build a positive neighborhood. TOOL||POOL is a volunteer community: there are no fees, no
-        subscriptions, no payments. You just need to supply your own nails, blades, oil, and other consumables. Don't
+    <p>TOOL||POOL helps people build a positive neighborhood. <span style="background-color: yellow">TOOL||POOL is a volunteer community: there are no fees, no
+        subscriptions, no payments.</span> You just need to supply your own nails, blades, oil, and other consumables. Don't
         fret about the risk of borrowing your precious tools to strangers&mdash;instead, see it as an opportunity to
         meet new like-minded DIY enthusiasts in your neighborhood!
 <?php endif ?>

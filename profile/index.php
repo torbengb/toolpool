@@ -147,6 +147,23 @@ $numloans =$stats[3][1][0];
         <blockquote class="success">Successfully deleted your profile!</blockquote>
     <?php endif; ?>
     <a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>
+    <form method="post" action="/">
+        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+        <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
+        <label class="label" for="user"><span class="labeltext">select user:</span>
+            <select class="input" name="user" id="user">
+              <?php foreach ($users as $row) : ?>
+                  <option
+                          name="user"
+                          id="user"
+                          value="<?php echo escape($row['id']); ?>"
+                      <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
+                  ><?php echo escape($row['username']); ?></option>
+              <?php endforeach; ?>
+            </select>
+        </label>
+        <button class="button submit" type="submit" name="login" value="login">Switch!</button>
+    </form>
 <?php endif; ?>
 
 <?php require "../common/footer.php"; ?>

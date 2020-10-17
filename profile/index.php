@@ -128,38 +128,25 @@ $numloans =$stats[3][1][0];
     <?php if (isset($_POST['update']) && $statement) : ?>
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
-    <div>
-        You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
-        You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others, plus <span style="font-size: 200%"><?php echo $numlendspast;  ?></span> in the past. Nice job!<br>
+    <p> You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
+        You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others,
+        plus <span style="font-size: 200%"><?php echo $numlendspast; ?></span> in the <a href="/profile/loan-out-history.php">past</a>.
+            <?php
+            if     ($numlends + $numlendspast > 5) echo "Great job!";
+            elseif ($numlends + $numlendspast > 0) echo "Good start!";
+            elseif ($numlends + $numlendspast = 0) echo "That's okay.";
+            ?><br>
         You are <a href="/profile/loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
-    </div>
+    </p>
     <hr />
 <?php else : ?>
-    <a href="../users/new.php">Register!</a>
     <?php if (isset($_POST['create']) && $statement) : ?>
         <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>! Now you can <a href="/profile/">log in</a>.</blockquote>
     <?php endif; ?>
     <?php if (isset($_POST['delete']) && $statement) : ?>
         <blockquote class="success">Successfully deleted your profile!</blockquote>
     <?php endif; ?>
+    <a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>
 <?php endif; ?>
-
-<form method="post" action="/">
-    <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
-    <label class="label" for="user"><span class="labeltext">select user:</span>
-        <select class="input" name="user" id="user">
-          <?php foreach ($users as $row) : ?>
-              <option
-                      name="user"
-                      id="user"
-                      value="<?php echo escape($row['id']); ?>"
-                  <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
-              ><?php echo escape($row['username']); ?></option>
-          <?php endforeach; ?>
-        </select>
-    </label>
-    <button class="button submit" type="submit" name="login" value="login">Switch!</button>
-</form>
 
 <?php require "../common/footer.php"; ?>

@@ -2,56 +2,6 @@
 require "../common/common.php";
 require "../common/header.php";
 
-if (isset($_POST['update'])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-        "id" => $_POST['id'],
-        "modified" => $timestamp,
-        "active" => $_POST['active'],
-        "tool" => $_POST['tool'],
-        "owner" => $_POST['owner'],
-        "loanedto" => $_POST['loanedto'],
-        "agreedstart" => $_POST['agreedstart'],
-        "agreedend" => $_POST['agreedend'],
-        "actualstart" => $_POST['actualstart'],
-        "actualend" => $_POST['actualend'],
-    ];
-    $statement = $connection->prepare("
-        UPDATE loans 
-            SET modified = :modified,
-              active = :active,
-              tool = :tool,
-              owner = :owner,
-              loanedto = :loanedto,
-              agreedstart = :agreedstart,
-              agreedend = :agreedend,
-              actualstart = :actualstart,
-              actualend = :actualend
-            WHERE id = :id
-        ");
-    $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
-}
-
-if (isset($_POST['delete'])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  try {
-    $timestamp = date("Y-m-d H:i:s");
-    $id = $_POST["delete"];
-    $statement = $connection->prepare("
-        UPDATE loans 
-		SET deleted = '$timestamp'
-        WHERE id = :id
-        ");
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-  } catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-  }
-}
-
 // Action on LOAD:
 try {
   $userid = $_SESSION['currentuserid'];
@@ -61,7 +11,7 @@ try {
 		JOIN users u1 ON l.owner = u1.id
 		JOIN users u2 ON l.loanedto = u2.id
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-        -- AND l.active = 1
+        AND l.active = 0
         AND l.owner = :userid
 		ORDER BY l.active DESC, l.created DESC -- l.active DESC, t.toolname
     ");
@@ -73,7 +23,7 @@ try {
 }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || You are lending to others || <a href="loan-out-history.php">history</a> </h2>
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || <a href="loan-out.php">current lending</a> || past lending</h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
   <blockquote class="success">Successfully loaned the tool!</blockquote>

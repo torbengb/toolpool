@@ -2,10 +2,10 @@
 require "common.php";
 
 function runsqlfile($file) {
-  echo __LINE__ . "<br>";
+  //echo __LINE__ . "<br>";
   $sql = file_get_contents($file);
   $connection->exec($sql);
-  echo __LINE__ . "<br>";
+  //echo __LINE__ . "<br>";
   return;
 }
 
@@ -22,7 +22,7 @@ function arst(PDO $connection, str $file): void
 
 try {
 // first create database:
-  /* INSTALLER CANNOT CREATE DATABASE!!
+  /* INSTALLER CANNOT CREATE DATABASE on DreamHost!! (and neither can a local SQL client!)
    * The database MUST exist before the installer is run!
    * The installer can do everything after that.
   $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;

@@ -160,7 +160,7 @@ try { // load the record:
 <?php endif; ?>
 
 <?php if (isset($_POST['loan']) && $statement) : ?>
-    <blockquote>Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the
+    <blockquote class="success">Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the
         <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.
     </blockquote>
 <?php endif; ?>

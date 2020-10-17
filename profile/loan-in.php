@@ -119,7 +119,7 @@ try { // load the record
 <h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || You are loaning from others</h2>
 
 <?php if (isset($_POST['loan']) && $statement) : ?>
-    <blockquote>Successfully recorded your new loan. Now you may pick up the <b><?php echo escape($toolname) ?></b> from
+    <blockquote class="success">Successfully recorded your new loan. Now you may pick up the <b><?php echo escape($toolname) ?></b> from
         <a href="/users/view.php?id=<?php echo escape($owner) ?>"><?php echo escape($ownername) ?></a></b>.</blockquote>
 <?php endif; ?>
 

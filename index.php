@@ -64,10 +64,11 @@ $numloans =$stats[2][1][0];
     </div>
 <?php endif ?>
 
-    <p>This prototype aims to provide a proof of concept for a community of people wanting to share their tools for DIY
-    home-improvement projects. <a href="/users/new.php">Register</a> if you're not a user already, or just <a href="tools/list.php">browse all
-    the tools</a> that are available already. You can also <a href="/profile/tool-list.php">offer your own
-    tools</a> for the benefit of your neighbors and local community.
+    <p>This prototype is <span style="background-color: yellow">a community platform for people to share their tools for
+        DIY home-improvement projects.</span>
+        <a href="/users/new.php">Register</a> if you're not a user already, or just
+        <a href="tools/list.php">browse all the tools</a> that are available already. You can also
+        <a href="/profile/tool-list.php">offer your own tools</a> for the benefit of your neighbors and local community.
 
     <h3>TOOL||POOL helps people to find tools they can borrow, rather than buying them.</h3>
 

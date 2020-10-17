@@ -98,16 +98,19 @@ $userid = $_SESSION['currentuserid'];
 $statement = $connection->prepare("
                 SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
                 UNION 
-                SELECT 'You are lending',   COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
+                SELECT 'You are lending',  COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
                 UNION 
-                SELECT 'You are loaning',   COUNT(*) AS count FROM loans WHERE loanedto=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
+                SELECT 'Past lending',     COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=0
+                UNION 
+                SELECT 'You are loaning',  COUNT(*) AS count FROM loans WHERE loanedto=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
             ");
 $statement->bindValue('userid', $userid);
 $statement->execute();
 $stats = $statement->fetchAll();
 $numoffers=$stats[0][1][0];
 $numlends =$stats[1][1][0];
-$numloans =$stats[2][1][0];
+$numlendspast =$stats[2][1][0];
+$numloans =$stats[3][1][0];
 ?>
 
 <?php if (isset($_SESSION['currentusername'])) : ?>
@@ -126,9 +129,9 @@ $numloans =$stats[2][1][0];
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
     <div>
-        You are <a href="tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
-        You are <a href="loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others.<br>
-        You are <a href="loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
+        You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
+        You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others, plus <span style="font-size: 200%"><?php echo $numlendspast;  ?></span> in the past. Nice job!<br>
+        You are <a href="/profile/loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
     </div>
     <hr />
 <?php else : ?>

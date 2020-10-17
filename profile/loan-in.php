@@ -116,7 +116,7 @@ try { // load the record
 }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || You are loaning from others</h2>
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || You are loaning from others || <a href="loan-in-history.php">history</a></h2>
 
 <?php if (isset($_POST['loan']) && $statement) : ?>
     <blockquote class="success">Successfully recorded your new loan. Now you may pick up the <b><?php echo escape($toolname) ?></b> from

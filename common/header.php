@@ -18,8 +18,7 @@
         <div class="topics">
             || <a href="/index.php"><strong>Home</strong></a>
             || <a href="/tools/list.php"><strong>Tools</strong></a>
-            || <a href="/users/list.php"><strong>Members</strong></a>
-            || <a href="/taxonomy/list.php"><strong>Taxonomy</strong></a>
+            || <a href="/profile"><strong>My account</strong></a>
             || <span style="float:right"><?php
             if (isset($_SESSION['currentusername'])) {
               echo '<a href="/profile/">Hello <b>' . escape($_SESSION['currentusername']) . '</b>!</a>';

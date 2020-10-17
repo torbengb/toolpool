@@ -13,7 +13,7 @@
 
 <body>
 <div class="header">
-    <h1 class="sitename">TOOL||POOL on <?php echo $_SERVER['HTTP_HOST']; ?></h1>
+    <h1 class="sitename">TOOL||POOL</h1>
     <div class="navbar">
         <div class="topics">
             || <a href="/index.php"><strong>Home</strong></a>

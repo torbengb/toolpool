@@ -1,20 +1,23 @@
 <?php
 require "common/common.php";
 require "common/header.php";
-$userid = $_SESSION['currentuserid'];
-$statement = $connection->prepare("
+
+if (isset($_SESSION['currentuserid'])) {
+    $userid = $_SESSION['currentuserid'];
+    $statement = $connection->prepare("
                 SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
                 UNION SELECT 'You are lending',   COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
                 UNION SELECT 'Past lending',     COUNT(*) AS count FROM loans WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=0
                 UNION SELECT 'You are loaning',   COUNT(*) AS count FROM loans WHERE loanedto=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND active=1
             ");
-$statement->bindValue('userid', $userid);
-$statement->execute();
-$stats = $statement->fetchAll();
-$numoffers=$stats[0][1][0];
-$numlends =$stats[1][1][0];
-$numlendspast =$stats[2][1][0];
-$numloans =$stats[3][1][0];
+    $statement->bindValue('userid', $userid);
+    $statement->execute();
+    $stats = $statement->fetchAll();
+    $numoffers=$stats[0][1][0];
+    $numlends =$stats[1][1][0];
+    $numlendspast =$stats[2][1][0];
+    $numloans =$stats[3][1][0];
+}
 ?>
 
     <div style="float:right;background-color:#eee;sborder:3px double black;xpadding:1em;margin:1em;">

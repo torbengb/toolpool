@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS tools (
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  created TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-  modified TIMESTAMP DEFAULT '0000-00-00 00:00:00',
-  deleted TIMESTAMP DEFAULT '0000-00-00 00:00:00' COMMENT 'treat as deleted when value is not zero',
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified TIMESTAMP NULL DEFAULT NULL,
+  deleted TIMESTAMP NULL DEFAULT NULL COMMENT 'treat as deleted when value is not zero',
   owner int(11) NOT NULL COMMENT 'users.id of owner',
   offered BOOLEAN DEFAULT FALSE COMMENT 'TRUE if owner currently offers to loan this tool',
   toolname VARCHAR(30) NOT NULL COMMENT 'what is this tool called',

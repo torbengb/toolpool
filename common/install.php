@@ -1,24 +1,4 @@
 <?php
-require "common.php";
-
-function runsqlfile($file) {
-  //echo __LINE__ . "<br>";
-  $sql = file_get_contents($file);
-  $connection->exec($sql);
-  //echo __LINE__ . "<br>";
-  return;
-}
-
-/**
- * @param PDO $connection
- */
-function arst(PDO $connection, str $file): void
-{
-  echo __LINE__ . "<br>";
-  $sql = file_get_contents($file);
-  $connection->exec($sql);
-  echo __LINE__ . "<br>";
-}
 
 try {
 // first create database:
@@ -28,15 +8,19 @@ try {
   $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
   $connection->exec($sql);
    */
-  echo __LINE__ . "<br>";
-// then open database:
-  $sql = "USE " . $dbname;
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // connect to the database:
+  require "dbconfig.php";
+  $dsn        = "mysql:host=$host;dbname=$dbname";
+  $options    = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+  $connection = new PDO($dsn, $username, $password, $options);
+  $sql        = "USE " . $dbname;
   $connection->exec($sql);
-  echo __LINE__ . "<br>";
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // and then create tables:
   $sql = file_get_contents("../database/countries.sql");
   $connection->exec($sql);
-  echo __LINE__ . "<br>";
   $sql = file_get_contents("../database/regions.sql");
   $connection->exec($sql);
   $sql = file_get_contents("../database/users.sql");

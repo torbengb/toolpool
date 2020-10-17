@@ -23,7 +23,6 @@ $sql        = "USE " . $dbname;
 $connection->exec($sql);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // common functions:
-if ($_SESSION['debug']==1) echo __LINE__ . " in " . __FILE__ ."<br>";
 function escape($html)
 {
   return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");

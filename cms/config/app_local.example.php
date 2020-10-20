@@ -65,11 +65,21 @@ return [
          */
         'test' => [
             'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
             'username' => 'my_app',
             'password' => 'secret',
             'database' => 'test_myapp',
             //'schema' => 'myapp',
+            'url' => env('DATABASE_TEST_URL', null),
+        ],
+        'debug_kit' => [
+            // annoying that the CakePHP developers didn't get this template right. It needs this section to work!
+            // source: https://stackoverflow.com/a/51720196/20571
+            'host' => 'mysql.golfbravo.net',
+            'username' => 'username_here',
+            'password' => 'password_here',
+            'database' => 'dbname_here',
+            'className' => 'Cake\Database\Connection',
+            'driver' => 'Cake\Database\Driver\Mysql',
             'url' => env('DATABASE_TEST_URL', null),
         ],
     ],

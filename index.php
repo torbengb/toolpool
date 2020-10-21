@@ -4,7 +4,7 @@ require "common/header.php";
 
     <h2>Welcome to your TOOL||POOL!</h2>
 
-    <p>This prototype is not yet operational. Try the <span style="background-color: yellow"><a href="http://dev.toolpool.club">dev</a></span> or <span style="background-color: yellow"><a href="http://test.toolpool.club">test system</a></span>.
+    <p>This prototype is not yet operational (<a href="https://blog.toolpool.club/2020/10/17/hello-world/">see the blog post</a>). Try the <span style="background-color: yellow"><a href="http://dev.toolpool.club">dev</a></span> or <span style="background-color: yellow"><a href="http://test.toolpool.club">test system</a></span>.
 
     <p>This prototype is <span style="background-color: yellow">a community platform for people to share their tools for
         DIY home-improvement projects.</span>

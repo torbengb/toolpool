@@ -23,7 +23,7 @@
 </div>
 <form method="post" action="/">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
+    <input type="hidden" name="id" value="<?php echo escape($_SESSION["currentuserid"]); ?>">
     <label class="label" for="user"><span class="labeltext">select user:</span>
         <select class="input" name="user" id="user">
           <?php foreach ($users as $row) : ?>

@@ -1,4 +1,3 @@
-
-common/dbconfig.php
-
 .idea/
+common/dbconfig.php
+config/dbconfig.php

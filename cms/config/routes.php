@@ -57,6 +57,10 @@ $routes->scope('/', function (RouteBuilder $builder) {
      */
     $builder->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
+    $builder->scope('/articles', function (RouteBuilder $builder) {
+        $builder->connect('/tagged/*', ['controller' => 'Articles', 'action' => 'tags']);
+    });
+
     /*
      * Connect catchall routes for all controllers.
      *

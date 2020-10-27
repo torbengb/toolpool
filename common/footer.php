@@ -21,7 +21,7 @@
     </span>
     </div>
 </div>
-<form method="post" action="/">
+<form method="post" action="/profile/">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
     <input type="hidden" name="id" value="<?php echo (isset($_SESSION["currentuserid"]) ? escape($_SESSION["currentuserid"]) : NULL ); ?>">
     <label class="label" for="user"><span class="labeltext">select user:</span>

@@ -49,10 +49,12 @@ class ArticlesController extends AppController
     }
     public function edit($slug)
     {
-        $article = $this->Articles
-            ->findBySlug($slug)
-            ->firstOrFail();
-
+        try {
+            $article = $this->Articles->findBySlug($slug)->firstOrFail();
+        } catch (\Exception $e) {
+            $this->Flash->error(__("Slug '$slug' was not found."));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['post', 'put'])) {
             $this->Articles->patchEntity($article, $this->request->getData());
             if ($this->Articles->save($article)) {

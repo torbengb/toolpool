@@ -149,7 +149,7 @@ $numloans =$stats[3][1][0];
         <blockquote class="success">Successfully deleted your profile!</blockquote>
     <?php endif; ?>
     <a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>
-    <form method="post" action="/">
+    <form method="post" action="/profile/">
         <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
         <label class="label" for="user"><span class="labeltext">select user:</span>
             <select class="input" name="user" id="user">

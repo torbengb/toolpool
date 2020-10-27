@@ -23,17 +23,23 @@
 </div>
 <form method="post" action="/">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <input type="hidden" name="id" value="<?php echo escape($_SESSION["currentuserid"]); ?>">
+    <input type="hidden" name="id" value="<?php echo (isset($_SESSION["currentuserid"]) ? escape($_SESSION["currentuserid"]) : NULL ); ?>">
     <label class="label" for="user"><span class="labeltext">select user:</span>
         <select class="input" name="user" id="user">
-          <?php foreach ($users as $row) : ?>
-              <option
-                      name="user"
-                      id="user"
-                      value="<?php echo escape($row['id']); ?>"
-                  <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
-              ><?php echo escape($row['username']); ?></option>
-          <?php endforeach; ?>
+            <?php foreach ($users as $row) : ?>
+                <option
+                    name="user"
+                    id="user"
+                    value="<?php echo escape($row['id']); ?>"
+                    <?php echo(
+                        escape($row["id"]) ==
+                            (isset($_SESSION["currentuserid"])
+                            ? escape($_SESSION["currentuserid"])
+                            : NULL )
+                        ? "selected='selected'"
+                        : NULL) ?>
+                ><?php echo escape($row['username']); ?></option>
+            <?php endforeach; ?>
         </select>
     </label>
     <button class="button submit" type="submit" name="login" value="login">Switch!</button>

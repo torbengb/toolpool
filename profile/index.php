@@ -94,7 +94,9 @@ if (isset($_POST["delete"])) {
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
-$userid = $_SESSION['currentuserid'];
+$userid = (isset($_SESSION["currentuserid"])
+        ? escape($_SESSION["currentuserid"])
+        : NULL );
 $statement = $connection->prepare("
                 SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
                 UNION 
@@ -118,7 +120,7 @@ $numloans =$stats[3][1][0];
 
     <form method="post">
         <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-        <button style="float: right;" class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete this account</button>
+        <button style="float: right;" class="button submit" type="submit" name="delete" value="<?php echo escape($_SESSION['currentuserid']); ?>">Delete this account</button>
     </form>
 
     <form method="post" action="/index.php">
@@ -149,15 +151,18 @@ $numloans =$stats[3][1][0];
     <a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>
     <form method="post" action="/">
         <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-        <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
         <label class="label" for="user"><span class="labeltext">select user:</span>
             <select class="input" name="user" id="user">
-              <?php foreach ($users as $row) : ?>
-                  <option
-                          name="user"
-                          id="user"
-                          value="<?php echo escape($row['id']); ?>"
-                      <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
+                <?php foreach ($users as $row) : ?>
+                    <option
+                            name="user"
+                            id="user"
+                            value="<?php echo escape($row['id']); ?>"
+                        <?php echo(escape($row["id"]) ==
+                                (isset($_SESSION["currentuserid"])
+                                ? escape($_SESSION["currentuserid"])
+                                : NULL )
+                            ? "selected='selected'" : NULL) ?>
                   ><?php echo escape($row['username']); ?></option>
               <?php endforeach; ?>
             </select>

@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO users (created,modified,deleted,username,email,firstname,lastname,phone,addr_country,addr_region,addr_city,addr_zip,addr_street,addr_number,privatenotes,publicnotes)
-VALUES (SYSDATE(),NULL,NULL,'torbengb','torben@g-b.dk','Torben','G-B','123123123','AT','NO','Kbg','2100','Jag','15','hemli','nemli')
+VALUES (SYSDATE(),NULL,NULL,'torbengb','torben@g-b.dk','Torben','G-B','123123123','AT','KO','Kbg','2100','Jag','15','hemli','nemli')
 ;
 

@@ -11,7 +11,7 @@ try {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // connect to the database:
-  require "dbconfig.php";
+  require dirname(__DIR__) . '/config/dbconfig.php';
   $dsn        = "mysql:host=$host;dbname=$dbname";
   $options    = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
   $connection = new PDO($dsn, $username, $password, $options);

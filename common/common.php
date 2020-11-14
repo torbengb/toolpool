@@ -20,11 +20,17 @@ if (empty($_SESSION['csrf'])) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // connect to the database:
-require "dbconfig.php";
+require dirname(__DIR__) . '/config/dbconfig.php';
 $dsn        = "mysql:host=$host;dbname=$dbname";
 $options    = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
-$connection = new PDO($dsn, $username, $password, $options);
-$sql        = "USE " . $dbname;
+try {
+    $connection = new PDO($dsn, $username, $password, $options);
+} catch (Exception $e) {
+    echo $e->getMessage();
+    echo $e->getCode();
+    echo $e->getTraceAsString();
+}
+$sql = "USE " . $dbname;
 $connection->exec($sql);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // common functions:

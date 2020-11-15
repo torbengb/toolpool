@@ -114,5 +114,8 @@ VALUES
 ,(SYSDATE(),NULL,NULL,'AT','WO','Wolfsberg')
 ,(SYSDATE(),NULL,NULL,'AT','ZE','Zell am See')
 ,(SYSDATE(),NULL,NULL,'AT','ZT','Zwettl')
+,(SYSDATE(),NULL,NULL,'DE','B','Berlin')
+,(SYSDATE(),NULL,NULL,'DE','F','Frankfurt')
+,(SYSDATE(),NULL,NULL,'DE','MTK','Main-Taunus Kreis')
 ;
 

@@ -5,7 +5,11 @@ require "../common/header.php";
 if (isset($_GET['id'])) { // Action on LOAD:
   try { // load the record
     $id        = $_GET['id'];
-    $statement = $connection->prepare("SELECT * FROM users WHERE id = :id");
+    $statement = $connection->prepare("SELECT u.*, r.name AS regionname, c.name AS countryname
+        FROM users u
+        LEFT JOIN regions r ON r.code = u.addr_region
+        LEFT JOIN countries c ON c.code = u.addr_country
+        WHERE u.id = :id");
     $statement->bindValue(':id', $id);
     $statement->execute();
     $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -34,7 +38,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
 }
 
 // Action on LOAD:
-try { // load the record:
+try { // load the user's tools:
   $owner     = $_GET['id'];
   $statement = $connection->prepare("
     SELECT DISTINCT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
@@ -58,18 +62,21 @@ try { // load the record:
     ");
   $statement->bindValue(':owner', $owner);
   $statement->execute();
-  $result = $statement->fetchAll();
+  $toolList = $statement->fetchAll();
   // list for taxonomy columns:
-  $statement = $connection->prepare("
-        SELECT name, id, parent FROM taxonomy
-        WHERE deleted = '0000-00-00 00:00:00'
-        ORDER BY name
-        ");
-  $statement->execute();
-  $tax = $statement->fetchAll();
+	if ( ! empty($toolList) ) { // don't bother about taxonomies when there are no tools.
+        $statement = $connection->prepare("
+            SELECT name, id, parent FROM taxonomy
+            WHERE deleted = '0000-00-00 00:00:00'
+            ORDER BY name
+            ");
+        $statement->execute();
+        $tax = $statement->fetchAll();
+	}
 } catch (PDOException $error) {
   showMessage(__LINE__, __FILE__, $sql . "<br>" . $error->getMessage());
-}?>
+}
+?>
 
 <h2>View user profile || <a href="list.php">back to list</a></h2>
 
@@ -99,6 +106,11 @@ try { // load the record:
 
 <h3>Tools</h3>
 
+<?php // don't show empty tools table when there are no tools.
+    if ( empty($toolList) ) : ?>
+<p><?php echo escape($user["username"]); ?> is not sharing any tools.</p>
+<?php else : ?>
+
 <form method="post">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <table>
@@ -121,7 +133,7 @@ try { // load the record:
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($result as $row) : ?>
+        <?php foreach ( $toolList as $row) : ?>
             <tr>
                 <td align="center">
                   <?php if (isset($_SESSION['currentusername'])
@@ -162,5 +174,6 @@ try { // load the record:
         </tbody>
     </table>
 </form>
+<?php endif; ?>
 
 <?php require "../common/footer.php"; ?>

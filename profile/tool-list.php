@@ -130,7 +130,7 @@ try { // load the record:
     ");
   $statement->bindValue(':owner', $owner);
   $statement->execute();
-  $result = $statement->fetchAll();
+  $toolList = $statement->fetchAll();
   // list for taxonomy columns:
   $statement = $connection->prepare("
         SELECT name, id, parent FROM taxonomy
@@ -165,7 +165,11 @@ try { // load the record:
     </blockquote>
 <?php endif; ?>
 
-<form method="post">
+<?php if ( empty($toolList) ) : ?>
+    <p>You have not yet entered any tools. <a href="tool-new.php">Add a new tool now?</a></p>
+<?php else : ?>
+
+    <form method="post">
     <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <table>
         <thead>
@@ -186,7 +190,7 @@ try { // load the record:
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($result as $row) : ?>
+        <?php foreach ( $toolList as $row) : ?>
             <tr>
                 <td align="center">
                     <a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
@@ -214,5 +218,6 @@ try { // load the record:
         </tbody>
     </table>
 </form>
+<?php endif; ?>
 
 <?php require "../common/footer.php"; ?>

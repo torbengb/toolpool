@@ -15,4 +15,5 @@ INSERT INTO countries (created,modified,deleted,code,name)
 VALUES
  (SYSDATE(),NULL,NULL,'0','(not specified)')
 ,(SYSDATE(),NULL,NULL,'AT','Austria')
+,(SYSDATE(),NULL,NULL,'DE','Germany')
 ;

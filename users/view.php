@@ -45,17 +45,13 @@ try { // load the user's tools:
     FROM tools t
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
-    			AND l.active = 1
-    			AND ( l.deleted = '0000-00-00 00:00:00'
-    			  OR  l.deleted IS NULL
-    			)
+    			AND l.active = 1 AND ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
     LEFT JOIN taxonomy t1 ON t1.id = t.taxonomy1 -- LEFT includes tools without a taxonomy.
     LEFT JOIN taxonomy t2 ON t2.id = t.taxonomy2 
     LEFT JOIN taxonomy t3 ON t3.id = t.taxonomy3 
     LEFT JOIN taxonomy t4 ON t4.id = t.taxonomy4 
     LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
-    WHERE ( t.deleted = '0000-00-00 00:00:00'
-      OR  t.deleted IS NULL )
+    WHERE ( t.deleted = '0000-00-00 00:00:00' OR t.deleted IS NULL )
       AND t.owner = :owner
       AND t.offered = 1
     ORDER BY t.toolname -- t1, t2, t3, T4, t5 -- TODO: order the list meaningfully.
@@ -78,31 +74,14 @@ try { // load the user's tools:
 }
 ?>
 
-<h2>View user profile || <a href="list.php">back to list</a></h2>
+<h2><a href="list.php">Members</a> || <?php echo escape($user["username"]); ?></h2>
 
-<table>
-    <tr>
-        <td><b>Username</b></td>
-        <td><?php echo escape($user["username"]); ?></td>
-    </tr>
-    <tr>
-        <td><b>Country</b></td>
-        <td><?php echo escape($user["addr_country"]); ?></td>
-    </tr>
-    <tr>
-        <td><b>Region</b></td>
-        <td><?php echo escape($user["addr_region"]); ?></td>
-    </tr>
-    <tr>
-        <td><b>ZIP</b></td>
-        <td><?php echo escape($user["addr_zip"]); ?></td>
-    </tr>
-    <tr>
-        <td><b>Public notes</b></td>
-        <td><?php echo escape($user["publicnotes"]); ?></td>
-    </tr>
-</table>
-
+<div class="userlocation">
+    <?php echo (escape($user["addr_zip"])    ? escape($user["addr_zip"]).' '    : NULL ); ?>
+    <?php echo (escape($user["regionname"])  ? escape($user["regionname"]).', ' : NULL ); ?>
+    <?php echo (escape($user["countryname"]) ? escape($user["countryname"])     : NULL ); ?>
+</div>
+<div class="userpublicnotes"><?php echo escape($user["publicnotes"]); ?></div>
 
 <h3>Tools</h3>
 
@@ -111,12 +90,10 @@ try { // load the user's tools:
 <p><?php echo escape($user["username"]); ?> is not sharing any tools.</p>
 <?php else : ?>
 
-<form method="post">
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <table>
         <thead>
         <tr>
-            <th align="center">Action</th>
+            <th>Action</th>
             <th>Owner</th>
             <th>Availability</th>
             <th>Tool name</th>
@@ -135,29 +112,20 @@ try { // load the user's tools:
         <tbody>
         <?php foreach ( $toolList as $row) : ?>
             <tr>
-                <td align="center">
-                  <?php if (isset($_SESSION['currentusername'])
-                      && $_SESSION['currentuserid'] != $_GET['id'] ) : ?>
-                      <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
-                  <?php endif; ?>
+                <td>
+		            <?php if ( isset($_SESSION['currentusername']) ) : ?>
+                        <form method="post" action="/profile/loan-in.php">
+                            <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                            <button class="button edit" type="submit" name="loan"
+                                    value="<?php echo escape($row["id"]); ?>">Loan
+                            </button>
+                        </form>
+		            <?php endif; ?>
                 </td>
                 <td><?php echo escape($row["username"]); ?></td>
-                <td
-                    <?php echo
-                    ( escape($row["offered"])
-                        ? ( escape($row["active"])
-                            ? 'class="loaned" title="currently loaned"'
-                            : 'class="offered"' )
-                        : 'class="notoffered" title="currently not offered"' )
-                    ?>
-                >
-                  <?php echo
-                  ( escape($row["offered"])
-                      ? ( escape($row["active"])
-                          ? "waiting list"
-                          : "available" )
-                      : "not offered" )
-                  ?></td>
+	            <?php
+	            echo(escape($row["offered"]) ? (escape($row["active"]) ? '<td class="loaned" title="currently loaned">waiting list</td>' : '<td class="offered">available</td>') : '<td class="notoffered" title="currently not offered">not offered</td>')
+	            ?>
                 <td><?php echo escape($row["toolname"]); ?></td>
                 <td><?php echo escape($row["brand"]); ?></td>
                 <td><?php echo escape($row["model"]); ?></td>
@@ -173,7 +141,6 @@ try { // load the user's tools:
         <?php endforeach; ?>
         </tbody>
     </table>
-</form>
 <?php endif; ?>
 
 <?php require "../common/footer.php"; ?>

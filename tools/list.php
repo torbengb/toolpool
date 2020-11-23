@@ -142,12 +142,10 @@ try { // load the record:
 
 <h2>Tool Pool</h2>
 
-<form method="post">
-  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
     <thead>
       <tr>
-          <th align="center">Action</th>
+          <th>Action</th>
           <th>Owner</th>
           <th>Availability</th>
           <th>Tool name</th>
@@ -166,7 +164,7 @@ try { // load the record:
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td align="center">
+          <td>
               <?php if (isset($_SESSION['currentusername'])) : ?>
               <form method="post" action="/profile/loan-in.php">
                   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -175,22 +173,13 @@ try { // load the record:
               <?php endif; ?>
           </td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>"><?php echo escape($row["username"]); ?></a></td>
-          <td
-              <?php echo
-              ( escape($row["offered"])
-                  ? ( escape($row["active"])
-                      ? 'class="loaned" title="currently loaned"'
-                      : 'class="offered"' )
-                  : 'class="notoffered" title="currently not offered"' )
-              ?>
-          >
-            <?php echo
-            ( escape($row["offered"])
-                ? ( escape($row["active"])
-                    ? "waiting list"
-                    : "available" )
-                : "not offered" )
-            ?></td>
+	      <?php
+            echo(escape($row["offered"]) ?
+                (escape($row["active"]) ?
+                    '<td class="loaned" title="currently loaned">waiting list</td>' :
+                    '<td class="offered">available</td>')
+                : '<td class="notoffered" title="currently not offered">not offered</td>')
+	      ?>
           <td><?php echo escape($row["toolname"]); ?></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
@@ -206,6 +195,5 @@ try { // load the record:
     <?php endforeach; ?>
     </tbody>
   </table>
-</form>
 
 <?php require "../common/footer.php"; ?>

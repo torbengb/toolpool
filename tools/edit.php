@@ -48,9 +48,9 @@ if (isset($_GET['id'])) { // Action on LOAD:
 } else { showMessage( __LINE__ , __FILE__ ); exit; }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Edit a tool || <a href="tool-list.php">back to list</a></h2>
+<h2><a href="../profile/index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Edit a tool || <a href="../profile/tools.php">back to my tools</a></h2>
 
-<form action="tool-list.php" method="post">
+<form action="../profile/tools.php" method="post">
   <button class="button delete" type="submit" name="update" value="update">Update</button>
   <button class="button delete" type="submit" name="delete" value="delete">Delete</button>
   <input type="hidden" name="csrf"  value="<?php echo escape($_SESSION['csrf']); ?>">

@@ -18,9 +18,9 @@ try { // load foreign tables:
 }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Add new tool || <a href="tool-list.php">back to list</a></h2>
+<h2><a href="../profile/index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Add new tool || <a href="../profile/tools.php">back to my tools</a></h2>
 
-<form method="post" action="tool-list.php">
+<form method="post" action="../profile/tools.php">
     <input class="button submit" type="submit" name="create" value="Submit">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
     <input type="hidden" name="owner" value="<?php echo escape($_SESSION['currentusername']) ?>">

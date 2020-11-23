@@ -165,7 +165,8 @@ try { // load the record:
     <?php foreach ($result as $row) : ?>
       <tr>
           <td>
-              <?php if (isset($_SESSION['currentusername'])) : ?>
+              <?php if (isset($_SESSION['currentusername'])
+                  && escape($row["userid"]) != $_SESSION['currentuserid'] ) : ?>
               <form method="post" action="/profile/loan-in.php">
                   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
                   <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
@@ -180,7 +181,7 @@ try { // load the record:
                     '<td class="offered">available</td>')
                 : '<td class="notoffered" title="currently not offered">not offered</td>')
 	      ?>
-          <td><?php echo escape($row["toolname"]); ?></td>
+          <td><a href="/tools/view.php?id=<?php echo escape($row["id"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
           <td><?php echo escape($row["brand"]); ?></td>
           <td><?php echo escape($row["model"]); ?></td>
           <td><?php echo escape($row["dimensions"]); ?></td>

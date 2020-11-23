@@ -41,7 +41,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
 try { // load the user's tools:
   $owner     = $_GET['id'];
   $statement = $connection->prepare("
-    SELECT DISTINCT t.*, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
+    SELECT DISTINCT t.*, u.id as userid, u.username, t1.name AS t1, t2.name AS t2, t3.name AS t3, t4.name AS t4, t5.name AS t5, l.active
     FROM tools t
     JOIN users u ON u.id = t.owner
     LEFT JOIN loans l ON l.tool = t.id 
@@ -94,7 +94,6 @@ try { // load the user's tools:
         <thead>
         <tr>
             <th>Action</th>
-            <th>Owner</th>
             <th>Availability</th>
             <th>Tool name</th>
             <th>Brand</th>
@@ -112,21 +111,23 @@ try { // load the user's tools:
         <tbody>
         <?php foreach ( $toolList as $row) : ?>
             <tr>
-                <td>
-		            <?php if ( isset($_SESSION['currentusername']) ) : ?>
+                <td><?php // when current_user != tool_owner then show LOAN button
+		            if ( isset($_SESSION['currentusername']) && escape($row["userid"]) != $_SESSION['currentuserid'] ) : ?>
                         <form method="post" action="/profile/loan-in.php">
                             <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-                            <button class="button edit" type="submit" name="loan"
-                                    value="<?php echo escape($row["id"]); ?>">Loan
-                            </button>
+                            <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
                         </form>
 		            <?php endif; ?>
+		            <?php // when current_user == tool_owner then show EDIT button
+		            if ( isset($_SESSION['currentusername']) && escape($row["userid"]) == $_SESSION['currentuserid'] ) : ?>
+                        <a href="/tools/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+		            <?php endif; ?>
                 </td>
-                <td><?php echo escape($row["username"]); ?></td>
 	            <?php
 	            echo(escape($row["offered"]) ? (escape($row["active"]) ? '<td class="loaned" title="currently loaned">waiting list</td>' : '<td class="offered">available</td>') : '<td class="notoffered" title="currently not offered">not offered</td>')
 	            ?>
-                <td><?php echo escape($row["toolname"]); ?></td>
+                <td>
+                    <a href="/tools/view.php?id=<?php echo escape($row["id"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
                 <td><?php echo escape($row["brand"]); ?></td>
                 <td><?php echo escape($row["model"]); ?></td>
                 <td><?php echo escape($row["dimensions"]); ?></td>

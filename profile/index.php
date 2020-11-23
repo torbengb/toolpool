@@ -130,7 +130,7 @@ $numloans =$stats[3][1][0];
     <?php if (isset($_POST['update']) && $statement) : ?>
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
-    <p> You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
+    <p> You are <a href="/profile/tools.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="../tools/new.php">Add another!</a><br>
         You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others,
         plus <span style="font-size: 200%"><?php echo $numlendspast; ?></span> in the <a href="/profile/loan-out-history.php">past</a>.
             <?php

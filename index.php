@@ -60,7 +60,7 @@ if (isset($_SESSION['currentuserid'])) {
 <?php endif; ?>
 
 <?php if (isset($_SESSION['currentusername'])) : ?>
-    <p> You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="profile/tool-new.php">Add another!</a><br>
+    <p> You are <a href="/profile/tools.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tools/new.php">Add another!</a><br>
         You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others,
             plus <span style="font-size: 200%"><?php echo $numlendspast; ?></span> in the <a href="/profile/loan-out-history.php">past</a>.
             <?php
@@ -76,7 +76,7 @@ if (isset($_SESSION['currentuserid'])) {
         DIY home-improvement projects.</span>
         <a href="/users/new.php">Register</a> if you're not a user already, or just
         <a href="tools/list.php">browse all the tools</a> that are available already. You can also
-        <a href="/profile/tool-list.php">offer your own tools</a> for the benefit of your neighbors and local community.
+        <a href="/profile/tools.php">offer your own tools</a> for the benefit of your neighbors and local community.
 
     <h3>TOOL||POOL helps people to find tools they can borrow, rather than buying them.</h3>
 

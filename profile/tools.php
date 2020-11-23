@@ -144,7 +144,7 @@ try { // load the record:
 }
 ?>
 
-<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || My tools || <a href="tool-new.php">add
+<h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || My tools || <a href="../tools/new.php">add
         new</a></h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
@@ -159,14 +159,8 @@ try { // load the record:
     <blockquote class="success">Successfully deleted your <b><?php echo escape($_POST['toolname']); ?></b>!</blockquote>
 <?php endif; ?>
 
-<?php if (isset($_POST['loan']) && $statement) : ?>
-    <blockquote class="success">Successfully recorded <a href="../loans/list.php">your new loan</a>. Now you may pick up the
-        <b><?php echo escape($toolname) ?></b> from <b><?php echo escape($ownername) ?></b>.
-    </blockquote>
-<?php endif; ?>
-
 <?php if ( empty($toolList) ) : ?>
-    <p>You have not yet entered any tools. <a href="tool-new.php">Add a new tool now?</a></p>
+    <p>You have not yet entered any tools. <a href="../tools/new.php">Add a new tool now?</a></p>
 <?php else : ?>
 
     <form method="post">
@@ -174,7 +168,7 @@ try { // load the record:
     <table>
         <thead>
         <tr>
-            <th align="center">Action</th>
+            <th>Action</th>
             <th>Availability</th>
             <th>Tool name</th>
             <th>Brand</th>
@@ -192,8 +186,8 @@ try { // load the record:
         <tbody>
         <?php foreach ( $toolList as $row) : ?>
             <tr>
-                <td align="center">
-                    <a href="tool-edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+                <td>
+                    <a href="/tools/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
                     <!--button class="button delete" type="submit" name="delete" value="<?php echo escape($row["id"]); ?> action="list.php">Delete!</button-->
                 </td>
                 <td
@@ -202,7 +196,7 @@ try { // load the record:
                 >
                   <?php echo(escape($row["offered"]) ? (escape($row["active"]) ? "waiting list" : "available") : "not offered")
                   ?></td>
-                <td><?php echo escape($row["toolname"]); ?></td>
+                <td><a href="/tools/view.php?id=<?php echo escape($row["id"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
                 <td><?php echo escape($row["brand"]); ?></td>
                 <td><?php echo escape($row["model"]); ?></td>
                 <td><?php echo escape($row["dimensions"]); ?></td>

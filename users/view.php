@@ -33,7 +33,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     showMessage(__LINE__, __FILE__, $sql . "<br>" . $error->getMessage());
   }
 } else {
-  showMessage(__LINE__, __FILE__, "No user was specified!");
+	echo "Error " . __LINE__ . ": No user was specified!" . "<br>";
   exit;
 }
 

@@ -133,11 +133,16 @@ $connection->exec($sql);
     <?php foreach ($result as $row) : ?>
       <tr>
           <td>
-              <form method="post">
-                  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-                  <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-                  <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
-              </form>
+	          <?php if ( isset($_SESSION['currentusername'])
+                        && escape($row["userid1"]) == $_SESSION['currentuserid'] ) : ?>
+                  <form method="post">
+                      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                      <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+                      <button class="button submit" type="submit" name="delete"
+                              value="<?php echo escape($row["id"]); ?>">Delete!
+                      </button>
+                  </form>
+		          <?php endif; ?>
           </td>
           <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
           <td><?php echo escape($row["toolname"]); ?></td>

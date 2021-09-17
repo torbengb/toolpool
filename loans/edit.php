@@ -34,6 +34,13 @@ if (isset($_GET['id'])) { // Action on LOAD:
 
 <h2>Edit a loan || <a href="/profile/loan-out.php">back to list</a> </h2>
 
+<?php if (!isset($_SESSION['currentusername'])) : ?>
+    <blockquote class="warning">You are not logged in. <a href="/profile/">Login</a> or <a href="/profile/login.php?action=registers">register!</a>
+    </blockquote>
+<?php elseif ( $_SESSION['currentuserid'] != escape($loan['owner']) ) : ?>
+    <blockquote class="failure">This is not your tool!</blockquote>
+<?php else : ?>
+
 <form method="post" action="/profile/loan-out.php">
   <button class="button submit" type="submit" name="update" value="update">Save</button>
   <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -59,4 +66,5 @@ if (isset($_GET['id'])) { // Action on LOAD:
   <button class="button submit" type="submit" name="update" value="update">Save</button>
 </form>
 
+<?php endif; ?>
 <?php require "../common/footer.php"; ?>

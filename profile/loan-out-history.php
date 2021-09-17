@@ -11,7 +11,7 @@ try {
 		JOIN users u1 ON l.owner = u1.id
 		JOIN users u2 ON l.loanedto = u2.id
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-        AND l.active = 0
+        AND l.active IS NULL
         AND l.owner = :userid
 		ORDER BY l.active DESC, l.created DESC -- l.active DESC, t.toolname
     ");

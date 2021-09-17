@@ -27,7 +27,7 @@ try { // Action on LOAD:
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
 
-<h2>Members || <a href="new.php">add new</a></h2>
+<h2>Members || <a href="/profile/login.php?action=registers">add new</a></h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
     <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>!</blockquote>

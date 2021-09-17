@@ -9,30 +9,38 @@ if (isset($_POST['update'])) {
     $record =[
         "id" => $_POST['id'],
         "modified" => $timestamp,
-        "active" => $_POST['active'],
-        "tool" => $_POST['tool'],
-        "owner" => $_POST['owner'],
-        "loanedto" => $_POST['loanedto'],
-        "agreedstart" => $_POST['agreedstart'],
-        "agreedend" => $_POST['agreedend'],
-        "actualstart" => $_POST['actualstart'],
-        "actualend" => $_POST['actualend'],
+        "active" => NULL,
+        "actualend" => $timestamp,
     ];
     $statement = $connection->prepare("
         UPDATE loans 
-            SET modified = :modified,
+          SET modified = :modified,
               active = :active,
-              tool = :tool,
-              owner = :owner,
-              loanedto = :loanedto,
+              actualend = :actualend
+          WHERE id = :id
+        ");
+    $statement->execute($record);
+  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+}
+
+if (isset($_POST['return'])) {
+	if ( !hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+	try {
+		$timestamp = date("Y-m-d H:i:s");
+		$id        = $_POST["return"];
+		$statement = $connection->prepare("
+        UPDATE loans 
+	      SET active = NULL,
               agreedstart = :agreedstart,
               agreedend = :agreedend,
               actualstart = :actualstart,
               actualend = :actualend
-            WHERE id = :id
+          WHERE id = :id
         ");
-    $statement->execute($record);
-  } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
+		$statement->execute($record);
+	} catch (PDOException $error) {
+		echo $sql . "<br>" . $error->getMessage();
+	}
 }
 
 if (isset($_POST['delete'])) {
@@ -61,7 +69,7 @@ try {
 		JOIN users u1 ON l.owner = u1.id
 		JOIN users u2 ON l.loanedto = u2.id
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-        -- AND l.active = 1
+        AND l.active = 1
         AND l.owner = :userid
 		ORDER BY l.active DESC, l.created DESC -- l.active DESC, t.toolname
     ");
@@ -81,6 +89,10 @@ try {
 
 <?php if (isset($_POST['update']) && $statement) : ?>
   <blockquote class="success">Successfully updated the loan of the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
+<?php endif; ?>
+
+<?php if (isset($_POST['return']) && $statement) : ?>
+  <blockquote class="success">Successfully returned the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
 <?php endif; ?>
 
 <?php if (isset($_POST['delete']) && $statement) : ?>
@@ -107,7 +119,9 @@ try {
     <?php foreach ($result as $row) : ?>
       <tr>
         <td><a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-          <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <button class="button submit" type="submit" name="return" value="<?php echo escape($row["id"]); ?>">Returned!</button>
+          <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
+        </td>
         <td><?php echo escape($row["toolname"]); ?></td>
         <td><?php echo escape($row["active"]); ?></td>
         <td><a href="/users/view.php?id=<?php echo escape($row["loanedto"]); ?>"><?php echo escape($row["username2"]); ?></a></td>

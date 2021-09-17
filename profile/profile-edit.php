@@ -30,6 +30,11 @@ try { // load the record
 
 <h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || Edit your profile || <a href="index.php">back to profile</a></h2>
 
+<?php if (!isset($_SESSION['currentusername'])) : ?>
+    <blockquote class="warning">You are not logged in. <a href="/profile/">Login</a> or <a href="/profile/login.php?action=registers">register!</a>
+    </blockquote>
+<?php else : ?>
+
 <?php if (isset($_POST['submit']) && $statement) : ?>
     <blockquote class="success">Successfully updated <b><?php echo escape($_POST['username']); ?></b>'s user profile in
         the <a href="list.php">member list</a>.
@@ -41,7 +46,7 @@ try { // load the record
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
     <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
 
-    <label class="label" for="username">username<input class="input" type="text" name="username" id="username"
+    <label class="label" for="username">username<input class="input" type="text" name="username" id="username" disabled
                                                        value="<?php echo escape($user["username"]); ?>"></label>
     <label class="label" for="email">email<input class="input" type="text" name="email" id="email"
                                                  value="<?php echo escape($user["email"]); ?>"></label>
@@ -89,4 +94,5 @@ try { // load the record
     <button class="button submit" type="submit" name="update" value="update">Save</button>
 </form>
 
+<?php endif; ?>
 <?php require "../common/footer.php"; ?>

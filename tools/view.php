@@ -37,7 +37,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
 }
 ?>
 
-<h2><a href="list.php">Tool Pool</a> || <?php echo escape($tool["toolname"]); ?></h2>
+<h2><a href="list.php">Tool Pool</a> || <?php echo escape($tool["toolname"]); ?>
+	<?php if (isset($_SESSION['currentusername']) && escape($tool["userid"]) == $_SESSION['currentuserid']) : ?>
+        || <a href="edit.php?id=<?php echo escape($tool_id); ?>">edit</a>
+    <?php endif; ?>
+</h2>
 
 <ul>
     <li><a href="/users/view.php?id=<?php echo escape($tool["userid"]); ?>"><?php echo escape($tool["username"]); ?></a></li>

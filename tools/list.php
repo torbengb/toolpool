@@ -171,6 +171,8 @@ try { // load the record:
                   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
                   <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
               </form>
+              <?php else: ?>
+              (your tool)
               <?php endif; ?>
           </td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>"><?php echo escape($row["username"]); ?></a></td>

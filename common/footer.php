@@ -42,8 +42,8 @@
             <?php endforeach; ?>
         </select>
     </label>
+    <button style="float: left;" class="button submit" type="submit" name="logout" value="logout">Log out!</button> &nbsp;
     <button class="button submit" type="submit" name="login" value="login">Switch!</button>
-    <button style="float: right;" class="button submit" type="submit" name="logout" value="logout">Log out!</button>
 </form>
 </body>
 </html>

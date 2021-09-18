@@ -158,4 +158,8 @@ $numloans =$stats[3][1][0];
     <blockquote class="warning">You are not logged in. <a href="/profile/login.php">Login</a> or <a href="/profile/login.php?action=register">register!</a></blockquote>
 <?php endif; ?>
 
+<?php
+var_dump(password_verify($password, $hashed_password));
+?>
+
 <?php require "../common/footer.php"; ?>

@@ -31,12 +31,17 @@ if ( isset($_GET["action"]) && $_GET["action"] == 'register' ) {
 
 	<h2>Register || <a href="login.php">Login instead?</a></h2>
 
-	<form method="post" action="profile-created.php">
+    <p>🔒 Your data is secure with us. In technical terms, all persnoal information is "hashed using a salt" before it is stored in the database. In layman's terms, nobody can read your information.</p>
+
+	<form method="post"  action="profile-created.php">
 		<input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
 
 		<label class="label" for="username">User name
 			<input class="input" type="text" name="username" id="username">
 			<span class="formhint">This is the only name we will show other users.</span> </label>
+		<label class="label" for="password">Password
+			<input class="input" type="password" name="password" id="password">
+			<span class="formhint">Be safe: don't reuse password! May we recommend using a password manager?</span> </label>
 		<label class="label" for="email">Email address
 			<input class="input" type="text" name="email" id="email">
 			<span class="formhint">We use this to validate your account, and to send you information about loans and requests.</span></label>

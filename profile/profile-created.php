@@ -8,7 +8,7 @@ if ( isset($_POST['create']) ) { // Action on SUBMIT:
 	}
 	try { // create the record:
 		$timestamp = date("Y-m-d H:i:s");
-		$record    = ["created" => $timestamp, "username" => $_POST['username'], "email" => $_POST['email'], "firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "phone" => $_POST['phone'], "addr_country" => $_POST['addr_country'], "addr_region" => $_POST['addr_region'], "addr_city" => $_POST['addr_city'], "addr_zip" => $_POST['addr_zip'], "addr_street" => $_POST['addr_street'], "addr_number" => $_POST['addr_number'], "privatenotes" => $_POST['privatenotes'], "publicnotes" => $_POST['publicnotes']];
+		$record    = ["created" => $timestamp, "username" => $_POST['username'], "hashedpassword" => password_hash($_POST['password'], PASSWORD_DEFAULT), "email" => $_POST['email'], "firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "phone" => $_POST['phone'], "addr_country" => $_POST['addr_country'], "addr_region" => $_POST['addr_region'], "addr_city" => $_POST['addr_city'], "addr_zip" => $_POST['addr_zip'], "addr_street" => $_POST['addr_street'], "addr_number" => $_POST['addr_number'], "privatenotes" => $_POST['privatenotes'], "publicnotes" => $_POST['publicnotes']];
 		$sql       = sprintf("INSERT INTO %s (%s) VALUES (%s)", "users", implode(", ", array_keys($record)), ":" . implode(", :", array_keys($record)));
 		$statement = $connection->prepare($sql);
 		$statement->execute($record);

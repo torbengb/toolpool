@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
   modified TIMESTAMP NULL DEFAULT NULL,
   deleted TIMESTAMP NULL DEFAULT NULL COMMENT 'treat as deleted when value is not zero',
   username VARCHAR(30) NOT NULL COMMENT 'screen name of user',
+  hashedpassword VARCHAR(60) NOT NULL COMMENT 'hashed password',
   email VARCHAR(50) NOT NULL COMMENT 'obvious',
   firstname VARCHAR(50) COMMENT 'obvious',
   lastname VARCHAR(50) COMMENT 'obvious',

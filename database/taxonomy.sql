@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS taxonomy (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified TIMESTAMP NULL DEFAULT NULL,
   deleted TIMESTAMP NULL DEFAULT NULL COMMENT 'treat as deleted when value is not zero',
-  name VARCHAR(50) NOT NULL COMMENT 'name of the taxonomy',
+  name VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'name of the taxonomy',
   parent INT(11) DEFAULT 0 COMMENT 'taxonomy.id of the parent of this taxonomy, or zero for top level'
 );
 

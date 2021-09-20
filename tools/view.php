@@ -17,10 +17,10 @@ if (isset($_GET['id'])) { // Action on LOAD:
             LEFT JOIN taxonomy t5 ON t5.id = t.taxonomy5 
             WHERE t.id = :tool_id
             ");
-        $statement->bindValue(':tool_id', $tool_id);
-        $statement->execute();
-        $tool = $statement->fetch(PDO::FETCH_ASSOC);
-        // list for taxonomy columns:
+			$statement->bindValue(':tool_id', $tool_id);
+			$statement->execute();
+			$tool = $statement->fetch(PDO::FETCH_ASSOC);
+			// list for taxonomy columns:
         $statement = $connection->prepare("
             SELECT name, id, parent FROM taxonomy
             WHERE deleted = '0000-00-00 00:00:00'
@@ -28,7 +28,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
             ");
         $statement->execute();
         $tax = $statement->fetchAll();
-    } catch (PDOException $error) {
+		} catch (PDOException $error) {
         showMessage(__LINE__, __FILE__, $sql . "<br>" . $error->getMessage());
     }
 } else {
@@ -52,6 +52,22 @@ if (isset($_GET['id'])) { // Action on LOAD:
     $urlencoded = $protocol . "://" . $domain . $resource;
     echo $urlencoded ?>&choe=UTF-8" title="URL to this page"/>
 </div>
+
+<div>
+	<?php
+	$numlends  = 0;
+	$statement = $connection->prepare("
+            SELECT count(l.id) as count
+            FROM loans l 
+            WHERE l.tool = :tool_id
+            AND ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
+            ");
+	$statement->bindValue(':tool_id', $tool_id);
+	$statement->execute();
+	$statement = $statement->fetchAll();
+	$numlends  = $statement[0][0][0];
+	?>
+    This tool has been lent <?php echo $numlends; ?> times so far.</div>
 
 <ul>
     <li><a href="/users/view.php?id=<?php echo escape($tool["userid"]); ?>"><?php echo escape($tool["username"]); ?></a></li>

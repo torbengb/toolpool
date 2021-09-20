@@ -145,7 +145,7 @@ $connection->exec($sql);
 		          <?php endif; ?>
           </td>
           <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
-          <td><?php echo escape($row["toolname"]); ?></td>
+          <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid1"]); ?>"><?php echo escape($row["username1"]); ?></a></td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid2"]); ?>"><?php echo escape($row["username2"]); ?></a></td>
           <td><?php echo escape($row["created"]); ?></td>

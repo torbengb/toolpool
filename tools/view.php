@@ -53,7 +53,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
     echo $urlencoded ?>&choe=UTF-8" title="URL to this page"/>
 </div>
 
-<div>
+<div><h3>Lending history</h3>
 	<?php
 	$numlends  = 0;
 	$statement = $connection->prepare("
@@ -66,9 +66,12 @@ if (isset($_GET['id'])) { // Action on LOAD:
 	$statement->execute();
 	$statement = $statement->fetchAll();
 	$numlends  = $statement[0][0][0];
-	?>
-    This tool has been lent <?php echo $numlends; ?> times so far.</div>
+		if ( $numlends == 1 ) $times = " time" ;
+        else $times = " times";
+		?>
+    This tool has been lent <?php echo $numlends.$times; ?> so far.</div>
 
+<div><h3>Tool details</h3>
 <ul>
     <li><a href="/users/view.php?id=<?php echo escape($tool["userid"]); ?>"><?php echo escape($tool["username"]); ?></a></li>
     <li><?php echo(escape($tool["offered"]) ? "offered" : "not offered") ?></li>
@@ -89,5 +92,6 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <li><?php echo(escape($tool["hydraulic"]) ? "hydr" : NULL) ?></li>
     <li><?php echo(escape($tool["pneumatic"]) ? "pneu" : NULL) ?></li>
 </ul>
+</div>
 
 <?php require "../common/footer.php"; ?>

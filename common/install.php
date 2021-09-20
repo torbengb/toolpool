@@ -2,7 +2,7 @@
 
 try {
 // first create database:
-  /* INSTALLER CANNOT CREATE DATABASE on DreamHost!! (and neither can a local SQL client!)
+  /* INSTALLER CANNOT CREATE DATABASE on DreamHost!! (and neither can a remote SQL client!)
    * The database MUST exist before the installer is run!
    * The installer can do everything after that.
   $sql = "CREATE DATABASE IF NOT EXISTS " . $dbname;
@@ -44,7 +44,7 @@ try {
       echo "Successfully inserted test data.<br>";
       break;
     default:
-      die('Cannot insert test data into unknown environment!<br>');
+      die("Cannot insert test data into unknown environment '" . $dbname . "'!<br>");
   }
 
   echo "Now <a href='../index.php'>go to the homepage</a>.";

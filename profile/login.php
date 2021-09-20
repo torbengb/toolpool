@@ -29,9 +29,7 @@ if ( isset($_GET["action"]) && $_GET["action"] == 'register' ) {
 <?php if ( isset($_GET["action"])
 			  && $_GET["action"] == 'register' ) : ?>
 
-	<h2>Register || <a href="login.php">Login instead?</a></h2>
-
-    <p>🔒 Your data is secure with us. In technical terms, all persnoal information is "hashed using a salt" before it is stored in the database. In layman's terms, nobody can read your information.</p>
+    <h2>Register || <a href="login.php">Login instead?</a></h2>
 
 	<form method="post"  action="profile-created.php">
 		<input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
@@ -41,7 +39,7 @@ if ( isset($_GET["action"]) && $_GET["action"] == 'register' ) {
 			<span class="formhint">This is the only name we will show other users.</span> </label>
 		<label class="label" for="password">Password
 			<input class="input" type="password" name="password" id="password">
-			<span class="formhint">Be safe: don't reuse password! May we recommend using a password manager?</span> </label>
+			<span class="formhint">Be safe: don't reuse passwords! May we recommend using a password manager?</span> </label>
 		<label class="label" for="email">Email address
 			<input class="input" type="text" name="email" id="email">
 			<span class="formhint">We use this to validate your account, and to send you information about loans and requests.</span></label>
@@ -62,7 +60,7 @@ if ( isset($_GET["action"]) && $_GET["action"] == 'register' ) {
 					</option>
 				<?php endforeach; ?>
 			</select>
-            <span class="formhint">We use country and region to help you find tools in your proximity.</span>
+            <span class="formhint">We use country and region to help you find tools in your area.</span>
         </label>
 		<label class="label" for="addr_region">Region
 			<select class="input" name="addr_region" id="addr_region">
@@ -89,7 +87,7 @@ if ( isset($_GET["action"]) && $_GET["action"] == 'register' ) {
 		</label>
 		<label class="label" for="privatenotes">Private notes
 			<input class="input" type="text" name="privatenotes" id="privatenotes">
-			<span class="formhint">Only you cam see these notes.</span>
+			<span class="formhint">Only you can see these notes.</span>
 		</label>
 		<label class="label" for="publicnotes">Public notes
 			<input class="input" type="text" name="publicnotes" id="publicnotes">

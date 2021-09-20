@@ -43,6 +43,16 @@ if (isset($_GET['id'])) { // Action on LOAD:
     <?php endif; ?>
 </h2>
 
+<div style="float:right"><img
+    src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=http%3A%2F%2F<?php
+    if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) { $protocol = "https"; } else { $protocol = "http"; }
+    $domain     = $_SERVER['HTTP_HOST'];
+    $resource   = $_SERVER['REQUEST_URI'];
+    $url        = $protocol . "://" . $domain . $resource;
+    $urlencoded = $protocol . "://" . $domain . $resource;
+    echo $urlencoded ?>&choe=UTF-8" title="URL to this page"/>
+</div>
+
 <ul>
     <li><a href="/users/view.php?id=<?php echo escape($tool["userid"]); ?>"><?php echo escape($tool["username"]); ?></a></li>
     <li><?php echo(escape($tool["offered"]) ? "offered" : "not offered") ?></li>

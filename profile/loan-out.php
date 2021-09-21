@@ -23,41 +23,22 @@ if (isset($_POST['update'])) {
   } catch(PDOException $error) { echo $sql . "<br>" . $error->getMessage(); }
 }
 
-if (isset($_POST['return'])) {
-	if ( !hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-	try {
+if ( isset($_POST['return']) ) { // Action on SUBMIT:
+	if ( !hash_equals($_SESSION['csrf'], $_POST['csrf']) ) die();
+	try { // update the record:
 		$timestamp = date("Y-m-d H:i:s");
-		$id        = $_POST["return"];
+		$id        = $_POST['id'];
 		$statement = $connection->prepare("
-        UPDATE loans 
-	      SET active = NULL,
-              agreedstart = :agreedstart,
-              agreedend = :agreedend,
-              actualstart = :actualstart,
-              actualend = :actualend
-          WHERE id = :id
+        UPDATE loans
+			SET modified = '$timestamp',
+			    active = NULL
+			WHERE id = :id
         ");
-		$statement->execute($record);
+		$statement->bindValue(':id', $id);
+		$statement->execute();
 	} catch (PDOException $error) {
 		echo $sql . "<br>" . $error->getMessage();
 	}
-}
-
-if (isset($_POST['delete'])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-  try {
-    $timestamp = date("Y-m-d H:i:s");
-    $id = $_POST["delete"];
-    $statement = $connection->prepare("
-        UPDATE loans 
-		SET deleted = '$timestamp'
-        WHERE id = :id
-        ");
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-  } catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-  }
 }
 
 // Action on LOAD:
@@ -71,7 +52,7 @@ try {
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
         AND l.active = 1
         AND l.owner = :userid
-		ORDER BY l.active DESC, l.created DESC -- l.active DESC, t.toolname
+		ORDER BY l.created ASC
     ");
   $statement->bindValue('userid', $userid);
   $statement->execute();
@@ -88,15 +69,11 @@ try {
 <?php endif; ?>
 
 <?php if (isset($_POST['update']) && $statement) : ?>
-  <blockquote class="success">Successfully updated the loan of the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
+  <blockquote class="success">Successfully updated the loan!</blockquote>
 <?php endif; ?>
 
 <?php if (isset($_POST['return']) && $statement) : ?>
-  <blockquote class="success">Successfully returned the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
-<?php endif; ?>
-
-<?php if (isset($_POST['delete']) && $statement) : ?>
-  <blockquote class="success">Successfully deleted the loan.</blockquote>
+  <blockquote class="success">Successfully returned the tool!</blockquote>
 <?php endif; ?>
 
 <form method="post">
@@ -118,11 +95,12 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td><a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-          <button class="button submit" type="submit" name="return" value="<?php echo escape($row["id"]); ?>">Returned!</button>
-          <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button>
+        <td>
+          <a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
+          <input type="text" name="id" id="id" value="<?php echo escape($row["id"]); ?>" hidden>
+          <button class="button submit" type="submit" name="return" value="<?php echo escape($row["id"]); ?>">Mark as returned</button>
         </td>
-        <td><?php echo escape($row["toolname"]); ?></td>
+        <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
         <td><?php echo escape($row["active"]); ?></td>
         <td><a href="/users/view.php?id=<?php echo escape($row["loanedto"]); ?>"><?php echo escape($row["username2"]); ?></a></td>
         <td><?php echo escape($row["created"]); ?></td>

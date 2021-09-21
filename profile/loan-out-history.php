@@ -13,7 +13,7 @@ try {
 		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
         AND l.active IS NULL
         AND l.owner = :userid
-		ORDER BY l.active DESC, l.created DESC -- l.active DESC, t.toolname
+		ORDER BY l.created DESC
     ");
   $statement->bindValue('userid', $userid);
   $statement->execute();
@@ -25,16 +25,8 @@ try {
 
 <h2><a href="index.php"><?php echo escape($_SESSION['currentusername']); ?></a> || <a href="loan-out.php">current lending</a> || past lending</h2>
 
-<?php if (isset($_POST['create']) && $statement) : ?>
-  <blockquote class="success">Successfully loaned the tool!</blockquote>
-<?php endif; ?>
-
 <?php if (isset($_POST['update']) && $statement) : ?>
   <blockquote class="success">Successfully updated the loan of the <b><?php echo escape($_POST['toolname']); ?></b>.</blockquote>
-<?php endif; ?>
-
-<?php if (isset($_POST['delete']) && $statement) : ?>
-  <blockquote class="success">Successfully deleted the loan.</blockquote>
 <?php endif; ?>
 
 <form method="post">
@@ -56,9 +48,8 @@ try {
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td><a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-          <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
-        <td><?php echo escape($row["toolname"]); ?></td>
+        <td><a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a></td>
+        <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
         <td><?php echo escape($row["active"]); ?></td>
         <td><a href="/users/view.php?id=<?php echo escape($row["loanedto"]); ?>"><?php echo escape($row["username2"]); ?></a></td>
         <td><?php echo escape($row["created"]); ?></td>

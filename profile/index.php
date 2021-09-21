@@ -147,19 +147,26 @@ $numloans =$stats[3][1][0];
             echo "Good start!";
         }
         elseif ( $numlends + $numlendspast = 0 ) {
-            echo "That's okay.";
+            echo "Just wait...";
         }
         ?><br>
         You are <a href="/profile/loan-in.php">loaning <span style="font-size: 200%"><?php echo $numloans; ?></span></a>
-        tools from others.<br>
+        tools from others.
+	    <?php
+	    if ( $numloans > 5 ) {
+		    echo "You are busy!";
+	    }
+      elseif ( $numloans > 0 ) {
+		    echo "Remember to return the stuff :-)";
+	    }
+      elseif ( $numloans = 0 ) {
+		    echo "";
+	    }
+	    ?><br>
     </p>
 
 <?php else : ?>
     <blockquote class="warning">You are not logged in. <a href="/profile/login.php">Login</a> or <a href="/profile/login.php?action=register">register!</a></blockquote>
 <?php endif; ?>
-
-<?php
-var_dump(password_verify($password, $hashed_password));
-?>
 
 <?php require "../common/footer.php"; ?>

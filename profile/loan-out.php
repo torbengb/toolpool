@@ -5,17 +5,23 @@ require "../common/header.php";
 if (isset($_POST['update'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try { // update the record:
-    $timestamp = date("Y-m-d H:i:s");
-    $record =[
-        "id" => $_POST['id'],
-        "modified" => $timestamp,
-        "active" => NULL,
-        "actualend" => $timestamp,
-    ];
+	$id = $_POST['id'];
+	$timestamp = date("Y-m-d H:i:s");
+	$record = array(
+              "active"      => ($_POST['active']      === '' ? NULL : 1 ),
+              "agreedstart" => ($_POST['agreedstart'] === '' ? NULL : $_POST['agreedstart'] ),
+              "agreedend"   => ($_POST['agreedend']   === '' ? NULL : $_POST['agreedend'] ),
+              "actualstart" => ($_POST['actualstart'] === '' ? NULL : $_POST['actualstart'] ),
+              "actualend"   => ($_POST['actualend']   === '' ? NULL : $_POST['actualend'] ),
+              "id" => $_POST['id']
+    );
     $statement = $connection->prepare("
         UPDATE loans 
-          SET modified = :modified,
+          SET modified = sysdate(),
               active = :active,
+              agreedstart = :agreedstart,
+              agreedend = :agreedend,
+              actualstart = :actualstart,
               actualend = :actualend
           WHERE id = :id
         ");

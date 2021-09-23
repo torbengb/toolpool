@@ -104,9 +104,11 @@ if (isset($_SESSION['currentuserid'])) {
 <?php endif ?>
 
     <h2>Known bugs</h2>
-    <p>Found a bug? Check whether it's already in the <a href="https://github.com/torbengb/toolpool/issues/"
-                                                         target="_new">issue tracker on GitHub</a>. If it isn't, <a
-                href="https://github.com/torbengb/toolpool/issues/new">please submit an issue!</a>
+    <p>Found a bug? Check whether it's already in the
+        <a href="https://github.com/torbengb/toolpool/issues/" target="_new">
+            issue tracker on GitHub</a>. If it isn't,
+        <a href="https://github.com/torbengb/toolpool/issues/new" target="_new">
+            please submit an issue!</a>
 
 
 <?php require "common/footer.php"; ?>

@@ -103,16 +103,20 @@ th {
   cursor: pointer;
 }
 
-.xsubmit {
-}
-
-.xdelete {
-  text: red;
-  background-color: red;
-}
-
 .success {
   color: white;
   background-color: var(--color5);
+  padding: 5px;
+}
+
+.failure {
+  color: white;
+  background-color: var(--color2);
+  padding: 5px;
+}
+
+.warning {
+  xcolor: white;
+  background-color: var(--color4);
   padding: 5px;
 }

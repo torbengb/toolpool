@@ -21,21 +21,28 @@
     </span>
     </div>
 </div>
-<form method="post" action="/">
+<form method="post" action="/profile/">
     <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
+    <input type="hidden" name="id" value="<?php echo (isset($_SESSION["currentuserid"]) ? escape($_SESSION["currentuserid"]) : NULL ); ?>">
     <label class="label" for="user"><span class="labeltext">select user:</span>
         <select class="input" name="user" id="user">
-          <?php foreach ($users as $row) : ?>
-              <option
-                      name="user"
-                      id="user"
-                      value="<?php echo escape($row['id']); ?>"
-                  <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
-              ><?php echo escape($row['username']); ?></option>
-          <?php endforeach; ?>
+            <?php foreach ($users as $row) : ?>
+                <option
+                    name="user"
+                    id="user"
+                    value="<?php echo escape($row['id']); ?>"
+                    <?php echo(
+                        escape($row["id"]) ==
+                            (isset($_SESSION["currentuserid"])
+                            ? escape($_SESSION["currentuserid"])
+                            : NULL )
+                        ? "selected='selected'"
+                        : NULL) ?>
+                ><?php echo escape($row['username']); ?></option>
+            <?php endforeach; ?>
         </select>
     </label>
+    <button style="float: left;" class="button submit" type="submit" name="logout" value="logout">Log out!</button> &nbsp;
     <button class="button submit" type="submit" name="login" value="login">Switch!</button>
 </form>
 </body>

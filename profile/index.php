@@ -94,7 +94,9 @@ if (isset($_POST["delete"])) {
   } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 }
 
-$userid = $_SESSION['currentuserid'];
+$userid = (isset($_SESSION["currentuserid"])
+        ? escape($_SESSION["currentuserid"])
+        : NULL );
 $statement = $connection->prepare("
                 SELECT 'You are offering', COUNT(*) AS count FROM tools WHERE owner=:userid AND ( deleted = '0000-00-00 00:00:00' OR  deleted IS NULL ) AND offered=1
                 UNION 
@@ -113,57 +115,58 @@ $numlendspast =$stats[2][1][0];
 $numloans =$stats[3][1][0];
 ?>
 
-<?php if (isset($_SESSION['currentusername'])) : ?>
+<?php if (isset($_POST['create']) && $statement) : ?>
+    <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>! Now you can <a href="login.php">log in</a>.</blockquote>
+
+<?php elseif ( isset($_SESSION['currentusername']) ) : ?>
     <h2><?php echo escape($_SESSION['currentusername']); ?> || My profile || <a href="profile-edit.php">edit</a></h2>
 
-    <form method="post">
-        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-        <button style="float: right;" class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete this account</button>
+    <form method="post" action="profile-deleted.php">
+    <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+        <button style="float: right;" class="button submit" type="submit" name="delete" value="<?php echo escape($_SESSION['currentuserid']); ?>">Delete this account</button>
     </form>
 
     <form method="post" action="/index.php">
-        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
+        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); // TODO: replace button with URL ending in ?delete=[currentuserid] pointing to a delete page that confirm the passed ID against the actual current id, then asks for confirmation, then ultimately marks as deleted. ?>">
         <button style="float: right;" class="button submit" type="submit" name="logout" value="logout">Log out!</button>
     </form>
-    <?php if (isset($_POST['update']) && $statement) : ?>
+    <?php if ( isset($_POST['update']) && $statement ) : ?>
         <blockquote class="success">Successfully updated your user profile.</blockquote>
     <?php endif; ?>
-    <p> You are <a href="/profile/tool-list.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a> tools. <a href="tool-new.php">Add another!</a><br>
-        You are <a href="/profile/loan-out.php" >lending  <span style="font-size: 200%"><?php echo $numlends;  ?></span></a> tools to others,
-        plus <span style="font-size: 200%"><?php echo $numlendspast; ?></span> in the <a href="/profile/loan-out-history.php">past</a>.
-            <?php
-            if     ($numlends + $numlendspast > 5) echo "Great job!";
-            elseif ($numlends + $numlendspast > 0) echo "Good start!";
-            elseif ($numlends + $numlendspast = 0) echo "That's okay.";
-            ?><br>
-        You are <a href="/profile/loan-in.php"  >loaning  <span style="font-size: 200%"><?php echo $numloans;  ?></span></a> tools from others.<br>
+    <p> You are <a href="/profile/tools.php">offering <span style="font-size: 200%"><?php echo $numoffers; ?></span></a>
+        tools. <a href="../tools/new.php">Add another!</a><br>
+        You are <a href="/profile/loan-out.php">lending <span
+                    style="font-size: 200%"><?php echo $numlends; ?></span></a> tools to others,
+        plus <span style="font-size: 200%"><?php echo $numlendspast; ?></span> in the <a
+                href="/profile/loan-out-history.php">past</a>.
+        <?php
+        if ( $numlends + $numlendspast > 5 ) {
+            echo "Great job!";
+        }
+        elseif ( $numlends + $numlendspast > 0 ) {
+            echo "Good start!";
+        }
+        elseif ( $numlends + $numlendspast = 0 ) {
+            echo "Just wait...";
+        }
+        ?><br>
+        You are <a href="/profile/loan-in.php">loaning <span style="font-size: 200%"><?php echo $numloans; ?></span></a>
+        tools from others.
+	    <?php
+	    if ( $numloans > 5 ) {
+		    echo "You are busy!";
+	    }
+      elseif ( $numloans > 0 ) {
+		    echo "Remember to return the stuff :-)";
+	    }
+      elseif ( $numloans = 0 ) {
+		    echo "";
+	    }
+	    ?><br>
     </p>
-    <hr />
+
 <?php else : ?>
-    <?php if (isset($_POST['create']) && $statement) : ?>
-        <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>! Now you can <a href="/profile/">log in</a>.</blockquote>
-    <?php endif; ?>
-    <?php if (isset($_POST['delete']) && $statement) : ?>
-        <blockquote class="success">Successfully deleted your profile!</blockquote>
-    <?php endif; ?>
-    <a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>
-    <form method="post" action="/">
-        <input type="hidden" name="csrf" value="<?php echo escape($_SESSION['csrf']); ?>">
-        <input type="hidden" name="id" value="<?php echo escape($user['id']); ?>">
-        <label class="label" for="user"><span class="labeltext">select user:</span>
-            <select class="input" name="user" id="user">
-              <?php foreach ($users as $row) : ?>
-                  <option
-                          name="user"
-                          id="user"
-                          value="<?php echo escape($row['id']); ?>"
-                      <?php echo(escape($row["id"]) == escape($_SESSION["currentuserid"]) ? "selected='selected'" : NULL) ?>
-                  ><?php echo escape($row['username']); ?></option>
-              <?php endforeach; ?>
-            </select>
-        </label>
-        <button class="button submit" type="submit" name="login" value="login">Switch!</button>
-    </form>
+    <blockquote class="warning">You are not logged in. <a href="/profile/login.php">Login</a> or <a href="/profile/login.php?action=register">register!</a></blockquote>
 <?php endif; ?>
 
 <?php require "../common/footer.php"; ?>

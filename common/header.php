@@ -23,7 +23,7 @@
             if (isset($_SESSION['currentusername'])) {
               echo '<a href="/profile/">Hello <b>' . escape($_SESSION['currentusername']) . '</b>!</a>';
             } else {
-              echo '<a href="/profile/">Login</a> or <a href="/users/new.php">register!</a>';
+              echo '<a href="/profile/login.php">Login</a> or <a href="/profile/login.php?action=register">register!</a>';
             }
             ?></span>
         </div>

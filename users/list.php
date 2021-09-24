@@ -15,18 +15,19 @@ if (isset($_POST["delete"])) {
 }
 
 try { // Action on LOAD:
-  $statement = $connection->prepare("
-        SELECT u.*, r.name AS regionname
+    $statement = $connection->prepare("
+        SELECT u.*, r.name AS regionname, c.name AS countryname
         FROM users u
-        LEFT JOIN regions r ON r.code = u.addr_region -- LEFT includes users without a region.
+        LEFT JOIN regions r   ON r.code = u.addr_region -- LEFT includes users without a region.
+        LEFT JOIN countries c ON c.code = r.country     -- LEFT includes countries without a region.
         WHERE ( u.deleted = '0000-00-00 00:00:00' OR u.deleted IS NULL )
         ");
-  $statement->execute();
-  $result = $statement->fetchAll();
+    $statement->execute();
+    $result = $statement->fetchAll();
 } catch(PDOException $error) { showMessage( __LINE__ , __FILE__ , $sql . "<br>" . $error->getMessage()); }
 ?>
 
-<h2>Members || <a href="new.php">add new</a></h2>
+<h2>Members || <a href="/profile/login.php?action=registers">add new</a></h2>
 
 <?php if (isset($_POST['create']) && $statement) : ?>
     <blockquote class="success">Successfully registered your username <b><?php echo escape($_POST['username']); ?></b>!</blockquote>

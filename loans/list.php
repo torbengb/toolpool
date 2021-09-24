@@ -85,7 +85,7 @@ $connection = new PDO($dsn, $username, $password, $options);
 $sql = "USE " . $dbname;
 $connection->exec($sql);
   $statement = $connection->prepare("
-        SELECT l.*, t.toolname, u1.username AS username1, u2.username AS username2 FROM loans l
+        SELECT l.*, t.toolname, u1.id as userid1, u1.username AS username1, u2.id as userid2, u2.username AS username2 FROM loans l
 		JOIN tools t ON l.tool = t.id
 		JOIN users u1 ON l.owner = u1.id
 		JOIN users u2 ON l.loanedto = u2.id
@@ -114,8 +114,6 @@ $connection->exec($sql);
     <blockquote class="success">Successfully deleted the loan.</blockquote>
 <?php endif; ?>
 
-<form method="post">
-  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
   <table>
     <thead>
       <tr>
@@ -134,12 +132,22 @@ $connection->exec($sql);
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-          <td><a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>&nbsp;
-              <button class="button submit" type="submit" name="delete" value="<?php echo escape($row["id"]); ?>">Delete!</button></td>
+          <td>
+	          <?php if ( isset($_SESSION['currentusername'])
+                        && escape($row["userid1"]) == $_SESSION['currentuserid'] ) : ?>
+                  <form method="post">
+                      <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                      <a href="edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+                      <button class="button submit" type="submit" name="delete"
+                              value="<?php echo escape($row["id"]); ?>">Delete!
+                      </button>
+                  </form>
+		          <?php endif; ?>
+          </td>
           <td><?php echo ( escape($row["active"]) ? "active" : "-" ); ?></td>
-          <td><?php echo escape($row["toolname"]); ?></td>
-          <td><?php echo escape($row["username1"]); ?></td>
-          <td><?php echo escape($row["username2"]); ?></td>
+          <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
+          <td><a href="/users/view.php?id=<?php echo escape($row["userid1"]); ?>"><?php echo escape($row["username1"]); ?></a></td>
+          <td><a href="/users/view.php?id=<?php echo escape($row["userid2"]); ?>"><?php echo escape($row["username2"]); ?></a></td>
           <td><?php echo escape($row["created"]); ?></td>
           <td><?php echo escape($row["agreedstart"]); ?></td>
           <td><?php echo escape($row["agreedend"]); ?></td>
@@ -149,6 +157,5 @@ $connection->exec($sql);
     <?php endforeach; ?>
     </tbody>
   </table>
-</form>
 
 <?php require "../common/footer.php"; ?>

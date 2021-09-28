@@ -48,14 +48,14 @@ if (isset($_GET['id'])) { // Action on LOAD:
     if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) { $protocol = "https"; } else { $protocol = "http"; }
     $domain     = $_SERVER['HTTP_HOST'];
     $resource   = $_SERVER['REQUEST_URI'];
-    $url        = $protocol . "://" . $domain . $resource;
     $urlencoded = $protocol . "://" . $domain . $resource;
-    echo $urlencoded ?>&choe=UTF-8" title="URL to this page"/>
+    echo $urlencoded ?>&choe=UTF-8" title="QR code with link to this page"/>
 </div>
 
 <div><h3>Tool details</h3>
 <ul>
     <li><?php echo escape($tool["toolname"]); ?></li>
+    <li><?php echo escape($tool["username"]); ?></li>
     <li><?php echo(escape($tool["offered"]) ? "offered" : "not offered") ?></li>
     <li><?php echo escape($tool["brand"]); ?></li>
     <li><?php echo escape($tool["model"]); ?></li>
@@ -76,9 +76,10 @@ if (isset($_GET['id'])) { // Action on LOAD:
 </div>
 
 <h3>Lending history</h3>
-<div>
-  <?php
-	$numlends  = 0;
+
+<?php
+$numlends  = 0;
+try { // load the record
 	$statement = $connection->prepare("
             SELECT count(l.id) as count
             FROM loans l 
@@ -88,28 +89,28 @@ if (isset($_GET['id'])) { // Action on LOAD:
 	$statement->bindValue(':tool_id', $tool_id);
 	$statement->execute();
 	$statement = $statement->fetchAll();
-	$numlends  = $statement[0][0][0];
-	if ( $numlends == 1 ) {
-		$times = " time";
-	}
-	else {
-		$times = " times";
-	}
-	?>
-    This tool has been lent <?php echo $numlends . $times; ?> so far.
-</div>
+} catch (PDOException $error)
+{ echo $sql . "<br>" . $error->getMessage();
+}
+    $numlends  = $statement[0][0][0];
+    if ( $numlends == 1 ) {
+        $times = " time";
+    }
+    else {
+        $times = " times";
+    }
 
-<?php if ( $numlends > 0 && isset($_SESSION['currentusername']) && escape($tool["userid"]) == $_SESSION['currentuserid'] ) :
+if ( isset($_SESSION['currentusername']) && escape($tool["userid"]) == $_SESSION['currentuserid'] && $numlends > 0 ) :
 	try { // load the record
 		$connection = new PDO($dsn, $username, $password, $options);
 		$sql        = "USE " . $dbname;
 		$connection->exec($sql);
 		$statement = $connection->prepare("
-        SELECT l.*, u.id as userid, u.username AS lender
+        SELECT l.*, u.username AS lender
         FROM loans l
-		JOIN users u ON l.loanedto = u.id
-		WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-          AND l.tool = $tool_id
+		JOIN users u ON u.id = l.loanedto
+        WHERE ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
+        AND l.tool = $tool_id
 		ORDER BY l.agreedstart DESC
 		");
 		$statement->execute();
@@ -118,6 +119,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
 		echo $sql . "<br>" . $error->getMessage();
 	}
 	?>
+    You have lent this tool <?php echo $numlends . $times; ?> so far:
     <table>
         <thead>
         <tr>
@@ -135,11 +137,11 @@ if (isset($_GET['id'])) { // Action on LOAD:
 				<?php foreach ( $result as $row ) : ?>
             <tr>
                 <td><?php if ( escape($row["active"]) == 1 ) : ?>
-                      <form method="post">
-                          <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-                          <a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
-                      </form>
-					<?php endif; ?>
+                        <form method="post">
+                            <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                            <a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a>
+                        </form>
+									<?php endif; ?>
                 </td>
                 <td><?php echo(escape($row["active"]) ? "active" : "-"); ?></td>
                 <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>">
@@ -154,38 +156,13 @@ if (isset($_GET['id'])) { // Action on LOAD:
 				<?php endforeach; ?>
         </tbody>
     </table><br/>
-<?php endif; ?>
 
-<div>
-	<?php
-	$numlends2  = 0;
-	$loanedto2 = $_SESSION['currentuserid'];
-	$statement = $connection->prepare("
-            SELECT count(l.id) as count
-            FROM loans l 
-            WHERE l.tool = :tool_id
-            AND ( l.deleted = '0000-00-00 00:00:00' OR l.deleted IS NULL )
-            AND l.loanedto = $loanedto2
-            ");
-	$statement->bindValue(':tool_id', $tool_id);
-	$statement->execute();
-	$statement = $statement->fetchAll();
-	$numlends2 = $statement[0][0][0];
-	if ( $numlends2 == 1 ) {
-		$times = " time";
-	}
-	else {
-		$times = " times";
-	}
-	?>
-    You have loaned this tool <?php echo $numlends2 . $times; ?> so far:
-</div>
-
-<?php if ( $numlends > 0 && isset($_SESSION['currentusername']) && escape($tool["userid"]) != $_SESSION['currentuserid'] ) :
+<?php elseif ( isset($_SESSION['currentusername']) && $numlends > 0 ) :
 	try { // load the record
 		$connection = new PDO($dsn, $username, $password, $options);
 		$sql        = "USE " . $dbname;
 		$connection->exec($sql);
+		$loanedto2 = $_SESSION['currentuserid'];
 		$statement = $connection->prepare("
         SELECT l.*
         FROM loans l
@@ -212,7 +189,7 @@ if (isset($_GET['id'])) { // Action on LOAD:
         </tr>
         </thead>
         <tbody>
-		  <?php foreach ( $result as $row ) : ?>
+				<?php foreach ( $result as $row ) : ?>
             <tr>
                 <td><?php echo(escape($row["active"]) ? "active" : "-"); ?></td>
                 <td><?php echo escape($row["created"]); ?></td>
@@ -224,6 +201,9 @@ if (isset($_GET['id'])) { // Action on LOAD:
 				<?php endforeach; ?>
         </tbody>
     </table><br/>
-<?php endif; ?>
+
+<?php else : ?>
+    <div>This tool has been lent <?php echo $numlends . $times; ?> so far.</div>
+<?php endif ?>
 
 <?php require "../common/footer.php"; ?>

@@ -1,3 +1,4 @@
+<br />
 </div> <!-- end body -->
 <div class="footer">
     <div class="navbar">

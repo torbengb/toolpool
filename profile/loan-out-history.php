@@ -36,7 +36,6 @@ try {
     <tr>
       <th>Action</th>
       <th>Tool</th>
-      <th>Status</th>
       <th>Loaned to</th>
       <th>Created</th>
       <th>Agreed start</th>
@@ -50,7 +49,6 @@ try {
       <tr>
         <td><a href="/loans/edit.php?id=<?php echo escape($row["id"]); ?>">Edit</a></td>
         <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
-        <td><?php echo escape($row["active"]); ?></td>
         <td><a href="/users/view.php?id=<?php echo escape($row["loanedto"]); ?>"><?php echo escape($row["username2"]); ?></a></td>
         <td><?php echo escape($row["created"]); ?></td>
         <td><?php echo escape($row["agreedstart"]); ?></td>

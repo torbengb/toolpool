@@ -45,11 +45,14 @@ if (isset($_GET['id'])) { // Action on LOAD:
 
 <div style="float:right"><img
     src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=http%3A%2F%2F<?php
-    if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) { $protocol = "https"; } else { $protocol = "http"; }
-    $domain     = $_SERVER['HTTP_HOST'];
-    $resource   = $_SERVER['REQUEST_URI'];
-    $urlencoded = $protocol . "://" . $domain . $resource;
-    echo $urlencoded ?>&choe=UTF-8" title="QR code with link to this page"/>
+    if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) {$protocol = "https";}
+    else {$protocol = "http";}
+    $domain         = $_SERVER['HTTP_HOST'];
+    $resource       = $_SERVER['REQUEST_URI'];
+    $siteurl        = $protocol . "://" . $domain;
+    $pageurl        = $siteurl . $resource;
+    $pageurlencoded = urlencode($pageurl);
+    echo urlencode($pageurlencoded) ?>&choe=UTF-8" title="QR code with link to this page"/>
 </div>
 
 <div><h3>Tool details</h3>

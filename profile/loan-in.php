@@ -153,8 +153,8 @@ try { // load the record
     <tbody>
     <?php foreach ($result as $row) : ?>
       <tr>
-        <td>[message to owner]</td>
-        <td><?php echo escape($row["toolname"]); ?></td>
+        <td>[send message to owner]</td>
+        <td><a href="/tools/view.php?id=<?php echo escape($row["tool"]); ?>"><?php echo escape($row["toolname"]); ?></a></td>
         <td><a href="/users/view.php?id=<?php echo escape($row["owner"]); ?>"><?php echo escape($row["username1"]); ?></a></td>
         <td><?php echo escape($row["created"]); ?></td>
         <td><?php echo escape($row["agreedstart"]); ?></td>

@@ -166,13 +166,16 @@ try { // load the record:
       <tr>
           <td>
               <?php if (isset($_SESSION['currentusername'])
+                  && escape($row["userid"]) == $_SESSION['currentuserid'] ) : ?>
+                  (your tool)
+              <?php elseif (isset($_SESSION['currentusername'])
                   && escape($row["userid"]) != $_SESSION['currentuserid'] ) : ?>
               <form method="post" action="/profile/loan-in.php">
                   <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
                   <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
               </form>
               <?php else: ?>
-              (your tool)
+                  &nbsp;
               <?php endif; ?>
           </td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>"><?php echo escape($row["username"]); ?></a></td>

@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/home', function () { // FIXME This should not be the dashboard
+    return view('dashboard');
+})->middleware(['auth'])->name('home');
+
+Route::get('/dashboard', function () { // FIXME What even is the dashboard?
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Laravel - A PHP Framework For Web Artisans
+ * Toolpool - A community platform for people to share their tools for DIY home-improvement projects.
  *
- * @package  Laravel
- * @author   Taylor Otwell <taylor@laravel.com>
+ * @package  Toolpool
+ * @author   Golfbravo <info@golfbravo.net>
  */
 
 $uri = urldecode(

@@ -2,6 +2,8 @@
 require "../common/common.php";
 require "../common/header.php";
 
+// header("Location: $siteurl/profile/login.php", TRUE, 3071); // '307' means temporary redirect.
+
 if (isset($_POST['create'])) { // Action on SUBMIT:
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
   try  { // create the record:

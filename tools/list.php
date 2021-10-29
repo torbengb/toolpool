@@ -157,6 +157,7 @@ try { // load the record:
           <th>Taxonomy3</th>
           <th>230V</th>
           <th>400V</th>
+          <th>Battery</th>
           <th>Hydraulic</th>
           <th>Pneumatic</th>
       </tr>
@@ -175,7 +176,7 @@ try { // load the record:
                   <button class="button edit" type="submit" name="loan" value="<?php echo escape($row["id"]); ?>">Loan</button>
               </form>
               <?php else: ?>
-                  &nbsp;
+              &nbsp;<!-- no actions when not logged in! -->
               <?php endif; ?>
           </td>
           <td><a href="/users/view.php?id=<?php echo escape($row["userid"]); ?>"><?php echo escape($row["username"]); ?></a></td>
@@ -195,6 +196,7 @@ try { // load the record:
           <td><?php echo escape($row["taxonomy3"])==0 ? '-' : escape($row["t3"]) ; ?></td>
           <td><?php echo escape($row["electrical230v"]) ? '230V' : '-' ; ?></td>
           <td><?php echo escape($row["electrical400v"]) ? '400V' : '-' ; ?></td>
+          <td><?php echo escape($row["electricalbatt"]) ? 'batt' : '-' ; ?></td>
           <td><?php echo escape($row["hydraulic"]) ? 'hydr' : '-' ; ?></td>
           <td><?php echo escape($row["pneumatic"]) ? 'pneu' : '-' ; ?></td>
       </tr>

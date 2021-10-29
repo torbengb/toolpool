@@ -119,30 +119,30 @@ try {
         || escape($level1["parent"]) != 1 ) // skip anything that is not top level (has no real parent).
       continue;
     echo ' <a href="edit.php?id=' . escape($level1["id"]) . '" class="submit">Edit</a> '
-        . ' <button class="button submit" type="submit" name="delete" value="' . escape($level1["id"]) . '">Delete!</button> '
+        //. ' <button class="button submit" type="submit" name="delete" value="' . escape($level1["id"]) . '">Delete!</button> '
         //. ' <a href="list.php?id=' . escape($level1["id"]) . '" class="submit">Delete</a> '
         //. ' <input type="hidden" name="delete" value="' . escape($level1["id"]) . '"><a href="list.php" class="submit">Delete</a> '
         . escape($level1["name"]) . "<br>";
     foreach ($tax as $level2) {
       if ( escape($level2["id"]) > 1 // skip "(none)".
           && escape($level2["parent"]) == escape($level1["id"]) )
-      {   echo "<a href='edit.php?id=" . escape($level2["id"]) . "' class='submit'>Edit</a>"
-          . ' <button class="button submit" type="submit" name="delete" value="' . escape($level2["id"]) . '">Delete!</button> '
+      {   echo "<a href='edit.php?id=" . escape($level2["id"]) . "' class='submit'>Edit</a> "
+          //. ' <button class="button submit" type="submit" name="delete" value="' . escape($level2["id"]) . '">Delete!</button> '
           . escape($level1["name"]) . " &gt; "
           . escape($level2["name"]) . "<br>" ;
         foreach ($tax as $level3) {
           if ( escape($level3["id"]) > 1 // skip "(none)".
               && escape($level3["parent"]) == escape($level2["id"]) )
-          {   echo "<a href='edit.php?id=" . escape($level3["id"]) . "' class='submit'>Edit</a>"
-              . ' <button class="button submit" type="submit" name="delete" value="' . escape($level3["id"]) . '">Delete!</button> '
+          {   echo "<a href='edit.php?id=" . escape($level3["id"]) . "' class='submit'>Edit</a> "
+              //. ' <button class="button submit" type="submit" name="delete" value="' . escape($level3["id"]) . '">Delete!</button> '
               . escape($level1["name"]) . " &gt; "
               . escape($level2["name"]) . " &gt; "
               . escape($level3["name"]) . "<br>" ;
             foreach ($tax as $level4) {
               if ( escape($level4["id"]) > 1 // skip "(none)".
                   && escape($level4["parent"]) == escape($level3["id"]) )
-              {   echo "<a href='edit.php?id=" . escape($level4["id"]) . "' class='submit'>Edit</a>"
-                  . ' <button class="button submit" type="submit" name="delete" value="' . escape($level4["id"]) . '">Delete!</button> '
+              {   echo "<a href='edit.php?id=" . escape($level4["id"]) . "' class='submit'>Edit</a> "
+                  //. ' <button class="button submit" type="submit" name="delete" value="' . escape($level4["id"]) . '">Delete!</button> '
                   . escape($level1["name"]) . " &gt; "
                   . escape($level2["name"]) . " &gt; "
                   . escape($level3["name"]) . " &gt; "
@@ -150,8 +150,8 @@ try {
                 foreach ($tax as $level5) {
                   if ( escape($level5["id"]) > 1 // skip "(none)".
                       && escape($level5["parent"]) == escape($level4["id"]) )
-                  {   echo "<a href='edit.php?id=" . escape($level5["id"]) . "' class='submit'>Edit</a>"
-                      . ' <button class="button submit" type="submit" name="delete" value="' . escape($level5["id"]) . '">Delete!</button> '
+                  {   echo "<a href='edit.php?id=" . escape($level5["id"]) . "' class='submit'>Edit</a> "
+                      //. ' <button class="button submit" type="submit" name="delete" value="' . escape($level5["id"]) . '">Delete!</button> '
                       . escape($level1["name"]) . " &gt; "
                       . escape($level2["name"]) . " &gt; "
                       . escape($level3["name"]) . " &gt; "

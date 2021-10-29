@@ -17,6 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    // TODO When the app is more complete, change this to something that would be convenient for users
     public const HOME = '/home';
 
     /**

@@ -1,0 +1,11 @@
+src: https://laravel.com/docs/8.x/structure#the-storage-directory
+  The storage/app/public directory may be used to store user-generated files,
+  such as profile avatars, that should be publicly accessible.
+  You should create a symbolic link at public/storage which points to this directory.
+
+Instead of making a symlink as usual, I've made one with a *relative* path so that
+the link is unaffected by changing the project root directory.
+
+Once pulled from git, this folder should have a ".gitignore" file containing:
+  *
+  !.gitignore
